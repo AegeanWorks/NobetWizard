@@ -159,6 +159,7 @@ NobetWizard/
 ├── LICENSES/                 <- REUSE license texts
 ├── REUSE.toml                <- Machine-readable SPDX metadata
 ├── README.md
+├── assets/                   <- brand logo and social preview
 ├── COMMERCIAL.md
 ├── exports.py               <- escaped iCalendar output and timed font downloads
 ├── main.py
