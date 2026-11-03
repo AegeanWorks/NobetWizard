@@ -5,12 +5,12 @@
   "gates": {},
   "created": "2026-10-20",
   "has_ui": true,
-  "ui_kind": "desktop",
+  "ui_kind": "web",
   "ui_evidence": [
     "requirements.txt"
   ],
-  "ui_checked_at": "2026-10-28",
-  "ui_source": "detected",
+  "ui_checked_at": "2026-11-03",
+  "ui_source": "manual",
   "topics": [
     "aikit",
     "aikit-integrated",

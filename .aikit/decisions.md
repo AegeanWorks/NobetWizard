@@ -31,6 +31,13 @@ contract, a dependency, a data format or the architecture; IDs are consecutive a
 - **Decision**: Correct `ui_kind` to `web`; register `2026-11-03-app.png` (Playwright capture of `streamlit run main.py` login, commit `f8b591d`, viewport 1440x900) in `.aikit/media.json` and the README `aegean:screenshots` block. Roster views wait for an authenticated session. Installed missing declared deps (reportlab, pandas, holidays) to run the app.
 - **Consequences**: README proves the real login gate. Reproduce with: install requirements, `streamlit run main.py`, Playwright screenshot after network idle plus settle wait.
 
+### ADR-005: Enforce web ui_kind via manual ui-id after detector drift
+- **Date**: 2026-11-03
+- **Status**: Accepted
+- **Context**: ADR-004 corrected `ui_kind` to `web` in `media.json`, but `aikit ui-id` still detected `desktop` from `requirements.txt` and `project.json` kept `ui_kind: desktop` with `ui_source: detected` (2026-10-28), contradicting the Streamlit web app (`streamlit run main.py`).
+- **Decision**: Run `python aikit.py ui-id NobetWizard --set yes --kind web`; `project.json` now records `ui_kind: web` with `ui_source: manual` (2026-11-03), matching `media.json`.
+- **Consequences**: Catalog display and media pipeline agree the app is web; detector evidence stays `requirements.txt` (minimal change); re-detection with `--set auto` would regress to desktop and must not be used without updating evidence to `main.py`.
+
 <!-- Entry format:
 ### ADR-NNN: <decision in one line>
 - **Date**: YYYY-MM-DD
