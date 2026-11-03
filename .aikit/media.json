@@ -3,7 +3,7 @@
   "name": "NobetWizard",
   "repo": "NobetWizard",
   "has_ui": true,
-  "ui_kind": "desktop",
+  "ui_kind": "web",
   "palette": [
     "#120a1f",
     "#2e1b4d",
@@ -41,6 +41,26 @@
       }
     }
   },
-  "screenshots": [],
+  "screenshots": [
+    {
+      "path": "assets/screenshots/2026-11-03-app.png",
+      "alt": "NobetWizard login at 2026-11-03",
+      "caption": "Login gate from streamlit run main.py (http://127.0.0.1:4185): language picker, Login/Register tabs, credential fields. Roster views need auth and stay uncaptured \u2014 see ADR-004.",
+      "commit": "f8b591d1b60e40c03e278925935bc5210365a794",
+      "taken_at": "2026-11-03",
+      "viewport": "1440x900",
+      "width": 1440,
+      "height": 900,
+      "status": "approved",
+      "review": {
+        "status": "approved",
+        "reviewer": "agent:kilo",
+        "method": "vision",
+        "notes": "Real Playwright capture of the served login: wizard mark, bilingual picker, tabs and empty fields all legible; no credential entered.",
+        "score": 90,
+        "reviewed_at": "2026-11-03"
+      }
+    }
+  ],
   "model": "community/scriptsnsenses-sys/flux-2-dev-free"
 }

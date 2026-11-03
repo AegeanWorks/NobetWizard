@@ -24,6 +24,13 @@ contract, a dependency, a data format or the architecture; IDs are consecutive a
 - **Decision**: Escape every iCalendar text value and download each font once through a 10-second timeout into a temporary file before replacing the target.
 - **Consequences**: Exported calendars stay well-formed for any name, and PDF generation fails over to built-in fonts instead of hanging on a slow network.
 
+### ADR-004: Login gate keeper; ui_kind corrected to web; roster deferred past auth
+- **Date**: 2026-11-03
+- **Status**: Accepted
+- **Context**: No screenshots existed and `media.json` mislabeled the Streamlit app as `desktop`; the roster needs credentials (super-admin fallback is secrets-gated) and headless `--screenshot` cannot hydrate Streamlit.
+- **Decision**: Correct `ui_kind` to `web`; register `2026-11-03-app.png` (Playwright capture of `streamlit run main.py` login, commit `f8b591d`, viewport 1440x900) in `.aikit/media.json` and the README `aegean:screenshots` block. Roster views wait for an authenticated session. Installed missing declared deps (reportlab, pandas, holidays) to run the app.
+- **Consequences**: README proves the real login gate. Reproduce with: install requirements, `streamlit run main.py`, Playwright screenshot after network idle plus settle wait.
+
 <!-- Entry format:
 ### ADR-NNN: <decision in one line>
 - **Date**: YYYY-MM-DD
