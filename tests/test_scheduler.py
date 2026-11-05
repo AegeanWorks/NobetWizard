@@ -154,6 +154,62 @@ class DutySchedulerTest(unittest.TestCase):
         self.assertFalse(success)
         self.assertIn("fixed", error.lower())
 
+    def test_duplicate_personnel_names_are_rejected(self):
+        crew = personnel()
+        crew[1]["name"] = crew[0]["name"]
+        scheduler = DutyScheduler(2026, 2, crew, config())
+
+        success, _schedule, error = scheduler.generate()
+
+        self.assertFalse(success)
+        self.assertIn("duplicate", error.lower())
+
+    def test_same_day_conditional_rule_is_rejected(self):
+        crew = personnel()
+        scheduler = DutyScheduler(
+            2026, 2, crew, config(conditional_rules=[{"trigger": 0, "forbidden": 0}])
+        )
+
+        success, _schedule, error = scheduler.generate()
+
+        self.assertFalse(success)
+        self.assertIn("conditional", error.lower())
+
+    def test_failed_search_restores_fixed_baseline_counts(self):
+        crew = personnel()
+        crew[0]["fixed_dates"] = "01/02/2026"
+        crew[0]["max_duties"] = 1
+        for person in crew[1:]:
+            person["max_duties"] = 0
+        scheduler = DutyScheduler(2026, 2, crew, config(allow_consecutive=True))
+
+        success, _schedule, _error = scheduler.generate()
+
+        self.assertFalse(success)
+        self.assertEqual(crew[0]["duty_count"], 1)
+        for person in crew[1:]:
+            self.assertEqual(person["duty_count"], 0)
+
+    def test_list_format_constraints_block_assignment(self):
+        crew = personnel()
+        scheduler = DutyScheduler(2026, 2, crew, config())
+        monday = date(2026, 2, 2)
+        self.assertEqual(monday.weekday(), 0)
+        person = dict(crew[0], duty_count=0, weekend_duty_count=0)
+        person["busy_days"] = ["Monday"]
+        person["off_dates"] = []
+        person["leave_dates"] = []
+
+        self.assertFalse(scheduler.check_constraints(person, monday, []))
+
+        person["busy_days"] = []
+        person["off_dates"] = ["02/02/2026"]
+        self.assertFalse(scheduler.check_constraints(person, monday, []))
+
+        person["off_dates"] = []
+        person["leave_dates"] = ["02/02/2026"]
+        self.assertFalse(scheduler.check_constraints(person, monday, []))
+
 
 if __name__ == "__main__":
     unittest.main()

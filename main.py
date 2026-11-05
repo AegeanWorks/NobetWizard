@@ -63,8 +63,6 @@ LANG_TEXT = {
         "fixed_dates": "Fixed Duty Dates (Must hold)",
         "add_btn": "Add Person",
         "added": "Added {}",
-        "save_csv": "💾 Save CSV",
-        "load_csv": "📂 Load CSV",
         "loaded": "Loaded!",
         "save_db": "💾 Save Personnel to the Database",
         "load_db_btn": "☁️ Load Personnel Database",
@@ -89,14 +87,15 @@ LANG_TEXT = {
         "col_assigned": "Assigned",
         "col_assigned_help": "Total duties assigned in last generation",
         "col_busy_help": "Comma-separated days. Use the tool below to select days.",
-        "col_off_help": "Specific dates (YYYY-MM-DD)",
+        "col_off_help": "Specific dates (DD/MM/YYYY)",
         "col_leave_help": "Dates on leave (DD/MM/YYYY). Use the tool below for date ranges.",
-        "col_fixed_help": "Specific dates (YYYY-MM-DD)",
+        "col_fixed_help": "Specific dates (DD/MM/YYYY)",
         "gender_opts": ["Any", "Mixed (Must have M & F)", "Single Gender (All M or All F)"],
         "rule_header": "Conditional Rules",
         "rule_trigger": "If holds duty on:",
         "rule_forbidden": "Cannot hold duty on:",
         "btn_add_rule": "Add Rule",
+        "err_rule_same_day": "Trigger and forbidden days must differ.",
         "rule_desc": "If {} then NO {}",
         "login_tab": "Login",
         "register_tab": "Register",
@@ -111,6 +110,8 @@ LANG_TEXT = {
         "login_success": "Logged In as {}",
         "login_failed": "Incorrect Username or Password",
         "user_exists": "User already exists",
+        "err_name_empty": "Name cannot be empty.",
+        "err_name_duplicate": "A person with this name already exists.",
         "reg_success": "Account Created! Please Login.",
         "export_excel": "📊 Export to Excel",
         "export_pdf": "📄 Export to PDF",
@@ -126,7 +127,6 @@ LANG_TEXT = {
         "conflict_help": "Select two people who should NOT work together.",
         "btn_add_conflict": "Block Pair",
         "conflict_desc": "🚫 {} & {}",
-        "template_download": "📥 Download Excel Template",
         "co_occurrence": "🤝 Team Co-occurrence (Who works with whom?)",
         "day_distribution": "📅 Day of Week Distribution",
         "role": "Role",
@@ -189,8 +189,6 @@ LANG_TEXT = {
         "fixed_dates": "Önceden Belirlenmiş Nöbet Tarihi",
         "add_btn": "Personel Ekle",
         "added": "{} Eklendi",
-        "save_csv": "💾 CSV Kaydet",
-        "load_csv": "📂 CSV Yükle",
         "loaded": "Yüklendi!",
         "save_db": "💾 Personeli Veritabanına Kaydet",
         "load_db_btn": "☁️ Personel Veritabanını Yükle",
@@ -200,7 +198,6 @@ LANG_TEXT = {
         "clear_all": "🗑️ Mevcut Listeyi Temizle",
         "clear_db_btn": "🔥 Personel Veritabanını Temizle",
         "info_start": "Başlamak için personel ekleyin.",
-        "header_gen": "Takvim Oluştur",
         "btn_gen": "🪄 Nöbet Listesi Oluştur",
         "err_no_pers": "Personel eklenmedi!",
         "spinner": "Hesaplanıyor...",
@@ -216,14 +213,15 @@ LANG_TEXT = {
         "col_assigned": "Atanan",
         "col_assigned_help": "Son üretimde atanan toplam nöbet",
         "col_busy_help": "Virgülle ayrılmış günler. Gün seçmek için aşağıdaki aracı kullanın.",
-        "col_off_help": "Belirli tarihler (YYYY-AA-GG)",
+        "col_off_help": "Belirli tarihler (GG/AA/YYYY)",
         "col_leave_help": "İzinli olunan tarihler (GG/AA/YYYY). Tarih aralığı için aşağıdaki aracı kullanın.",
-        "col_fixed_help": "Belirli tarihler (YYYY-AA-GG)",
+        "col_fixed_help": "Belirli tarihler (GG/AA/YYYY)",
         "gender_opts": ["Fark etmez", "Karma (E & K olmalı)", "Tek Cinsiyet (Hepsi E veya Hepsi K)"],
         "rule_header": "Koşullu Kurallar",
         "rule_trigger": "Eğer şu gün nöbetçiyse:",
         "rule_forbidden": "Şu gün nöbet tutamaz:",
         "btn_add_rule": "Kural Ekle",
+        "err_rule_same_day": "Tetikleyici ve yasaklı günler farklı olmalıdır.",
         "rule_desc": "Eğer {} ise {} YOK",
         "login_tab": "Giriş",
         "register_tab": "Kayıt Ol",
@@ -238,6 +236,8 @@ LANG_TEXT = {
         "login_success": "Giriş Başarılı: {}",
         "login_failed": "Hatalı Kullanıcı Adı veya Şifre",
         "user_exists": "Kullanıcı zaten var",
+        "err_name_empty": "İsim boş olamaz.",
+        "err_name_duplicate": "Bu isimde bir kişi zaten var.",
         "reg_success": "Hesap Oluşturuldu! Lütfen Giriş Yapın.",
         "export_excel": "📊 Excel Olarak İndir",
         "export_pdf": "📄 PDF Olarak İndir",
@@ -253,7 +253,6 @@ LANG_TEXT = {
         "conflict_help": "Birlikte çalışmaması gereken iki kişiyi seçin.",
         "btn_add_conflict": "Çifti Engelle",
         "conflict_desc": "🚫 {} & {}",
-        "template_download": "📥 Excel Şablonu İndir",
         "co_occurrence": "🤝 Birlikte Çalışma Sıklığı",
         "day_distribution": "📅 Gün Bazlı Dağılım",
         "role": "Rol",
@@ -737,10 +736,13 @@ def main():
     with c_r2:
         forbidden_day = st.selectbox(t["rule_forbidden"], DAYS_OF_WEEK, format_func=translate_day, key="forb")
         
-    if st.sidebar.button(t["btn_add_rule"]):
-        rule = {"trigger": trigger_day, "forbidden": forbidden_day}
-        if rule not in st.session_state.conditional_rules:
-            st.session_state.conditional_rules.append(rule)
+        if st.sidebar.button(t["btn_add_rule"]):
+            if trigger_day == forbidden_day:
+                st.sidebar.warning(t["err_rule_same_day"])
+            else:
+                rule = {"trigger": trigger_day, "forbidden": forbidden_day}
+                if rule not in st.session_state.conditional_rules:
+                    st.session_state.conditional_rules.append(rule)
             
     # Display Rules
     if st.session_state.conditional_rules:
@@ -814,10 +816,11 @@ def main():
         gen_month = st.session_state.gen_month
         
         display_data = []
+        holiday_set_top = set(st.session_state.get("holidays_multiselect", []))
         for d, team in sorted(schedule.items()):
             names = ", ".join([p['name'] for p in team])
             day_name = translate_day(DAYS_OF_WEEK[d.weekday()])
-            is_weekend = d.weekday() >= 5
+            is_weekend = d.weekday() >= 5 or d.strftime("%d/%m/%Y") in holiday_set_top
             display_data.append({
                 t["col_date"]: d.strftime("%d/%m/%Y"),
                 t["col_day"]: day_name,
@@ -890,33 +893,41 @@ def main():
             
         add_btn = st.button(t["add_btn"], use_container_width=True)
 
-        if add_btn and name:
-            leave_dates = []
-            if leave_range:
-                start = leave_range[0]
-                end = leave_range[-1]
-                curr = start
-                while curr <= end:
-                    leave_dates.append(curr.strftime("%d/%m/%Y"))
-                    curr += timedelta(days=1)
+        if add_btn:
+            clean_name = (name or "").strip()
+            existing_names = [p.get('name', '') for p in st.session_state.get('personnel', [])]
+            if not clean_name:
+                st.error(t["err_name_empty"])
+            elif clean_name in existing_names:
+                st.error(t["err_name_duplicate"])
+            else:
+                name = clean_name
+                leave_dates = []
+                if leave_range:
+                    start = leave_range[0]
+                    end = leave_range[-1]
+                    curr = start
+                    while curr <= end:
+                        leave_dates.append(curr.strftime("%d/%m/%Y"))
+                        curr += timedelta(days=1)
 
-            st.session_state.personnel.append({
-                "name": name,
-                "gender": gender,
-                "role": role,
-                "fixed_duties_total": fixed_total,
-                "fixed_duties_weekend": fixed_wknd,
-                "max_duties": max_duties,
-                "max_weekends": max_weekends,
-                "mixed_gender_allowed": mixed_ok,
-                "busy_days": ", ".join(busy_days),
-                "off_dates": ", ".join(off_dates),
-                "leave_dates": ", ".join(leave_dates),
-                "fixed_dates": ", ".join(fixed_dates),
-                "duty_count": 0, # Runtime tracker
-                "weekend_duty_count": 0 # Runtime tracker
-            })
-            st.success(t["added"].format(name))
+                st.session_state.personnel.append({
+                    "name": name,
+                    "gender": gender,
+                    "role": role,
+                    "fixed_duties_total": fixed_total,
+                    "fixed_duties_weekend": fixed_wknd,
+                    "max_duties": max_duties,
+                    "max_weekends": max_weekends,
+                    "mixed_gender_allowed": mixed_ok,
+                    "busy_days": ", ".join(busy_days),
+                    "off_dates": ", ".join(off_dates),
+                    "leave_dates": ", ".join(leave_dates),
+                    "fixed_dates": ", ".join(fixed_dates),
+                    "duty_count": 0, # Runtime tracker
+                    "weekend_duty_count": 0 # Runtime tracker
+                })
+                st.success(t["added"].format(name))
 
     # Display current list
     if st.session_state.personnel:
@@ -1010,10 +1021,12 @@ def main():
         records = df_saved.to_dict('records')
         previous = st.session_state.personnel
         # Keep runtime counters (Saturday/Sunday totals and any future fields) that are
-        # not editable columns, and match rows by position.
+        # not editable columns, matched by name so a deleted middle row cannot shift
+        # counters onto the wrong person.
+        previous_by_name = {p.get('name', ''): p for p in previous}
         merged = []
-        for index, record in enumerate(records):
-            base = previous[index] if index < len(previous) else {}
+        for record in records:
+            base = previous_by_name.get(record.get('name', ''), {})
             merged.append({**base, **record})
 
         # A removed or renamed person makes the stored schedule unrenderable in stats.
@@ -1047,8 +1060,9 @@ def main():
                     st.write("") # Spacer
                     st.write("") # Spacer
                     if st.button(t["btn_add_leave"], use_container_width=True, key="btn_tool_leave"):
-                        if selected_person_leave and len(leave_range_bulk) == 2:
-                            start, end = leave_range_bulk
+                        if selected_person_leave and len(leave_range_bulk) in (1, 2):
+                            start = leave_range_bulk[0]
+                            end = leave_range_bulk[-1]
                             # Find person
                             for p in st.session_state.personnel:
                                 if p['name'] == selected_person_leave:
@@ -1329,12 +1343,13 @@ def main():
         
         # Process data for display
         display_data = []
-        
+        holiday_set = set(st.session_state.get("holidays_multiselect", []))
+
         for d, team in sorted(schedule.items()):
             names = ", ".join([p['name'] for p in team])
             day_name = translate_day(DAYS_OF_WEEK[d.weekday()])
-            is_weekend = d.weekday() >= 5
-            
+            is_weekend = d.weekday() >= 5 or d.strftime("%d/%m/%Y") in holiday_set
+
             display_data.append({
                 t["col_date"]: d.strftime("%d/%m/%Y"),
                 t["col_day"]: day_name,
@@ -1343,15 +1358,15 @@ def main():
             })
 
         df_res = pd.DataFrame(display_data)
-        
+
         # --- TABS ---
         tab_list, tab_cal, tab_stats = st.tabs([t["list_view"], t["cal_view"], t["stats"]])
-        
+
         with tab_list:
             st.dataframe(df_res, use_container_width=True, hide_index=True)
-            
+
         with tab_cal:
-            cal_html = get_calendar_html(gen_year, gen_month, schedule, t)
+            cal_html = get_calendar_html(gen_year, gen_month, schedule, t, holidays=holiday_set)
             st.markdown(cal_html, unsafe_allow_html=True)
         
         # Show Stats

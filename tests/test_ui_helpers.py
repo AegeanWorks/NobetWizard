@@ -44,6 +44,18 @@ class CalendarHtmlTest(unittest.TestCase):
         self.assertIn("Ada", markup)
         self.assertIn("</table>", markup)
 
+    def test_holiday_weekday_renders_with_weekend_shading(self):
+        schedule = {date(2026, 2, 2): [{"name": "Ada"}]}
+
+        plain = get_calendar_html(2026, 2, schedule, TEXT)
+        shaded = get_calendar_html(2026, 2, schedule, TEXT, holidays=["02/02/2026"])
+
+        self.assertNotEqual(plain.count("var(--secondary-background-color)"), 0)
+        self.assertGreater(
+            shaded.count("var(--secondary-background-color)"),
+            plain.count("var(--secondary-background-color)"),
+        )
+
 
 if __name__ == "__main__":
     unittest.main()

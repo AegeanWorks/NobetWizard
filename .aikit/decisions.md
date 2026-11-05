@@ -38,6 +38,13 @@ contract, a dependency, a data format or the architecture; IDs are consecutive a
 - **Decision**: Run `python aikit.py ui-id NobetWizard --set yes --kind web`; `project.json` now records `ui_kind: web` with `ui_source: manual` (2026-11-03), matching `media.json`.
 - **Consequences**: Catalog display and media pipeline agree the app is web; detector evidence stays `requirements.txt` (minimal change); re-detection with `--set auto` would regress to desktop and must not be used without updating evidence to `main.py`.
 
+### ADR-006: Harden scheduler guards, UI validation and calendar exports
+- **Date**: 2026-11-06
+- **Status**: Accepted
+- **Context**: The verify-3push audit found duplicate personnel names silently corrupting name-matched scheduling, failed searches leaking partial duty counters into the editor, list-typed constraints crashing string splits, same-day conditional rules accepted by the UI, single-day leave rejected by the bulk tool, holidays shown as weekdays while counted as weekends, iCalendar events missing UID/DTSTAMP, help text quoting the wrong date format, editor merges matched by position, and a shared font-download temp path.
+- **Decision**: Reject duplicate names and same-day rules in `generate()` with clear errors; restore the fixed baseline before returning failure; parse busy/off/leave through `_split_dates`; guard the add-person form (strip, reject empty/duplicates) and the rule form; accept single-day bulk leave; shade holidays as weekends in the calendar and list views; emit stable UID plus DTSTAMP per event; correct help text to DD/MM/YYYY; merge editor rows by name; download fonts through unique temp files; drop unused CSV/template/header keys.
+- **Consequences**: Invalid rosters fail fast with actionable messages instead of silent mismatch; the UI no longer shows partial counts or accepts meaningless rules; exports deduplicate on re-import; holiday display matches scheduler counting; 7 new regression tests pin the behavior (34 total).
+
 <!-- Entry format:
 ### ADR-NNN: <decision in one line>
 - **Date**: YYYY-MM-DD

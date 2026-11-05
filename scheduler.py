@@ -215,25 +215,20 @@ class DutyScheduler:
 
         # 7. Busy Days (Day of Week constraint)
         # Checks if the person has blocked this specific day of the week (e.g., "Monday")
-        busy_str = person.get('busy_days', '')
-        if busy_str:
-            busy_list = [d.strip() for d in busy_str.split(',')]
+        busy_set = self._split_dates(person, 'busy_days')
+        if busy_set:
             # Get the day name for the current date (e.g., "Monday")
             day_name = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"][current_date.weekday()]
-            if day_name in busy_list:
+            if day_name in busy_set:
                 return False
 
         # 7. Specific Off Dates
-        off_dates_str = person.get('off_dates', '')
-        if off_dates_str:
-            if current_date.strftime("%d/%m/%Y") in [d.strip() for d in off_dates_str.split(',')]:
-                return False
+        if current_date.strftime("%d/%m/%Y") in self._split_dates(person, 'off_dates'):
+            return False
 
         # 8. Leave Dates
-        leave_dates_str = person.get('leave_dates', '')
-        if leave_dates_str:
-            if current_date.strftime("%d/%m/%Y") in [d.strip() for d in leave_dates_str.split(',')]:
-                return False
+        if current_date.strftime("%d/%m/%Y") in self._split_dates(person, 'leave_dates'):
+            return False
 
         # 9. Conditional Weekday Rules (e.g., If Wed then No Sat)
         # config['conditional_rules'] = [{'trigger': 2, 'forbidden': 5}, ...] (0=Mon, 6=Sun)
@@ -316,6 +311,15 @@ class DutyScheduler:
     def generate(self):
         # Fixed duties are validated and reserved before the randomized fill so they
         # cannot bypass availability, rest, weekly, max-duty or team rules.
+        seen_names = set()
+        for person in self.personnel:
+            name = person.get('name', '')
+            if name in seen_names:
+                return False, {}, f"Duplicate personnel name '{name}'; names must be unique."
+            seen_names.add(name)
+        for rule in self.config.get('conditional_rules', []):
+            if rule.get('trigger') == rule.get('forbidden'):
+                return False, {}, "A conditional rule cannot forbid the same day it triggers on."
         index, index_error = self._index_fixed_duties()
         if index_error:
             return False, {}, index_error
@@ -458,5 +462,8 @@ class DutyScheduler:
                             break
             
             return True, self.schedule, None
-            
+
+        # A failed search leaves partial counters on the personnel objects; restore
+        # the fixed-duty baseline so the UI does not display a half-filled attempt.
+        self._restore_baseline()
         return False, {}, last_error

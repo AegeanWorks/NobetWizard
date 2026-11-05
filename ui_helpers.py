@@ -23,9 +23,10 @@ def normalize_gender_mode(value, option_sets):
     return "Any"
 
 
-def get_calendar_html(year, month, schedule, t):
+def get_calendar_html(year, month, schedule, t, holidays=None):
     """Render the month grid, escaping every personnel name it embeds."""
     weeks = calendar.monthcalendar(year, month)
+    holiday_set = set(holidays or [])
 
     headers = "".join(
         [
@@ -51,7 +52,7 @@ def get_calendar_html(year, month, schedule, t):
                 )
             else:
                 current_date = date(year, month, day)
-                is_weekend = current_date.weekday() >= 5
+                is_weekend = current_date.weekday() >= 5 or current_date.strftime("%d/%m/%Y") in holiday_set
                 bg_color = (
                     "var(--background-color)"
                     if not is_weekend

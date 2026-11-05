@@ -9,8 +9,8 @@
 - **Total Python Modules**: `12`
 - **Total Classes**: `9`
 - **Total Top-Level Functions**: `25`
-- **Total Class Methods**: `41`
-- **Total Source Lines**: `2413`
+- **Total Class Methods**: `48`
+- **Total Source Lines**: `2542`
 
 ---
 
@@ -19,7 +19,7 @@
 ### [`exports.py`](exports.py)
 > *Calendar export helpers that do not depend on the Streamlit UI.*
 
-**Size**: `61` lines (`1941` bytes)
+**Size**: `74` lines (`2485` bytes)
 
 **Functions:**
 - `def escape_ics_text(value)` - *Escape a value so it cannot break out of an iCalendar text property.*
@@ -29,7 +29,7 @@
 ---
 
 ### [`main.py`](main.py)
-**Size**: `1421` lines (`64561` bytes)
+**Size**: `1436` lines (`65641` bytes)
 
 **Functions:**
 - `def get_secrets()` - *st.secrets raises when no secrets file exists; an empty mapping keeps local runs working.*
@@ -49,7 +49,7 @@
 ---
 
 ### [`scheduler.py`](scheduler.py)
-**Size**: `462` lines (`20267` bytes)
+**Size**: `469` lines (`20700` bytes)
 
 **Classes:**
 - `class DutyScheduler`
@@ -96,12 +96,14 @@
 ---
 
 ### [`tests/test_exports.py`](tests/test_exports.py)
-**Size**: `60` lines (`2046` bytes)
+**Size**: `85` lines (`3110` bytes)
 
 **Classes:**
 - `class IcsEscapingTest`
   - Method `.test_escapes_text_separators_and_newlines()`
   - Method `.test_generated_event_escapes_personnel_names()`
+  - Method `.test_generated_events_carry_uid_and_dtstamp()`
+  - Method `.test_generated_uid_is_stable_for_the_same_event()`
 - `class DownloadFontTest`
   - Method `.test_existing_font_is_not_downloaded()`
   - Method `.test_download_uses_a_timeout_and_replaces_the_target()`
@@ -109,7 +111,7 @@
 ---
 
 ### [`tests/test_scheduler.py`](tests/test_scheduler.py)
-**Size**: `159` lines (`5449` bytes)
+**Size**: `215` lines (`7483` bytes)
 
 **Classes:**
 - `class DutySchedulerTest`
@@ -124,6 +126,10 @@
   - Method `.test_fixed_duties_cannot_exceed_people_per_day()`
   - Method `.test_fixed_duties_cannot_pair_incompatible_people()`
   - Method `.test_fixed_duties_cannot_exceed_max_duties()`
+  - Method `.test_duplicate_personnel_names_are_rejected()`
+  - Method `.test_same_day_conditional_rule_is_rejected()`
+  - Method `.test_failed_search_restores_fixed_baseline_counts()`
+  - Method `.test_list_format_constraints_block_assignment()`
 
 **Functions:**
 - `def personnel(count)`
@@ -155,7 +161,7 @@
 ---
 
 ### [`tests/test_ui_helpers.py`](tests/test_ui_helpers.py)
-**Size**: `49` lines (`1915` bytes)
+**Size**: `61` lines (`2428` bytes)
 
 **Classes:**
 - `class GenderModeTest`
@@ -166,17 +172,18 @@
 - `class CalendarHtmlTest`
   - Method `.test_personnel_names_are_html_escaped()`
   - Method `.test_empty_cells_and_assignments_still_render()`
+  - Method `.test_holiday_weekday_renders_with_weekend_shading()`
 
 ---
 
 ### [`ui_helpers.py`](ui_helpers.py)
 > *Pure presentation helpers shared by the Streamlit UI and the test suite.*
 
-**Size**: `84` lines (`3006` bytes)
+**Size**: `85` lines (`3111` bytes)
 
 **Functions:**
 - `def gender_label(options, mode)` - *Return the localized label for an internal gender mode.*
 - `def normalize_gender_mode(value, option_sets)` - *Accept an internal mode or a legacy localized label from saved data.*
-- `def get_calendar_html(year, month, schedule, t)` - *Render the month grid, escaping every personnel name it embeds.*
+- `def get_calendar_html(year, month, schedule, t, holidays)` - *Render the month grid, escaping every personnel name it embeds.*
 
 ---
