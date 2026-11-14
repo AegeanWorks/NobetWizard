@@ -1,7 +1,7 @@
 # Codebase Map & Symbol Catalog 🗺️
 
 > **AUTO-GENERATED & VERIFIED BY `scripts/update_knowledge_base.py`**
-> This document provides an automated, up-to-date registry of all modules, classes, and exported functions across this repository.
+> This document catalogues Python modules, classes, and exported functions. See Map Coverage for any stack it does not index.
 
 ---
 
@@ -11,6 +11,10 @@
 - **Total Top-Level Functions**: `25`
 - **Total Class Methods**: `48`
 - **Total Source Lines**: `2542`
+
+## 🧭 Map Coverage
+- **Indexed**: python (`12` module(s))
+- **Not indexed by this map**: none (no non-Python source files were found)
 
 ---
 
