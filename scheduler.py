@@ -314,6 +314,8 @@ class DutyScheduler:
         seen_names = set()
         for person in self.personnel:
             name = person.get('name', '')
+            if not isinstance(name, str) or not name.strip():
+                return False, {}, "Personnel name cannot be empty."
             if name in seen_names:
                 return False, {}, f"Duplicate personnel name '{name}'; names must be unique."
             seen_names.add(name)
@@ -326,6 +328,10 @@ class DutyScheduler:
         self._fixed_dates_by_person = index
         fixed_error = self._validate_fixed_duties()
         if fixed_error:
+            # Validation can fail after reserving some fixed duties; leave a clean
+            # counter baseline because no roster was produced.
+            self._reset_counters()
+            self.schedule = {}
             return False, {}, fixed_error
 
         # Optimization: Find multiple valid schedules and pick the fairest one

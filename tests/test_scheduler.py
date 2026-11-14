@@ -154,6 +154,35 @@ class DutySchedulerTest(unittest.TestCase):
         self.assertFalse(success)
         self.assertIn("fixed", error.lower())
 
+    def test_empty_personnel_name_is_rejected(self):
+        crew = personnel(1)
+        crew[0]["name"] = "   "
+        scheduler = DutyScheduler(
+            2026,
+            2,
+            crew,
+            config(people_per_day=1, allow_consecutive=True, max_weekly_duties=7),
+        )
+
+        success, _schedule, error = scheduler.generate()
+
+        self.assertFalse(success)
+        self.assertIn("empty", error.lower())
+
+    def test_fixed_validation_failure_restores_clean_counters(self):
+        crew = personnel()
+        crew[0]["max_duties"] = 2
+        crew[0]["fixed_dates"] = "01/02/2026, 02/02/2026, 03/02/2026"
+        scheduler = DutyScheduler(2026, 2, crew, config(allow_consecutive=True))
+
+        success, _schedule, error = scheduler.generate()
+
+        self.assertFalse(success)
+        self.assertIn("fixed", error.lower())
+        for person in crew:
+            self.assertEqual(person["duty_count"], 0)
+            self.assertEqual(person["weekend_duty_count"], 0)
+
     def test_duplicate_personnel_names_are_rejected(self):
         crew = personnel()
         crew[1]["name"] = crew[0]["name"]

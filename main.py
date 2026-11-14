@@ -1098,7 +1098,7 @@ def main():
                         DAYS_OF_WEEK, 
                         default=[d for d in current_busy if d in DAYS_OF_WEEK],
                         format_func=translate_day,
-                        key="tool_busy_select",
+                        key=f"tool_busy_select_{selected_person_busy}",
                         placeholder=t["placeholder_select"]
                     )
                 
@@ -1134,7 +1134,7 @@ def main():
                         date_options, 
                         default=default_off,
                         placeholder=t["placeholder_select"],
-                        key="tool_off_select"
+                        key=f"tool_off_select_{selected_person_off}"
                     )
                 
                 with c_o3:
@@ -1171,7 +1171,7 @@ def main():
                         date_options, 
                         default=default_fixed,
                         placeholder=t["placeholder_select"],
-                        key="tool_fixed_select"
+                        key=f"tool_fixed_select_{selected_person_fixed}"
                     )
                 
                 with c_f3:

@@ -1,21 +1,15 @@
 {
   "version": 1,
   "active_task": {
-    "task_id": "verify-3push-audit",
-    "last_phase": "phase 4",
+    "task_id": "scheduler-validation-hardening",
+    "last_phase": "in_progress",
     "active_phase": 5,
     "status": "completed",
-    "updated_at": 1793914717.6571314,
+    "updated_at": 1794644498.2471642,
     "owner": "kilo:goal",
     "started_by": "kilo:goal",
-    "continuations": [
-      {
-        "agent": "unidentified",
-        "from": "kilo:goal",
-        "at": 1793914746.3203142
-      }
-    ],
-    "completed_at": 1793914746.3203156
+    "continuations": [],
+    "completed_at": 1794644498.4998639
   },
   "checkpoints": [
     {
@@ -182,6 +176,45 @@
       "timestamp_str": "2026-11-06 00:39:06",
       "agent": "unidentified",
       "continued_from": "kilo:goal"
+    },
+    {
+      "task_id": "scheduler-validation-hardening",
+      "phase": "in_progress",
+      "phase_num": 2,
+      "description": "[1/3] Reject empty personnel names and leave counters clean after fixed-duty validation fails",
+      "files_affected": [],
+      "status": "in_progress",
+      "timestamp": 1794643911.2984352,
+      "timestamp_str": "2026-11-14 11:11:51",
+      "agent": "kilo:goal",
+      "impact_assessment": {
+        "why": "generate() can schedule a nameless person and a failed fixed-duty validation leaves partial duty_count values visible in the personnel editor",
+        "benefits": "Fail fast with an actionable message and keep the editor counters consistent with the ADR-006 failure-state contract",
+        "risks": "contract: generate() now rejects whitespace-only names and zeroes counters on fixed-validation failure; dependency: none; concurrency: none; state: runtime counters only",
+        "mitigation": "Failing-first unit tests for both paths, full project gates, explicit staging, no push"
+      },
+      "plan_digest": "3eb2ccd879b85bce66b599fb957a95a765ab46325e1bb4f1fed4be576332de43"
+    },
+    {
+      "task_id": "scheduler-validation-hardening",
+      "phase": "in_progress",
+      "phase_num": 4,
+      "description": "[2/3] Empty and non-text names rejected; failed fixed validation resets counters and schedule; tool multiselect state scoped per person; checklists: passed (test, hygiene, guidelines, secrets)",
+      "files_affected": [],
+      "status": "in_progress",
+      "timestamp": 1794644498.2471642,
+      "timestamp_str": "2026-11-14 11:21:38",
+      "agent": "kilo:goal"
+    },
+    {
+      "task_id": "scheduler-validation-hardening",
+      "phase": "completed",
+      "phase_num": 5,
+      "description": "Task 'scheduler-validation-hardening' completed successfully.",
+      "status": "completed",
+      "timestamp": 1794644498.4998653,
+      "timestamp_str": "2026-11-14 11:21:38",
+      "agent": "kilo:goal"
     }
   ]
 }

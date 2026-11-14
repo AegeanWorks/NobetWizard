@@ -9,8 +9,8 @@
 - **Total Python Modules**: `12`
 - **Total Classes**: `9`
 - **Total Top-Level Functions**: `25`
-- **Total Class Methods**: `48`
-- **Total Source Lines**: `2542`
+- **Total Class Methods**: `50`
+- **Total Source Lines**: `2577`
 
 ## 🧭 Map Coverage
 - **Indexed**: python (`12` module(s))
@@ -33,7 +33,7 @@
 ---
 
 ### [`main.py`](main.py)
-**Size**: `1436` lines (`65641` bytes)
+**Size**: `1436` lines (`65713` bytes)
 
 **Functions:**
 - `def get_secrets()` - *st.secrets raises when no secrets file exists; an empty mapping keeps local runs working.*
@@ -53,7 +53,7 @@
 ---
 
 ### [`scheduler.py`](scheduler.py)
-**Size**: `469` lines (`20700` bytes)
+**Size**: `475` lines (`21042` bytes)
 
 **Classes:**
 - `class DutyScheduler`
@@ -115,7 +115,7 @@
 ---
 
 ### [`tests/test_scheduler.py`](tests/test_scheduler.py)
-**Size**: `215` lines (`7483` bytes)
+**Size**: `244` lines (`8480` bytes)
 
 **Classes:**
 - `class DutySchedulerTest`
@@ -130,6 +130,8 @@
   - Method `.test_fixed_duties_cannot_exceed_people_per_day()`
   - Method `.test_fixed_duties_cannot_pair_incompatible_people()`
   - Method `.test_fixed_duties_cannot_exceed_max_duties()`
+  - Method `.test_empty_personnel_name_is_rejected()`
+  - Method `.test_fixed_validation_failure_restores_clean_counters()`
   - Method `.test_duplicate_personnel_names_are_rejected()`
   - Method `.test_same_day_conditional_rule_is_rejected()`
   - Method `.test_failed_search_restores_fixed_baseline_counts()`

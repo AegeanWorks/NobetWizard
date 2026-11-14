@@ -45,6 +45,13 @@ contract, a dependency, a data format or the architecture; IDs are consecutive a
 - **Decision**: Reject duplicate names and same-day rules in `generate()` with clear errors; restore the fixed baseline before returning failure; parse busy/off/leave through `_split_dates`; guard the add-person form (strip, reject empty/duplicates) and the rule form; accept single-day bulk leave; shade holidays as weekends in the calendar and list views; emit stable UID plus DTSTAMP per event; correct help text to DD/MM/YYYY; merge editor rows by name; download fonts through unique temp files; drop unused CSV/template/header keys.
 - **Consequences**: Invalid rosters fail fast with actionable messages instead of silent mismatch; the UI no longer shows partial counts or accepts meaningless rules; exports deduplicate on re-import; holiday display matches scheduler counting; 7 new regression tests pin the behavior (34 total).
 
+### ADR-007: Reject empty names, clean counters on invalid fixed duties, and scope tool widgets per person
+- **Date**: 2026-11-14
+- **Status**: Accepted
+- **Context**: A blank name from the free-form personnel editor could be scheduled as an unnamed roster entry; a failed fixed-duty validation returned after reserving some duties, leaving partial counters in the personnel editor; the busy, off and fixed tools reused one widget key, so switching the selected person kept the previous person's selections and could save them onto the new person.
+- **Decision**: `generate()` rejects non-text or whitespace-only names before reserving fixed duties; a failed fixed-duty validation resets the duty counters and schedule so no partial state survives; the busy, off and fixed multiselects key their widget state by person while their defaults still come from that person's saved values.
+- **Consequences**: Invalid personnel fail fast with an actionable message; a failed fixed-duty validation leaves the editor at a zero counter baseline while the ADR-006 failed-search baseline behavior is unchanged; each person's tool selections are independent and are dropped on logout.
+
 <!-- Entry format:
 ### ADR-NNN: <decision in one line>
 - **Date**: YYYY-MM-DD
