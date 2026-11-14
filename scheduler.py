@@ -146,16 +146,16 @@ class DutyScheduler:
     def check_constraints(self, person, current_date, current_team):
         # 1. Max Duties Total
         # If fixed_duties_total is set (>0), use it as the limit. Otherwise use max_duties.
-        fixed_total = person.get('fixed_duties_total', 0)
-        limit_total = fixed_total if fixed_total > 0 else person.get('max_duties', 0)
+        fixed_total = person.get('fixed_duties_total') or 0
+        limit_total = fixed_total if fixed_total > 0 else (person.get('max_duties') or 0)
         
         if person['duty_count'] >= limit_total:
             return False
 
         # 2. Max Weekend Duties
         if self.is_weekend(current_date):
-            fixed_wknd = person.get('fixed_duties_weekend', 0)
-            limit_wknd = fixed_wknd if fixed_wknd > 0 else person.get('max_weekends', 0)
+            fixed_wknd = person.get('fixed_duties_weekend') or 0
+            limit_wknd = fixed_wknd if fixed_wknd > 0 else (person.get('max_weekends') or 0)
             
             if person['weekend_duty_count'] >= limit_wknd:
                 return False
