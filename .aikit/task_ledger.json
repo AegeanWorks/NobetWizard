@@ -13,39 +13,6 @@
   },
   "checkpoints": [
     {
-      "task_id": "verify-3push-audit",
-      "phase": "phase 3",
-      "phase_num": 3,
-      "description": "[2/4] Adopt safe fixes for audit window (scheduler guards, UI validation, export RFC, display consistency)",
-      "files_affected": [],
-      "status": "in_progress",
-      "timestamp": 1793914431.7638373,
-      "timestamp_str": "2026-11-06 00:33:51",
-      "agent": "kilo:goal"
-    },
-    {
-      "task_id": "verify-3push-audit",
-      "phase": "phase 4",
-      "phase_num": 4,
-      "description": "[3/4] Phase 4 green: 34 unit OK, hygiene guidelines secrets clean, audit hardening pinned; checklists: passed",
-      "files_affected": [],
-      "status": "in_progress",
-      "timestamp": 1793914717.6571314,
-      "timestamp_str": "2026-11-06 00:38:37",
-      "agent": "kilo:goal"
-    },
-    {
-      "task_id": "verify-3push-audit",
-      "phase": "completed",
-      "phase_num": 5,
-      "description": "Task 'verify-3push-audit' completed successfully.",
-      "status": "completed",
-      "timestamp": 1793914746.320317,
-      "timestamp_str": "2026-11-06 00:39:06",
-      "agent": "unidentified",
-      "continued_from": "kilo:goal"
-    },
-    {
       "task_id": "scheduler-validation-hardening",
       "phase": "in_progress",
       "phase_num": 2,
@@ -268,6 +235,48 @@
       "status": "in_progress",
       "timestamp": 1794649438.119976,
       "timestamp_str": "2026-11-14 12:43:58",
+      "agent": "unidentified"
+    },
+    {
+      "task_id": "reforge:run-1",
+      "phase": "reforge stage 2",
+      "phase_num": 3,
+      "description": "Reforge stage 2: window 40, 20 commit(s), 24 file(s) reviewed (unreviewed), 0 finding(s), 0 repaired, empty \u2014 nothing to commit, 3 binary not analysed",
+      "files_affected": [
+        "assets/artwork.jpg",
+        "assets/logo.png",
+        "assets/social-preview.png"
+      ],
+      "status": "in_progress",
+      "timestamp": 1794649598.1242454,
+      "timestamp_str": "2026-11-14 12:46:38",
+      "agent": "unidentified"
+    },
+    {
+      "task_id": "reforge:run-1",
+      "phase": "reforge stage 2",
+      "phase_num": 3,
+      "description": "Reforge stage 2: stage 2 host review reviewed; run active; coverage 107/107",
+      "files_affected": [],
+      "status": "in_progress",
+      "timestamp": 1794650215.0658116,
+      "timestamp_str": "2026-11-14 12:56:55",
+      "agent": "unidentified"
+    },
+    {
+      "task_id": "reforge:run-1",
+      "phase": "reforge stage 2",
+      "phase_num": 3,
+      "description": "Reforge stage 2: window 40, 20 commit(s), 24 file(s) reviewed (reviewed), 2 finding(s), 2 repaired, commit f6f292f verified-but-unpushed, 3 binary not analysed (improvement=2)",
+      "files_affected": [
+        "scheduler.py",
+        "assets/artwork.jpg",
+        "assets/logo.png",
+        "assets/social-preview.png"
+      ],
+      "status": "in_progress",
+      "timestamp": 1794650215.0904927,
+      "timestamp_str": "2026-11-14 12:56:55",
       "agent": "unidentified"
     }
   ]

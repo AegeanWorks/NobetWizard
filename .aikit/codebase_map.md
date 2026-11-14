@@ -55,7 +55,7 @@
 ---
 
 ### [`scheduler.py`](scheduler.py)
-**Size**: `477` lines (`21080` bytes)
+**Size**: `477` lines (`21092` bytes)
 
 **Classes:**
 - `class DutyScheduler`

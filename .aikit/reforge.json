@@ -55,7 +55,7 @@
       ],
       "status": "active",
       "created": "2026-11-14T11:53:33",
-      "updated": "2026-11-14T12:46:38",
+      "updated": "2026-11-14T12:56:55",
       "last_audit": {
         "run": "run-1",
         "stage": 2,
@@ -312,12 +312,12 @@
         },
         "gates": {},
         "delivery": {
-          "commit": "",
-          "short": "",
+          "commit": "f6f292f13a12acccd1dee6fb872609929c2db857",
+          "short": "f6f292f",
           "pushed": false,
           "push_error": null,
-          "empty": true,
-          "timestamp": "2026-11-14T12:46:38"
+          "empty": false,
+          "timestamp": "2026-11-14T12:56:55"
         },
         "timestamp": "2026-11-14T12:46:38",
         "dirty_targets": []
@@ -757,12 +757,12 @@
           },
           "gates": {},
           "delivery": {
-            "commit": "",
-            "short": "",
+            "commit": "f6f292f13a12acccd1dee6fb872609929c2db857",
+            "short": "f6f292f",
             "pushed": false,
             "push_error": null,
-            "empty": true,
-            "timestamp": "2026-11-14T12:46:38"
+            "empty": false,
+            "timestamp": "2026-11-14T12:56:55"
           },
           "timestamp": "2026-11-14T12:46:38",
           "dirty_targets": []
@@ -1070,12 +1070,12 @@
     },
     "gates": {},
     "delivery": {
-      "commit": "",
-      "short": "",
+      "commit": "f6f292f13a12acccd1dee6fb872609929c2db857",
+      "short": "f6f292f",
       "pushed": false,
       "push_error": null,
-      "empty": true,
-      "timestamp": "2026-11-14T12:46:38"
+      "empty": false,
+      "timestamp": "2026-11-14T12:56:55"
     },
     "timestamp": "2026-11-14T12:46:38",
     "dirty_targets": []
@@ -1515,12 +1515,12 @@
       },
       "gates": {},
       "delivery": {
-        "commit": "",
-        "short": "",
+        "commit": "f6f292f13a12acccd1dee6fb872609929c2db857",
+        "short": "f6f292f",
         "pushed": false,
         "push_error": null,
-        "empty": true,
-        "timestamp": "2026-11-14T12:46:38"
+        "empty": false,
+        "timestamp": "2026-11-14T12:56:55"
       },
       "timestamp": "2026-11-14T12:46:38",
       "dirty_targets": []
