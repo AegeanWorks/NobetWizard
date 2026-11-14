@@ -59,6 +59,13 @@ contract, a dependency, a data format or the architecture; IDs are consecutive a
 - **Decision**: Failed searches clear `schedule` together with restoring counters; `generate_ics` folds every content line at the RFC 5545 octet limit and joins the physical lines with CRLF.
 - **Consequences**: Callers never observe a partial roster after a failed generation, and exports are accepted by strict iCalendar parsers; long name lists unfold identically in clients.
 
+### ADR-009: Clear authentication form state on logout
+- **Date**: 2026-11-14
+- **Status**: Accepted
+- **Context**: `clear_user_state()` ran on logout but left the login and registration widget keys in session state, so the login page reappeared with the previous username and password already filled; the clear-database confirmation flag could also survive into the next session.
+- **Decision**: Clear the login/registration fields and the username through a dedicated `clear_auth_state()` invoked only on the logout path, before the login page renders; treat `confirm_clear_db` as user-scoped state.
+- **Consequences**: Logout leaves an empty login form and no previous identity; the login page recreates its widget keys with empty defaults, while a successful login never touches auth widgets that were already rendered in the same run.
+
 <!-- Entry format:
 ### ADR-NNN: <decision in one line>
 - **Date**: YYYY-MM-DD

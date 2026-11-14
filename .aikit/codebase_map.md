@@ -8,9 +8,9 @@
 ## 📊 Codebase Metrics
 - **Total Python Modules**: `12`
 - **Total Classes**: `9`
-- **Total Top-Level Functions**: `26`
+- **Total Top-Level Functions**: `27`
 - **Total Class Methods**: `52`
-- **Total Source Lines**: `2618`
+- **Total Source Lines**: `2635`
 
 ## 🧭 Map Coverage
 - **Indexed**: python (`12` module(s))
@@ -34,11 +34,12 @@
 ---
 
 ### [`main.py`](main.py)
-**Size**: `1436` lines (`65713` bytes)
+**Size**: `1453` lines (`66184` bytes)
 
 **Functions:**
 - `def get_secrets()` - *st.secrets raises when no secrets file exists; an empty mapping keeps local runs working.*
 - `def clear_user_state()` - *Drop every user-scoped key so the next login starts from a clean session.*
+- `def clear_auth_state()` - *Drop the credentials and identity shown by the login page after logout.*
 - `def get_firestore_db()` - *Initialize Firestore Client from Streamlit Secrets*
 - `def get_user_db_path(username)`
 - `def load_db(username)`

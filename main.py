@@ -308,8 +308,18 @@ APP_STATE_KEYS = {
     "gen_month",
     "personnel_editor",
     "dl_fmt_top",
+    "confirm_clear_db",
 }
 APP_STATE_PREFIXES = ("cfg_", "hist_", "tool_", "conf_")
+# Login and registration widgets live outside the logged-in page but must not
+# carry the previous credentials into the next session.
+AUTH_STATE_KEYS = {
+    "username",
+    "login_user",
+    "login_pass",
+    "reg_user",
+    "reg_pass",
+}
 
 
 def clear_user_state():
@@ -317,6 +327,12 @@ def clear_user_state():
     for key in list(st.session_state.keys()):
         if key in APP_STATE_KEYS or key.startswith(APP_STATE_PREFIXES):
             del st.session_state[key]
+
+
+def clear_auth_state():
+    """Drop the credentials and identity shown by the login page after logout."""
+    for key in AUTH_STATE_KEYS:
+        st.session_state.pop(key, None)
 
 def get_firestore_db():
     """Initialize Firestore Client from Streamlit Secrets"""
@@ -570,6 +586,7 @@ def main():
     # run, so the cleanup runs at the start of the next one.
     if st.session_state.pop("pending_logout", False):
         clear_user_state()
+        clear_auth_state()
         st.session_state['logged_in'] = False
         
     if not st.session_state['logged_in']:
