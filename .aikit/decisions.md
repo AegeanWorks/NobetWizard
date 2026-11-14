@@ -122,6 +122,13 @@ contract, a dependency, a data format or the architecture; IDs are consecutive a
 - **Decision**: `security.verify_password` accepts a 64-character hex digest with a constant-time compare and returns a fresh bcrypt hash. `authenticate` stores it after a successful login: `storage.replace_json_entry` re-reads the users file and replaces only that user while the old hash is still there, and Firestore gets an `update` of `password_hash`. A failed upgrade never blocks the login and retries on the next one.
 - **Consequences**: Legacy accounts work again and leave the weak format on first login. The SHA-256 check stays until no active user has one; delete it then. The reload narrows the lost-update window on the users file but does not lock it, as registration already behaves.
 
+### ADR-018: Keep every quarantined state file and keep it out of git
+- **Date**: 2026-11-14
+- **Status**: Accepted
+- **Context**: ADR-011 renames an unreadable state file to `.corrupt_<epoch seconds>`. `os.replace` overwrites an existing target, so a second corruption within the same second destroyed the first quarantined copy. The runtime copies (`users_db.json.corrupt_*`, `personnel_db_*.json.corrupt_*`) were also not ignored by git, although they hold password hashes and personnel data.
+- **Decision**: `load_json_or_default` appends `_1`, `_2`, ... while the quarantine name exists, and .gitignore covers `*_db.json.corrupt_*` and `personnel_db_*.json.corrupt_*`.
+- **Consequences**: No damaged state is lost to a name collision and none can be staged by accident. Quarantined files still accumulate until the user removes them.
+
 <!-- Entry format:
 ### ADR-NNN: <decision in one line>
 - **Date**: YYYY-MM-DD

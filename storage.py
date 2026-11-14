@@ -18,7 +18,12 @@ def load_json_or_default(path, default):
         with open(target, "r", encoding="utf-8") as handle:
             return json.load(handle)
     except (OSError, ValueError):
-        quarantine = target.with_name(f"{target.name}.corrupt_{int(time.time())}")
+        stamp = int(time.time())
+        quarantine = target.with_name(f"{target.name}.corrupt_{stamp}")
+        suffix = 1
+        while quarantine.exists():  # a second corruption in the same second must not overwrite the first
+            quarantine = target.with_name(f"{target.name}.corrupt_{stamp}_{suffix}")
+            suffix += 1
         try:
             os.replace(target, quarantine)
         except OSError:  # hygiene: allow best-effort quarantine; the unreadable state still falls back

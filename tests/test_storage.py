@@ -2,6 +2,7 @@ import json
 import tempfile
 import unittest
 from pathlib import Path
+from unittest import mock
 
 from storage import atomic_write_json, load_json_or_default, replace_json_entry
 
@@ -57,6 +58,21 @@ class AtomicWriteJsonTest(unittest.TestCase):
             atomic_write_json(path, {"ok": True})
 
             self.assertTrue(path.is_file())
+
+
+class QuarantineCollisionTest(unittest.TestCase):
+    def test_two_corrupt_files_in_the_same_second_are_both_kept(self):
+        with tempfile.TemporaryDirectory() as folder:
+            path = Path(folder) / "data.json"
+            with mock.patch("storage.time.time", return_value=1000.0):
+                path.write_text("first {", encoding="utf-8")
+                load_json_or_default(path, {})
+                path.write_text("second {", encoding="utf-8")
+                load_json_or_default(path, {})
+            kept = sorted(
+                item.read_text(encoding="utf-8") for item in Path(folder).iterdir() if ".corrupt_" in item.name
+            )
+            self.assertEqual(kept, ["first {", "second {"])
 
 
 class ReplaceJsonEntryTest(unittest.TestCase):

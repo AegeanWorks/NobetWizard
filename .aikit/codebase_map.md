@@ -7,10 +7,10 @@
 
 ## 📊 Codebase Metrics
 - **Total Python Modules**: `12`
-- **Total Classes**: `14`
+- **Total Classes**: `15`
 - **Total Top-Level Functions**: `32`
-- **Total Class Methods**: `71`
-- **Total Source Lines**: `2850`
+- **Total Class Methods**: `72`
+- **Total Source Lines**: `2871`
 
 ## 🧭 Map Coverage
 - **Indexed**: python (`12` module(s))
@@ -91,7 +91,7 @@
 ---
 
 ### [`storage.py`](storage.py)
-**Size**: `63` lines (`2255` bytes)
+**Size**: `68` lines (`2511` bytes)
 
 **Functions:**
 - `def load_json_or_default(path, default)` - *Read a JSON document, quarantining an unreadable file instead of raising.*
@@ -176,7 +176,7 @@
 ---
 
 ### [`tests/test_storage.py`](tests/test_storage.py)
-**Size**: `90` lines (`3939` bytes)
+**Size**: `106` lines (`4689` bytes)
 
 **Classes:**
 - `class LoadJsonOrDefaultTest`
@@ -187,6 +187,8 @@
   - Method `.test_writes_and_overwrites_json()`
   - Method `.test_leaves_no_temporary_files()`
   - Method `.test_creates_missing_parent_directory()`
+- `class QuarantineCollisionTest`
+  - Method `.test_two_corrupt_files_in_the_same_second_are_both_kept()`
 - `class ReplaceJsonEntryTest`
   - Method `.test_replaces_only_the_named_entry_when_it_is_unchanged()`
   - Method `.test_keeps_an_entry_added_after_the_caller_read_the_file()`

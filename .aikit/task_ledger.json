@@ -5,28 +5,12 @@
     "last_phase": "verification",
     "active_phase": 4,
     "status": "in_progress",
-    "updated_at": 1794689127.619997,
+    "updated_at": 1794689218.7763512,
     "owner": "kiro:nw-fixes",
     "started_by": "kiro:nw-fixes",
     "continuations": []
   },
   "checkpoints": [
-    {
-      "task_id": "font-artifact-hygiene",
-      "phase": "completed",
-      "phase_num": 5,
-      "description": "Task 'font-artifact-hygiene' completed successfully.",
-      "status": "completed",
-      "timestamp": 1794660070.9255037,
-      "timestamp_str": "2026-11-14 15:41:10",
-      "agent": "kilo:goal",
-      "delivery": {
-        "roots": [
-          "."
-        ],
-        "forced": false
-      }
-    },
     {
       "task_id": "load-clears-stale-roster",
       "phase": "in_progress",
@@ -293,6 +277,18 @@
       "status": "in_progress",
       "timestamp": 1794689127.619997,
       "timestamp_str": "2026-11-14 23:45:27",
+      "agent": "kiro:nw-fixes",
+      "checklists": "passed"
+    },
+    {
+      "task_id": "nw-reforge-fixes",
+      "phase": "verification",
+      "phase_num": 4,
+      "description": "[milestone 2/3] quarantine names never collide and quarantined state is git-ignored; tests 57 pass; checklists: passed (test, hygiene, guidelines, secrets)",
+      "files_affected": [],
+      "status": "in_progress",
+      "timestamp": 1794689218.7763512,
+      "timestamp_str": "2026-11-14 23:46:58",
       "agent": "kiro:nw-fixes",
       "checklists": "passed"
     }
