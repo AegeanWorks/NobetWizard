@@ -3,25 +3,15 @@
   "active_task": {
     "task_id": "load-clears-stale-roster",
     "last_phase": "in_progress",
-    "active_phase": 4,
-    "status": "in_progress",
+    "active_phase": 5,
+    "status": "completed",
     "updated_at": 1794661325.0149183,
     "owner": "kilo:goal",
     "started_by": "kilo:goal",
-    "continuations": []
+    "continuations": [],
+    "completed_at": 1794661357.9127295
   },
   "checkpoints": [
-    {
-      "task_id": "reforge:run-1",
-      "phase": "reforge stage 3",
-      "phase_num": 3,
-      "description": "Reforge stage 3: stage 3 host review reviewed; run active; coverage 140/140",
-      "files_affected": [],
-      "status": "in_progress",
-      "timestamp": 1794651042.9133794,
-      "timestamp_str": "2026-11-14 13:10:42",
-      "agent": "unidentified"
-    },
     {
       "task_id": "reforge:run-1",
       "phase": "reforge stage 4",
@@ -300,6 +290,22 @@
       "timestamp": 1794661325.0149183,
       "timestamp_str": "2026-11-14 16:02:05",
       "agent": "kilo:goal"
+    },
+    {
+      "task_id": "load-clears-stale-roster",
+      "phase": "completed",
+      "phase_num": 5,
+      "description": "Task 'load-clears-stale-roster' completed successfully.",
+      "status": "completed",
+      "timestamp": 1794661357.912734,
+      "timestamp_str": "2026-11-14 16:02:37",
+      "agent": "kilo:goal",
+      "delivery": {
+        "roots": [
+          "."
+        ],
+        "forced": false
+      }
     }
   ]
 }
