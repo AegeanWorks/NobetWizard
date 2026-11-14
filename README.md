@@ -165,8 +165,9 @@ NobetWizard/
 ├── main.py
 ├── requirements.txt
 ├── scheduler.py
-├── security.py              <- password hashing and constant-time credential checks
-├── storage.py               <- crash-safe local JSON writes
+├── security.py              <- password hashing, legacy hash upgrade and username rules
+├── state_documents.py       <- shape checks and in-memory repair of saved state
+├── storage.py               <- crash-safe local JSON writes and quarantine of unusable files
 ├── ui_helpers.py            <- language-independent labels and escaped calendar markup
 └── tests/                   <- the project's own regression suite
 ```
@@ -176,7 +177,9 @@ NobetWizard/
 *   `main.py`: The main application entry point and UI logic.
 *   `exports.py`: Escaped iCalendar generation and timeout-bounded font downloads.
 *   `scheduler.py`: The core algorithm for constraint satisfaction and schedule generation.
-*   `security.py`: Password hashing and constant-time credential comparison.
+*   `security.py`: Password hashing, constant-time credential comparison, the one-time upgrade of legacy hashes and username rules.
+*   `state_documents.py`: Validates the saved personnel and users documents and repairs unusable entries in memory.
+*   `storage.py`: Crash-safe JSON writes; unreadable or wrongly shaped state files are set aside as `.corrupt_*` copies.
 *   `ui_helpers.py`: Pure presentation helpers, including language-independent gender labels and escaped calendar markup.
 *   `requirements.txt`: Python dependencies.
 *   `*_db.json`: Local storage for users and personnel data (used if Firestore is not configured).

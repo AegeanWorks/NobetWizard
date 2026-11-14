@@ -6,7 +6,14 @@ from scheduler import DutyScheduler
 from storage import atomic_write_json, load_json_or_default, replace_json_entry
 from state_documents import is_users_document, normalize_personnel_document
 from exports import download_font, generate_ics
-from security import login_backoff_seconds, make_hashes, secure_equals, verify_password
+from security import (
+    is_valid_username,
+    login_backoff_seconds,
+    make_hashes,
+    secure_equals,
+    username_taken,
+    verify_password,
+)
 from ui_helpers import GENDER_MODES, calendar_title, gender_label, get_calendar_html, normalize_gender_mode
 import json
 import os
@@ -19,7 +26,6 @@ from reportlab.pdfbase import pdfmetrics
 from reportlab.pdfbase.ttfonts import TTFont
 import holidays as holidays_lib
 import statistics
-import re
 import time
 
 # --- Cloud Database Imports ---
@@ -299,6 +305,15 @@ def get_secrets():
     except Exception:  # hygiene: allow a missing or malformed secrets file must not block login
         return {}
 
+
+def reserved_usernames():
+    """Usernames that belong to the configured admin and cannot be registered by anyone else."""
+    admin = get_secrets().get("admin")
+    try:
+        return [admin["username"]] if admin else []
+    except (KeyError, TypeError):  # hygiene: allow a scalar or partial admin entry reserves no name
+        return []
+
 # Everything below belongs to the logged-in user; it must not survive a logout.
 APP_STATE_KEYS = {
     "personnel",
@@ -497,7 +512,7 @@ def login_page():
         new_pass = st.text_input(t["password"], type='password', key="reg_pass")
         if st.button(t["register_btn"]):
             # 1. Input Validation
-            if not re.match("^[a-zA-Z0-9_-]{3,20}$", new_user):
+            if not is_valid_username(new_user):
                 st.error(t["err_username"])
                 return
             
@@ -513,7 +528,7 @@ def login_page():
             db = get_firestore_db()
             if db:
                 doc_ref = db.collection("users").document(new_user)
-                if doc_ref.get().exists:
+                if username_taken(new_user, [], reserved_usernames()) or doc_ref.get().exists:
                     st.error(t["user_exists"])
                 else:
                     doc_ref.set({"password_hash": make_hashes(new_pass)})
@@ -521,7 +536,7 @@ def login_page():
             else:
                 # 2. Local Registration
                 users = load_users()
-                if new_user in users:
+                if username_taken(new_user, users, reserved_usernames()):
                     st.error(t["user_exists"])
                 else:
                     users[new_user] = make_hashes(new_pass)

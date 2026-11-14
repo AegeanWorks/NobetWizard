@@ -143,6 +143,13 @@ contract, a dependency, a data format or the architecture; IDs are consecutive a
 - **Decision**: A new state_documents module decides the shape. normalize_personnel_document returns None for an unusable whole (not an object or list, or personnel not a list), drops people without a name or an M or F gender, fills missing limits with the add-form defaults (5 duties, 2 weekends), and discards settings of the wrong type or range. load_json_or_default takes an accept check and quarantines a rejected document like a corrupt one. The users file must be an object. Local and Firestore documents use the same normalization, and load_db returns how many people were dropped so the page can warn.
 - **Consequences**: Only an unusable whole is renamed; field-level problems are repaired in memory and the file is untouched until the next save, which would then remove the dropped entries, and the warning says so. Dropping a person without a valid gender loses that record on save, a deliberate trade against guessing a gender that drives the mixed-team rules.
 
+### ADR-021: Refuse usernames that collide by case or with the admin, and anchor the username pattern
+- **Date**: 2026-11-15
+- **Status**: Accepted
+- **Context**: Per-user files are named from the username, so on Windows and macOS the users Ann and ann shared one personnel file. A registered user named like the configured admin logged in through the local users file, which is checked before the admin secret, and received the admin's personnel file. re.match with a dollar sign also accepted a trailing newline.
+- **Decision**: security.is_valid_username uses fullmatch. security.username_taken compares ignoring case against existing and reserved names, and registration reserves the admin username from secrets, locally and in Firestore. Login stays case-sensitive and no file is renamed, because renaming would orphan existing files on case-sensitive hosts.
+- **Consequences**: New collisions are refused with the existing user-exists message. Collisions already present on a case-insensitive filesystem are not repaired. Firestore has no cheap exact case-insensitive lookup, so there only the admin name and exact duplicates are refused.
+
 <!-- Entry format:
 ### ADR-NNN: <decision in one line>
 - **Date**: YYYY-MM-DD

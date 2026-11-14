@@ -5,28 +5,12 @@
     "last_phase": "verification",
     "active_phase": 4,
     "status": "in_progress",
-    "updated_at": 1794691424.8994915,
+    "updated_at": 1794691837.9190257,
     "owner": "kiro:nw-fixes",
     "started_by": "kiro:nw-fixes",
     "continuations": []
   },
   "checkpoints": [
-    {
-      "task_id": "license-reference-links",
-      "phase": "completed",
-      "phase_num": 5,
-      "description": "Task 'license-reference-links' completed successfully.",
-      "status": "completed",
-      "timestamp": 1794662790.1188955,
-      "timestamp_str": "2026-11-14 16:26:30",
-      "agent": "kilo:goal",
-      "delivery": {
-        "roots": [
-          "."
-        ],
-        "forced": false
-      }
-    },
     {
       "task_id": "secrets-parse-guard",
       "phase": "in_progress",
@@ -286,6 +270,18 @@
       "status": "in_progress",
       "timestamp": 1794691424.8994915,
       "timestamp_str": "2026-11-15 00:23:44",
+      "agent": "kiro:nw-fixes",
+      "checklists": "passed"
+    },
+    {
+      "task_id": "nw-review-fixes",
+      "phase": "verification",
+      "phase_num": 4,
+      "description": "[milestone 3/4] fullmatch usernames; case-insensitive and admin-name duplicates refused at registration (local; Firestore exact and admin only); README tree updated; checklists: passed (test, hygiene, guidelines, secrets)",
+      "files_affected": [],
+      "status": "in_progress",
+      "timestamp": 1794691837.9190257,
+      "timestamp_str": "2026-11-15 00:30:37",
       "agent": "kiro:nw-fixes",
       "checklists": "passed"
     }

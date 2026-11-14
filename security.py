@@ -39,6 +39,22 @@ def check_hashes(password, hashed_text):
 
 LEGACY_SHA256_HASH = re.compile(r"^[0-9a-fA-F]{64}$")
 BCRYPT_MAX_BYTES = 72
+USERNAME_PATTERN = re.compile(r"[a-zA-Z0-9_-]{3,20}")
+
+
+def is_valid_username(name):
+    """A username is 3 to 20 ASCII letters, digits, dashes or underscores, with nothing after them."""
+    return isinstance(name, str) and USERNAME_PATTERN.fullmatch(name) is not None
+
+
+def username_taken(name, existing, reserved=()):
+    """True when `name` matches an existing or reserved username ignoring case.
+
+    Per-user files are named from the username, and Windows and macOS treat names that differ only
+    in case as the same file, so such names would share one person's saved data.
+    """
+    folded = str(name).casefold()
+    return any(str(other).casefold() == folded for other in (*existing, *reserved) if isinstance(other, str))
 
 
 def verify_password(password, stored):

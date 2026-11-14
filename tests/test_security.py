@@ -3,9 +3,11 @@ import unittest
 
 from security import (
     check_hashes,
+    is_valid_username,
     login_backoff_seconds,
     make_hashes,
     secure_equals,
+    username_taken,
     verify_password,
 )
 
@@ -35,6 +37,28 @@ class LoginBackoffTest(unittest.TestCase):
     def test_non_positive_counter_is_minimum(self):
         self.assertEqual(login_backoff_seconds(0), 1)
         self.assertEqual(login_backoff_seconds(-4), 1)
+
+
+class UsernameTest(unittest.TestCase):
+    def test_valid_usernames_are_3_to_20_letters_digits_dash_or_underscore(self):
+        for name in ("abc", "Ann_1", "a-b", "x" * 20):
+            self.assertTrue(is_valid_username(name), name)
+
+    def test_invalid_usernames_are_rejected_including_a_trailing_newline(self):
+        for name in ("ab", "x" * 21, "has space", "dot.name", "abc\n", "ş" * 4, "", None, 7):
+            self.assertFalse(is_valid_username(name), repr(name))
+
+    def test_a_name_is_taken_when_it_matches_ignoring_case(self):
+        self.assertTrue(username_taken("ann", ["Ann", "bob"]))
+        self.assertTrue(username_taken("BOB", {"Ann": "h", "bob": "h"}))
+        self.assertFalse(username_taken("cem", ["Ann", "bob"]))
+
+    def test_reserved_names_are_taken_too(self):
+        self.assertTrue(username_taken("Admin", [], reserved=["admin"]))
+        self.assertFalse(username_taken("user", [], reserved=["admin"]))
+
+    def test_non_text_entries_do_not_break_the_comparison(self):
+        self.assertFalse(username_taken("ann", [None, 5]))
 
 
 class CheckHashesTest(unittest.TestCase):

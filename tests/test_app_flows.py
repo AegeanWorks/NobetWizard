@@ -52,6 +52,43 @@ class LegacyLoginTest(AppFlowCase):
         self.assertTrue(stored["olduser"].startswith("$2"))
 
 
+class RegistrationTest(AppFlowCase):
+    def register(self, username, password="longenough1", admin=None):  # aikit:allow-secret[Hardcoded password assignment] -- test fixture password, not a credential
+        app = self.new_app()
+        if admin:
+            app.secrets["admin"] = admin
+        app.run()
+        app.text_input(key="reg_user").set_value(username)
+        app.text_input(key="reg_pass").set_value(password)
+        [button for button in app.button if button.label == "Register"][0].click().run()
+        return app
+
+    def users(self):
+        path = Path(self.folder.name, "users_db.json")
+        return json.loads(path.read_text(encoding="utf-8")) if path.exists() else {}
+
+    def test_a_new_username_is_registered(self):
+        app = self.register("annie")
+        self.assertEqual([item.value for item in app.exception], [])
+        self.assertEqual(list(self.users()), ["annie"])
+
+    def test_a_username_differing_only_in_case_is_refused(self):
+        self.register("Annie")
+        app = self.register("annie")
+        self.assertEqual(list(self.users()), ["Annie"])
+        self.assertEqual([item.value for item in app.error], ["User already exists"])
+
+    def test_a_username_with_a_trailing_newline_is_refused(self):
+        app = self.register("annie\n")
+        self.assertEqual(self.users(), {})
+        self.assertEqual(len(app.error), 1)
+
+    def test_the_configured_admin_username_cannot_be_registered(self):
+        app = self.register("Admin", admin={"username": "admin", "password": "s3cret-pass"})
+        self.assertEqual(self.users(), {})
+        self.assertEqual([item.value for item in app.error], ["User already exists"])
+
+
 PERSON = {
     "name": "Ann", "gender": "F", "role": "Senior", "fixed_duties_total": 0, "fixed_duties_weekend": 0,
     "max_duties": 20, "max_weekends": 10, "mixed_gender_allowed": True, "busy_days": "", "off_dates": "",

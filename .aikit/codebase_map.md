@@ -7,10 +7,10 @@
 
 ## 📊 Codebase Metrics
 - **Total Python Modules**: `15`
-- **Total Classes**: `22`
-- **Total Top-Level Functions**: `38`
-- **Total Class Methods**: `102`
-- **Total Source Lines**: `3220`
+- **Total Classes**: `24`
+- **Total Top-Level Functions**: `41`
+- **Total Class Methods**: `113`
+- **Total Source Lines**: `3312`
 
 ## 🧭 Map Coverage
 - **Indexed**: python (`15` module(s))
@@ -34,10 +34,11 @@
 ---
 
 ### [`main.py`](main.py)
-**Size**: `1479` lines (`68054` bytes)
+**Size**: `1494` lines (`68526` bytes)
 
 **Functions:**
 - `def get_secrets()` - *Parse Streamlit secrets now; a missing or malformed file is a supported local configuration.*
+- `def reserved_usernames()` - *Usernames that belong to the configured admin and cannot be registered by anyone else.*
 - `def clear_user_state()` - *Drop every user-scoped key so the next login starts from a clean session.*
 - `def clear_auth_state()` - *Drop the credentials and identity shown by the login page after logout.*
 - `def get_firestore_db()` - *Initialize Firestore Client from Streamlit Secrets*
@@ -79,13 +80,15 @@
 ### [`security.py`](security.py)
 > *Password and credential helpers kept free of UI dependencies.*
 
-**Size**: `61` lines (`2216` bytes)
+**Size**: `77` lines (`2950` bytes)
 
 **Functions:**
 - `def secure_equals(left, right)` - *Compare two values in constant time, including non-ASCII text.*
 - `def login_backoff_seconds(failures)` - *Seconds to pause after this many consecutive failed logins, capped at three.*
 - `def make_hashes(password)` - *Hash a password with bcrypt.*
 - `def check_hashes(password, hashed_text)` - *Return True only when the stored hash is a valid bcrypt hash matching the password.*
+- `def is_valid_username(name)` - *A username is 3 to 20 ASCII letters, digits, dashes or underscores, with nothing after them.*
+- `def username_taken(name, existing, reserved)` - *True when `name` matches an existing or reserved username ignoring case.*
 - `def verify_password(password, stored)` - *Check a password against a stored hash and report whether the hash needs upgrading.*
 
 ---
@@ -122,7 +125,7 @@
 ### [`tests/test_app_flows.py`](tests/test_app_flows.py)
 > *End-to-end checks that drive main.py through Streamlit's AppTest in a throwaway folder.*
 
-**Size**: `119` lines (`5143` bytes)
+**Size**: `156` lines (`6721` bytes)
 
 **Classes:**
 - `class AppFlowCase` - *Runs each test inside its own temp folder so local state files never touch the repo.*
@@ -133,6 +136,13 @@
 - `class LegacyLoginTest`
   - Method `.test_legacy_account_with_a_long_password_can_log_in()`
   - Method `.test_legacy_account_with_a_short_password_is_upgraded_to_bcrypt()`
+- `class RegistrationTest`
+  - Method `.register(username, password, admin)`
+  - Method `.users()`
+  - Method `.test_a_new_username_is_registered()`
+  - Method `.test_a_username_differing_only_in_case_is_refused()`
+  - Method `.test_a_username_with_a_trailing_newline_is_refused()`
+  - Method `.test_the_configured_admin_username_cannot_be_registered()`
 - `class MalformedPersonnelStateTest`
   - Method `.open_page(raw)`
   - Method `.quarantined()`
@@ -192,7 +202,7 @@
 ---
 
 ### [`tests/test_security.py`](tests/test_security.py)
-**Size**: `90` lines (`3565` bytes)
+**Size**: `114` lines (`4675` bytes)
 
 **Classes:**
 - `class SecureEqualsTest`
@@ -203,6 +213,12 @@
   - Method `.test_delay_grows_with_consecutive_failures()`
   - Method `.test_delay_is_capped()`
   - Method `.test_non_positive_counter_is_minimum()`
+- `class UsernameTest`
+  - Method `.test_valid_usernames_are_3_to_20_letters_digits_dash_or_underscore()`
+  - Method `.test_invalid_usernames_are_rejected_including_a_trailing_newline()`
+  - Method `.test_a_name_is_taken_when_it_matches_ignoring_case()`
+  - Method `.test_reserved_names_are_taken_too()`
+  - Method `.test_non_text_entries_do_not_break_the_comparison()`
 - `class CheckHashesTest`
   - Method `.test_rejects_missing_or_malformed_hashes()`
 - `class VerifyPasswordTest` - *Accounts created before the bcrypt switch store an unsalted SHA-256 hex digest.*
