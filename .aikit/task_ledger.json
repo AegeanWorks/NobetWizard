@@ -1,44 +1,16 @@
 {
   "version": 1,
   "active_task": {
-    "task_id": "license-reference-links",
+    "task_id": "secrets-parse-guard",
     "last_phase": "in_progress",
-    "active_phase": 5,
-    "status": "completed",
-    "updated_at": 1794662789.8718922,
+    "active_phase": 4,
+    "status": "in_progress",
+    "updated_at": 1794667631.4520984,
     "owner": "kilo:goal",
     "started_by": "kilo:goal",
-    "continuations": [],
-    "completed_at": 1794662790.1188912
+    "continuations": []
   },
   "checkpoints": [
-    {
-      "task_id": "corrupt-state-quarantine",
-      "phase": "in_progress",
-      "phase_num": 4,
-      "description": "[2/3] Unreadable personnel and users JSON is renamed to .corrupt_<epoch> and defaults are returned; three unit tests plus AppTest proof; checklists: passed (test 41, hygiene, guidelines, secrets)",
-      "files_affected": [],
-      "status": "in_progress",
-      "timestamp": 1794653352.47752,
-      "timestamp_str": "2026-11-14 13:49:12",
-      "agent": "kilo:goal"
-    },
-    {
-      "task_id": "corrupt-state-quarantine",
-      "phase": "completed",
-      "phase_num": 5,
-      "description": "Task 'corrupt-state-quarantine' completed successfully.",
-      "status": "completed",
-      "timestamp": 1794653372.037884,
-      "timestamp_str": "2026-11-14 13:49:32",
-      "agent": "kilo:goal",
-      "delivery": {
-        "roots": [
-          "."
-        ],
-        "forced": false
-      }
-    },
     {
       "task_id": "ics-title-derivation",
       "phase": "in_progress",
@@ -308,6 +280,35 @@
         ],
         "forced": false
       }
+    },
+    {
+      "task_id": "secrets-parse-guard",
+      "phase": "in_progress",
+      "phase_num": 2,
+      "description": "[1/3] Make malformed or scalar secrets a supported fallback instead of a login crash",
+      "files_affected": [],
+      "status": "in_progress",
+      "timestamp": 1794666318.0306735,
+      "timestamp_str": "2026-11-14 17:25:18",
+      "agent": "kilo:goal",
+      "impact_assessment": {
+        "why": "get_secrets() returns the lazy st.secrets object, so a malformed secrets.toml raises during authenticate()/load_db and a scalar admin secret raises TypeError; both crash login for every user",
+        "benefits": "A broken secrets file behaves like a missing one: local accounts still log in, and a non-mapping admin entry simply fails the admin check",
+        "risks": "contract: get_secrets returns a plain dict and parses eagerly; malformed secrets no longer surface an exception; dependency: none; concurrency: none; state: none",
+        "mitigation": "AppTest before/after for malformed TOML and scalar admin, plus valid admin login and local-account paths, full gates, explicit staging, no push"
+      },
+      "plan_digest": "4139e58c86cc8f017ecf1b00ac1efe8a3519e56b61260f2f5a88cb647d7f6a53"
+    },
+    {
+      "task_id": "secrets-parse-guard",
+      "phase": "in_progress",
+      "phase_num": 4,
+      "description": "[2/3] Malformed TOML, scalar admin and missing secrets all degrade cleanly; valid admin still logs in; AppTest proved all four shapes; checklists: passed (test 48, hygiene, guidelines, secrets)",
+      "files_affected": [],
+      "status": "in_progress",
+      "timestamp": 1794667631.4520984,
+      "timestamp_str": "2026-11-14 17:47:11",
+      "agent": "kilo:goal"
     }
   ]
 }
