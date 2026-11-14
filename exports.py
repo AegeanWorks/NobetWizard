@@ -66,7 +66,7 @@ def generate_ics(schedule, title="Duty Roster"):
     folded = []
     for line in lines:
         folded.extend(_fold_content_line(line))
-    return "\r\n".join(folded).encode("utf-8")
+    return ("\r\n".join(folded) + "\r\n").encode("utf-8")
 
 
 def download_font(url, path, timeout=10):

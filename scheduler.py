@@ -316,9 +316,10 @@ class DutyScheduler:
             name = person.get('name', '')
             if not isinstance(name, str) or not name.strip():
                 return False, {}, "Personnel name cannot be empty."
-            if name in seen_names:
+            normalized = name.strip()
+            if normalized in seen_names:
                 return False, {}, f"Duplicate personnel name '{name}'; names must be unique."
-            seen_names.add(name)
+            seen_names.add(normalized)
         for rule in self.config.get('conditional_rules', []):
             if rule.get('trigger') == rule.get('forbidden'):
                 return False, {}, "A conditional rule cannot forbid the same day it triggers on."

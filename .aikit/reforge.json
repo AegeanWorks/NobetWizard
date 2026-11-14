@@ -1,0 +1,993 @@
+{
+  "schema": 2,
+  "next_run_id": 2,
+  "active_run": "run-1",
+  "last_run": "run-1",
+  "runs": [
+    {
+      "id": "run-1",
+      "start": 20,
+      "step": 20,
+      "stop": 80,
+      "stage": 1,
+      "window": 20,
+      "audited_commits": [
+        "6d45e056e97612f169e198fe557cc17196ba31da",
+        "5f68fc9af3e8378aa98f0ff59d98bf4c2f640de4",
+        "45883bd20633ec54c626979196deb5dab5638e39",
+        "4c0ffebf3d94daf20ff35e36ba429c570dfc5eee",
+        "b483900477e6b1106ade9221b458d11aa19e6c4e",
+        "01ab35d5de2f0321c5fc8f21ba2875cb17f11a41",
+        "8401ca32bcbfc089521cb5a3002738227b749e99",
+        "19967c7052e9ff46932914df24ff2d7f58443fd9",
+        "f8b591d1b60e40c03e278925935bc5210365a794",
+        "ee3ec3ff2e2d52a30f6f43cc13f0ea2249e85ba6",
+        "de7e0dea2a53a4b9562dd77be3f7399a0a982b8a",
+        "7a66868085dda5a410c708a2ea902c43cc78ebf7",
+        "a1c428dcaaacbcf69c4b061a51ed4d95b7669fdc",
+        "7f36232fe246d3d6cbc4544fb9c847d9c363d0ee",
+        "ff93855bf3f78fcf9cdf753471a6a3160f16de1f",
+        "335dfbf6d39b87d661f5480af2403c6cacc5a7b9",
+        "41a50404f1acd0ec3207b08611ed1c0f90ffa47e",
+        "d46504a64584bf353e6a9b913b6a9d7a75f6a413",
+        "a6d76d44ef1bc66a54104348504fdf0c1467fe6c",
+        "88a277778c5744daeab468e4861c5fbd7d41e857"
+      ],
+      "status": "active",
+      "created": "2026-11-14T11:53:33",
+      "updated": "2026-11-14T11:53:47",
+      "last_audit": {
+        "run": "run-1",
+        "stage": 1,
+        "window": 20,
+        "commits": [
+          "6d45e056e97612f169e198fe557cc17196ba31da",
+          "5f68fc9af3e8378aa98f0ff59d98bf4c2f640de4",
+          "45883bd20633ec54c626979196deb5dab5638e39",
+          "4c0ffebf3d94daf20ff35e36ba429c570dfc5eee",
+          "b483900477e6b1106ade9221b458d11aa19e6c4e",
+          "01ab35d5de2f0321c5fc8f21ba2875cb17f11a41",
+          "8401ca32bcbfc089521cb5a3002738227b749e99",
+          "19967c7052e9ff46932914df24ff2d7f58443fd9",
+          "f8b591d1b60e40c03e278925935bc5210365a794",
+          "ee3ec3ff2e2d52a30f6f43cc13f0ea2249e85ba6",
+          "de7e0dea2a53a4b9562dd77be3f7399a0a982b8a",
+          "7a66868085dda5a410c708a2ea902c43cc78ebf7",
+          "a1c428dcaaacbcf69c4b061a51ed4d95b7669fdc",
+          "7f36232fe246d3d6cbc4544fb9c847d9c363d0ee",
+          "ff93855bf3f78fcf9cdf753471a6a3160f16de1f",
+          "335dfbf6d39b87d661f5480af2403c6cacc5a7b9",
+          "41a50404f1acd0ec3207b08611ed1c0f90ffa47e",
+          "d46504a64584bf353e6a9b913b6a9d7a75f6a413",
+          "a6d76d44ef1bc66a54104348504fdf0c1467fe6c",
+          "88a277778c5744daeab468e4861c5fbd7d41e857"
+        ],
+        "new_commits": [
+          "6d45e056e97612f169e198fe557cc17196ba31da",
+          "5f68fc9af3e8378aa98f0ff59d98bf4c2f640de4",
+          "45883bd20633ec54c626979196deb5dab5638e39",
+          "4c0ffebf3d94daf20ff35e36ba429c570dfc5eee",
+          "b483900477e6b1106ade9221b458d11aa19e6c4e",
+          "01ab35d5de2f0321c5fc8f21ba2875cb17f11a41",
+          "8401ca32bcbfc089521cb5a3002738227b749e99",
+          "19967c7052e9ff46932914df24ff2d7f58443fd9",
+          "f8b591d1b60e40c03e278925935bc5210365a794",
+          "ee3ec3ff2e2d52a30f6f43cc13f0ea2249e85ba6",
+          "de7e0dea2a53a4b9562dd77be3f7399a0a982b8a",
+          "7a66868085dda5a410c708a2ea902c43cc78ebf7",
+          "a1c428dcaaacbcf69c4b061a51ed4d95b7669fdc",
+          "7f36232fe246d3d6cbc4544fb9c847d9c363d0ee",
+          "ff93855bf3f78fcf9cdf753471a6a3160f16de1f",
+          "335dfbf6d39b87d661f5480af2403c6cacc5a7b9",
+          "41a50404f1acd0ec3207b08611ed1c0f90ffa47e",
+          "d46504a64584bf353e6a9b913b6a9d7a75f6a413",
+          "a6d76d44ef1bc66a54104348504fdf0c1467fe6c",
+          "88a277778c5744daeab468e4861c5fbd7d41e857"
+        ],
+        "prior_commits": [],
+        "findings": [
+          {
+            "code": "review-duplicate-name-whitespace",
+            "category": "review",
+            "severity": "medium",
+            "path": "scheduler.py",
+            "line": 319,
+            "message": "The duplicate-name guard compares raw names, so 'P1' and 'P1 ' pass validation and both enter the roster even though they are indistinguishable in the calendar, stats and exports; the UI add form strips names but the personnel editor does not.",
+            "evidence": "if name in seen_names:",
+            "commit": "01ab35d5de2f0321c5fc8f21ba2875cb17f11a41",
+            "hunk": "01ab35d5de2f:scheduler.py#2",
+            "symbol": "",
+            "introduced": true,
+            "reproducible": false,
+            "fixable": true,
+            "interaction": "",
+            "repaired": true,
+            "source": "review",
+            "patch_old": "            if name in seen_names:\n                return False, {}, f\"Duplicate personnel name '{name}'; names must be unique.\"\n            seen_names.add(name)",
+            "patch_new": "            normalized = name.strip()\n            if normalized in seen_names:\n                return False, {}, f\"Duplicate personnel name '{name}'; names must be unique.\"\n            seen_names.add(normalized)"
+          },
+          {
+            "code": "review-ics-missing-final-crlf",
+            "category": "review",
+            "severity": "low",
+            "path": "exports.py",
+            "line": 69,
+            "message": "Every RFC 5545 content line must be delimited by CRLF, but the joined document ends without a trailing CRLF after END:VCALENDAR, so strict parsers and byte-level conformance checks see an unterminated last line despite ADR-008 claiming conformance.",
+            "evidence": "return \"\\r\\n\".join(folded).encode(\"utf-8\")",
+            "commit": "45883bd20633ec54c626979196deb5dab5638e39",
+            "hunk": "45883bd20633:exports.py#2",
+            "symbol": "",
+            "introduced": true,
+            "reproducible": false,
+            "fixable": true,
+            "interaction": "",
+            "repaired": true,
+            "source": "review",
+            "patch_old": "    return \"\\r\\n\".join(folded).encode(\"utf-8\")",
+            "patch_new": "    return (\"\\r\\n\".join(folded) + \"\\r\\n\").encode(\"utf-8\")"
+          }
+        ],
+        "repairs": [
+          {
+            "code": "review-ics-missing-final-crlf",
+            "path": "exports.py",
+            "line": 69,
+            "summary": "applied review suggestion: Every RFC 5545 content line must be delimited by CRLF, but the joined document e",
+            "test_name": "",
+            "applied": true
+          },
+          {
+            "code": "review-duplicate-name-whitespace",
+            "path": "scheduler.py",
+            "line": 319,
+            "summary": "applied review suggestion: The duplicate-name guard compares raw names, so 'P1' and 'P1 ' pass validation a",
+            "test_name": "",
+            "applied": true
+          }
+        ],
+        "counts": {
+          "review": 2
+        },
+        "reviewed": 16,
+        "review": {
+          "status": "partial",
+          "rejected": [],
+          "files": [
+            ".aikit/codebase_map.md",
+            ".aikit/decisions.md",
+            ".aikit/media.json",
+            ".aikit/project.json",
+            ".aikit/task_ledger_archive.jsonl",
+            ".aikit/ui.json",
+            "LICENSE",
+            "LICENSES/LicenseRef-AL-1.1.txt",
+            "README.md",
+            "exports.py",
+            "main.py",
+            "scheduler.py",
+            "tests/test_exports.py",
+            "tests/test_scheduler.py",
+            "tests/test_ui_helpers.py",
+            "ui_helpers.py"
+          ],
+          "packet": ".aikit\\reforge.reviews\\stage-run-1-1-6d45e056e976.md",
+          "redacted": 0,
+          "reason": "the answer attested 102/104 hunks; 2 missing, 0 unknown, 2 unattested; 7f36232fe246:.aikit/project.json#3: the quote is missing or shorter than a real line",
+          "method": "host",
+          "coverage": {
+            "reported": 102,
+            "total": 104,
+            "missing": [
+              "7f36232fe246:.aikit/project.json#3",
+              "f8b591d1b60e:.aikit/ui.json#1"
+            ],
+            "unknown": [],
+            "invalid": [
+              {
+                "id": "7f36232fe246:.aikit/project.json#3",
+                "reason": "the quote is missing or shorter than a real line"
+              },
+              {
+                "id": "f8b591d1b60e:.aikit/ui.json#1",
+                "reason": "the quote is missing or shorter than a real line"
+              }
+            ]
+          },
+          "findings": [
+            {
+              "code": "review-duplicate-name-whitespace",
+              "category": "review",
+              "severity": "medium",
+              "path": "scheduler.py",
+              "line": 319,
+              "message": "The duplicate-name guard compares raw names, so 'P1' and 'P1 ' pass validation and both enter the roster even though they are indistinguishable in the calendar, stats and exports; the UI add form strips names but the personnel editor does not.",
+              "evidence": "if name in seen_names:",
+              "commit": "01ab35d5de2f0321c5fc8f21ba2875cb17f11a41",
+              "hunk": "01ab35d5de2f:scheduler.py#2",
+              "symbol": "",
+              "introduced": true,
+              "reproducible": false,
+              "fixable": true,
+              "interaction": "",
+              "repaired": false,
+              "source": "review",
+              "patch_old": "            if name in seen_names:\n                return False, {}, f\"Duplicate personnel name '{name}'; names must be unique.\"\n            seen_names.add(name)",
+              "patch_new": "            normalized = name.strip()\n            if normalized in seen_names:\n                return False, {}, f\"Duplicate personnel name '{name}'; names must be unique.\"\n            seen_names.add(normalized)"
+            },
+            {
+              "code": "review-ics-missing-final-crlf",
+              "category": "review",
+              "severity": "low",
+              "path": "exports.py",
+              "line": 69,
+              "message": "Every RFC 5545 content line must be delimited by CRLF, but the joined document ends without a trailing CRLF after END:VCALENDAR, so strict parsers and byte-level conformance checks see an unterminated last line despite ADR-008 claiming conformance.",
+              "evidence": "return \"\\r\\n\".join(folded).encode(\"utf-8\")",
+              "commit": "45883bd20633ec54c626979196deb5dab5638e39",
+              "hunk": "45883bd20633:exports.py#2",
+              "symbol": "",
+              "introduced": true,
+              "reproducible": false,
+              "fixable": true,
+              "interaction": "",
+              "repaired": false,
+              "source": "review",
+              "patch_old": "    return \"\\r\\n\".join(folded).encode(\"utf-8\")",
+              "patch_new": "    return (\"\\r\\n\".join(folded) + \"\\r\\n\").encode(\"utf-8\")"
+            }
+          ]
+        },
+        "skipped": [
+          "assets/logo.jpg",
+          "assets/logo.png",
+          "assets/screenshots/2026-11-03-app.png",
+          "assets/social-preview.jpg",
+          "assets/social-preview.png"
+        ],
+        "tests": {
+          "command": "C:\\Python314\\python.exe -m unittest discover tests",
+          "code": 0,
+          "passed": true,
+          "output": "......................................\n----------------------------------------------------------------------\nRan 38 tests in 0.069s\n\nOK",
+          "tail": [
+            "......................................",
+            "----------------------------------------------------------------------",
+            "Ran 38 tests in 0.069s",
+            "OK"
+          ]
+        },
+        "gates": {},
+        "delivery": {
+          "commit": "",
+          "short": "",
+          "pushed": false,
+          "push_error": null,
+          "empty": true,
+          "timestamp": "2026-11-14T11:53:47"
+        },
+        "timestamp": "2026-11-14T11:53:47",
+        "dirty_targets": []
+      },
+      "history": [
+        {
+          "run": "run-1",
+          "stage": 1,
+          "window": 20,
+          "commits": [
+            "6d45e056e97612f169e198fe557cc17196ba31da",
+            "5f68fc9af3e8378aa98f0ff59d98bf4c2f640de4",
+            "45883bd20633ec54c626979196deb5dab5638e39",
+            "4c0ffebf3d94daf20ff35e36ba429c570dfc5eee",
+            "b483900477e6b1106ade9221b458d11aa19e6c4e",
+            "01ab35d5de2f0321c5fc8f21ba2875cb17f11a41",
+            "8401ca32bcbfc089521cb5a3002738227b749e99",
+            "19967c7052e9ff46932914df24ff2d7f58443fd9",
+            "f8b591d1b60e40c03e278925935bc5210365a794",
+            "ee3ec3ff2e2d52a30f6f43cc13f0ea2249e85ba6",
+            "de7e0dea2a53a4b9562dd77be3f7399a0a982b8a",
+            "7a66868085dda5a410c708a2ea902c43cc78ebf7",
+            "a1c428dcaaacbcf69c4b061a51ed4d95b7669fdc",
+            "7f36232fe246d3d6cbc4544fb9c847d9c363d0ee",
+            "ff93855bf3f78fcf9cdf753471a6a3160f16de1f",
+            "335dfbf6d39b87d661f5480af2403c6cacc5a7b9",
+            "41a50404f1acd0ec3207b08611ed1c0f90ffa47e",
+            "d46504a64584bf353e6a9b913b6a9d7a75f6a413",
+            "a6d76d44ef1bc66a54104348504fdf0c1467fe6c",
+            "88a277778c5744daeab468e4861c5fbd7d41e857"
+          ],
+          "new_commits": [
+            "6d45e056e97612f169e198fe557cc17196ba31da",
+            "5f68fc9af3e8378aa98f0ff59d98bf4c2f640de4",
+            "45883bd20633ec54c626979196deb5dab5638e39",
+            "4c0ffebf3d94daf20ff35e36ba429c570dfc5eee",
+            "b483900477e6b1106ade9221b458d11aa19e6c4e",
+            "01ab35d5de2f0321c5fc8f21ba2875cb17f11a41",
+            "8401ca32bcbfc089521cb5a3002738227b749e99",
+            "19967c7052e9ff46932914df24ff2d7f58443fd9",
+            "f8b591d1b60e40c03e278925935bc5210365a794",
+            "ee3ec3ff2e2d52a30f6f43cc13f0ea2249e85ba6",
+            "de7e0dea2a53a4b9562dd77be3f7399a0a982b8a",
+            "7a66868085dda5a410c708a2ea902c43cc78ebf7",
+            "a1c428dcaaacbcf69c4b061a51ed4d95b7669fdc",
+            "7f36232fe246d3d6cbc4544fb9c847d9c363d0ee",
+            "ff93855bf3f78fcf9cdf753471a6a3160f16de1f",
+            "335dfbf6d39b87d661f5480af2403c6cacc5a7b9",
+            "41a50404f1acd0ec3207b08611ed1c0f90ffa47e",
+            "d46504a64584bf353e6a9b913b6a9d7a75f6a413",
+            "a6d76d44ef1bc66a54104348504fdf0c1467fe6c",
+            "88a277778c5744daeab468e4861c5fbd7d41e857"
+          ],
+          "prior_commits": [],
+          "findings": [
+            {
+              "code": "review-duplicate-name-whitespace",
+              "category": "review",
+              "severity": "medium",
+              "path": "scheduler.py",
+              "line": 319,
+              "message": "The duplicate-name guard compares raw names, so 'P1' and 'P1 ' pass validation and both enter the roster even though they are indistinguishable in the calendar, stats and exports; the UI add form strips names but the personnel editor does not.",
+              "evidence": "if name in seen_names:",
+              "commit": "01ab35d5de2f0321c5fc8f21ba2875cb17f11a41",
+              "hunk": "01ab35d5de2f:scheduler.py#2",
+              "symbol": "",
+              "introduced": true,
+              "reproducible": false,
+              "fixable": true,
+              "interaction": "",
+              "repaired": true,
+              "source": "review",
+              "patch_old": "            if name in seen_names:\n                return False, {}, f\"Duplicate personnel name '{name}'; names must be unique.\"\n            seen_names.add(name)",
+              "patch_new": "            normalized = name.strip()\n            if normalized in seen_names:\n                return False, {}, f\"Duplicate personnel name '{name}'; names must be unique.\"\n            seen_names.add(normalized)"
+            },
+            {
+              "code": "review-ics-missing-final-crlf",
+              "category": "review",
+              "severity": "low",
+              "path": "exports.py",
+              "line": 69,
+              "message": "Every RFC 5545 content line must be delimited by CRLF, but the joined document ends without a trailing CRLF after END:VCALENDAR, so strict parsers and byte-level conformance checks see an unterminated last line despite ADR-008 claiming conformance.",
+              "evidence": "return \"\\r\\n\".join(folded).encode(\"utf-8\")",
+              "commit": "45883bd20633ec54c626979196deb5dab5638e39",
+              "hunk": "45883bd20633:exports.py#2",
+              "symbol": "",
+              "introduced": true,
+              "reproducible": false,
+              "fixable": true,
+              "interaction": "",
+              "repaired": true,
+              "source": "review",
+              "patch_old": "    return \"\\r\\n\".join(folded).encode(\"utf-8\")",
+              "patch_new": "    return (\"\\r\\n\".join(folded) + \"\\r\\n\").encode(\"utf-8\")"
+            }
+          ],
+          "repairs": [
+            {
+              "code": "review-ics-missing-final-crlf",
+              "path": "exports.py",
+              "line": 69,
+              "summary": "applied review suggestion: Every RFC 5545 content line must be delimited by CRLF, but the joined document e",
+              "test_name": "",
+              "applied": true
+            },
+            {
+              "code": "review-duplicate-name-whitespace",
+              "path": "scheduler.py",
+              "line": 319,
+              "summary": "applied review suggestion: The duplicate-name guard compares raw names, so 'P1' and 'P1 ' pass validation a",
+              "test_name": "",
+              "applied": true
+            }
+          ],
+          "counts": {
+            "review": 2
+          },
+          "reviewed": 16,
+          "review": {
+            "status": "partial",
+            "rejected": [],
+            "files": [
+              ".aikit/codebase_map.md",
+              ".aikit/decisions.md",
+              ".aikit/media.json",
+              ".aikit/project.json",
+              ".aikit/task_ledger_archive.jsonl",
+              ".aikit/ui.json",
+              "LICENSE",
+              "LICENSES/LicenseRef-AL-1.1.txt",
+              "README.md",
+              "exports.py",
+              "main.py",
+              "scheduler.py",
+              "tests/test_exports.py",
+              "tests/test_scheduler.py",
+              "tests/test_ui_helpers.py",
+              "ui_helpers.py"
+            ],
+            "packet": ".aikit\\reforge.reviews\\stage-run-1-1-6d45e056e976.md",
+            "redacted": 0,
+            "reason": "the answer attested 102/104 hunks; 2 missing, 0 unknown, 2 unattested; 7f36232fe246:.aikit/project.json#3: the quote is missing or shorter than a real line",
+            "method": "host",
+            "coverage": {
+              "reported": 102,
+              "total": 104,
+              "missing": [
+                "7f36232fe246:.aikit/project.json#3",
+                "f8b591d1b60e:.aikit/ui.json#1"
+              ],
+              "unknown": [],
+              "invalid": [
+                {
+                  "id": "7f36232fe246:.aikit/project.json#3",
+                  "reason": "the quote is missing or shorter than a real line"
+                },
+                {
+                  "id": "f8b591d1b60e:.aikit/ui.json#1",
+                  "reason": "the quote is missing or shorter than a real line"
+                }
+              ]
+            },
+            "findings": [
+              {
+                "code": "review-duplicate-name-whitespace",
+                "category": "review",
+                "severity": "medium",
+                "path": "scheduler.py",
+                "line": 319,
+                "message": "The duplicate-name guard compares raw names, so 'P1' and 'P1 ' pass validation and both enter the roster even though they are indistinguishable in the calendar, stats and exports; the UI add form strips names but the personnel editor does not.",
+                "evidence": "if name in seen_names:",
+                "commit": "01ab35d5de2f0321c5fc8f21ba2875cb17f11a41",
+                "hunk": "01ab35d5de2f:scheduler.py#2",
+                "symbol": "",
+                "introduced": true,
+                "reproducible": false,
+                "fixable": true,
+                "interaction": "",
+                "repaired": false,
+                "source": "review",
+                "patch_old": "            if name in seen_names:\n                return False, {}, f\"Duplicate personnel name '{name}'; names must be unique.\"\n            seen_names.add(name)",
+                "patch_new": "            normalized = name.strip()\n            if normalized in seen_names:\n                return False, {}, f\"Duplicate personnel name '{name}'; names must be unique.\"\n            seen_names.add(normalized)"
+              },
+              {
+                "code": "review-ics-missing-final-crlf",
+                "category": "review",
+                "severity": "low",
+                "path": "exports.py",
+                "line": 69,
+                "message": "Every RFC 5545 content line must be delimited by CRLF, but the joined document ends without a trailing CRLF after END:VCALENDAR, so strict parsers and byte-level conformance checks see an unterminated last line despite ADR-008 claiming conformance.",
+                "evidence": "return \"\\r\\n\".join(folded).encode(\"utf-8\")",
+                "commit": "45883bd20633ec54c626979196deb5dab5638e39",
+                "hunk": "45883bd20633:exports.py#2",
+                "symbol": "",
+                "introduced": true,
+                "reproducible": false,
+                "fixable": true,
+                "interaction": "",
+                "repaired": false,
+                "source": "review",
+                "patch_old": "    return \"\\r\\n\".join(folded).encode(\"utf-8\")",
+                "patch_new": "    return (\"\\r\\n\".join(folded) + \"\\r\\n\").encode(\"utf-8\")"
+              }
+            ]
+          },
+          "skipped": [
+            "assets/logo.jpg",
+            "assets/logo.png",
+            "assets/screenshots/2026-11-03-app.png",
+            "assets/social-preview.jpg",
+            "assets/social-preview.png"
+          ],
+          "tests": {
+            "command": "C:\\Python314\\python.exe -m unittest discover tests",
+            "code": 0,
+            "passed": true,
+            "output": "......................................\n----------------------------------------------------------------------\nRan 38 tests in 0.069s\n\nOK",
+            "tail": [
+              "......................................",
+              "----------------------------------------------------------------------",
+              "Ran 38 tests in 0.069s",
+              "OK"
+            ]
+          },
+          "gates": {},
+          "delivery": {
+            "commit": "",
+            "short": "",
+            "pushed": false,
+            "push_error": null,
+            "empty": true,
+            "timestamp": "2026-11-14T11:53:47"
+          },
+          "timestamp": "2026-11-14T11:53:47",
+          "dirty_targets": []
+        }
+      ]
+    }
+  ],
+  "stage": 1,
+  "window": 20,
+  "audited_commits": [
+    "6d45e056e97612f169e198fe557cc17196ba31da",
+    "5f68fc9af3e8378aa98f0ff59d98bf4c2f640de4",
+    "45883bd20633ec54c626979196deb5dab5638e39",
+    "4c0ffebf3d94daf20ff35e36ba429c570dfc5eee",
+    "b483900477e6b1106ade9221b458d11aa19e6c4e",
+    "01ab35d5de2f0321c5fc8f21ba2875cb17f11a41",
+    "8401ca32bcbfc089521cb5a3002738227b749e99",
+    "19967c7052e9ff46932914df24ff2d7f58443fd9",
+    "f8b591d1b60e40c03e278925935bc5210365a794",
+    "ee3ec3ff2e2d52a30f6f43cc13f0ea2249e85ba6",
+    "de7e0dea2a53a4b9562dd77be3f7399a0a982b8a",
+    "7a66868085dda5a410c708a2ea902c43cc78ebf7",
+    "a1c428dcaaacbcf69c4b061a51ed4d95b7669fdc",
+    "7f36232fe246d3d6cbc4544fb9c847d9c363d0ee",
+    "ff93855bf3f78fcf9cdf753471a6a3160f16de1f",
+    "335dfbf6d39b87d661f5480af2403c6cacc5a7b9",
+    "41a50404f1acd0ec3207b08611ed1c0f90ffa47e",
+    "d46504a64584bf353e6a9b913b6a9d7a75f6a413",
+    "a6d76d44ef1bc66a54104348504fdf0c1467fe6c",
+    "88a277778c5744daeab468e4861c5fbd7d41e857"
+  ],
+  "last_audit": {
+    "run": "run-1",
+    "stage": 1,
+    "window": 20,
+    "commits": [
+      "6d45e056e97612f169e198fe557cc17196ba31da",
+      "5f68fc9af3e8378aa98f0ff59d98bf4c2f640de4",
+      "45883bd20633ec54c626979196deb5dab5638e39",
+      "4c0ffebf3d94daf20ff35e36ba429c570dfc5eee",
+      "b483900477e6b1106ade9221b458d11aa19e6c4e",
+      "01ab35d5de2f0321c5fc8f21ba2875cb17f11a41",
+      "8401ca32bcbfc089521cb5a3002738227b749e99",
+      "19967c7052e9ff46932914df24ff2d7f58443fd9",
+      "f8b591d1b60e40c03e278925935bc5210365a794",
+      "ee3ec3ff2e2d52a30f6f43cc13f0ea2249e85ba6",
+      "de7e0dea2a53a4b9562dd77be3f7399a0a982b8a",
+      "7a66868085dda5a410c708a2ea902c43cc78ebf7",
+      "a1c428dcaaacbcf69c4b061a51ed4d95b7669fdc",
+      "7f36232fe246d3d6cbc4544fb9c847d9c363d0ee",
+      "ff93855bf3f78fcf9cdf753471a6a3160f16de1f",
+      "335dfbf6d39b87d661f5480af2403c6cacc5a7b9",
+      "41a50404f1acd0ec3207b08611ed1c0f90ffa47e",
+      "d46504a64584bf353e6a9b913b6a9d7a75f6a413",
+      "a6d76d44ef1bc66a54104348504fdf0c1467fe6c",
+      "88a277778c5744daeab468e4861c5fbd7d41e857"
+    ],
+    "new_commits": [
+      "6d45e056e97612f169e198fe557cc17196ba31da",
+      "5f68fc9af3e8378aa98f0ff59d98bf4c2f640de4",
+      "45883bd20633ec54c626979196deb5dab5638e39",
+      "4c0ffebf3d94daf20ff35e36ba429c570dfc5eee",
+      "b483900477e6b1106ade9221b458d11aa19e6c4e",
+      "01ab35d5de2f0321c5fc8f21ba2875cb17f11a41",
+      "8401ca32bcbfc089521cb5a3002738227b749e99",
+      "19967c7052e9ff46932914df24ff2d7f58443fd9",
+      "f8b591d1b60e40c03e278925935bc5210365a794",
+      "ee3ec3ff2e2d52a30f6f43cc13f0ea2249e85ba6",
+      "de7e0dea2a53a4b9562dd77be3f7399a0a982b8a",
+      "7a66868085dda5a410c708a2ea902c43cc78ebf7",
+      "a1c428dcaaacbcf69c4b061a51ed4d95b7669fdc",
+      "7f36232fe246d3d6cbc4544fb9c847d9c363d0ee",
+      "ff93855bf3f78fcf9cdf753471a6a3160f16de1f",
+      "335dfbf6d39b87d661f5480af2403c6cacc5a7b9",
+      "41a50404f1acd0ec3207b08611ed1c0f90ffa47e",
+      "d46504a64584bf353e6a9b913b6a9d7a75f6a413",
+      "a6d76d44ef1bc66a54104348504fdf0c1467fe6c",
+      "88a277778c5744daeab468e4861c5fbd7d41e857"
+    ],
+    "prior_commits": [],
+    "findings": [
+      {
+        "code": "review-duplicate-name-whitespace",
+        "category": "review",
+        "severity": "medium",
+        "path": "scheduler.py",
+        "line": 319,
+        "message": "The duplicate-name guard compares raw names, so 'P1' and 'P1 ' pass validation and both enter the roster even though they are indistinguishable in the calendar, stats and exports; the UI add form strips names but the personnel editor does not.",
+        "evidence": "if name in seen_names:",
+        "commit": "01ab35d5de2f0321c5fc8f21ba2875cb17f11a41",
+        "hunk": "01ab35d5de2f:scheduler.py#2",
+        "symbol": "",
+        "introduced": true,
+        "reproducible": false,
+        "fixable": true,
+        "interaction": "",
+        "repaired": true,
+        "source": "review",
+        "patch_old": "            if name in seen_names:\n                return False, {}, f\"Duplicate personnel name '{name}'; names must be unique.\"\n            seen_names.add(name)",
+        "patch_new": "            normalized = name.strip()\n            if normalized in seen_names:\n                return False, {}, f\"Duplicate personnel name '{name}'; names must be unique.\"\n            seen_names.add(normalized)"
+      },
+      {
+        "code": "review-ics-missing-final-crlf",
+        "category": "review",
+        "severity": "low",
+        "path": "exports.py",
+        "line": 69,
+        "message": "Every RFC 5545 content line must be delimited by CRLF, but the joined document ends without a trailing CRLF after END:VCALENDAR, so strict parsers and byte-level conformance checks see an unterminated last line despite ADR-008 claiming conformance.",
+        "evidence": "return \"\\r\\n\".join(folded).encode(\"utf-8\")",
+        "commit": "45883bd20633ec54c626979196deb5dab5638e39",
+        "hunk": "45883bd20633:exports.py#2",
+        "symbol": "",
+        "introduced": true,
+        "reproducible": false,
+        "fixable": true,
+        "interaction": "",
+        "repaired": true,
+        "source": "review",
+        "patch_old": "    return \"\\r\\n\".join(folded).encode(\"utf-8\")",
+        "patch_new": "    return (\"\\r\\n\".join(folded) + \"\\r\\n\").encode(\"utf-8\")"
+      }
+    ],
+    "repairs": [
+      {
+        "code": "review-ics-missing-final-crlf",
+        "path": "exports.py",
+        "line": 69,
+        "summary": "applied review suggestion: Every RFC 5545 content line must be delimited by CRLF, but the joined document e",
+        "test_name": "",
+        "applied": true
+      },
+      {
+        "code": "review-duplicate-name-whitespace",
+        "path": "scheduler.py",
+        "line": 319,
+        "summary": "applied review suggestion: The duplicate-name guard compares raw names, so 'P1' and 'P1 ' pass validation a",
+        "test_name": "",
+        "applied": true
+      }
+    ],
+    "counts": {
+      "review": 2
+    },
+    "reviewed": 16,
+    "review": {
+      "status": "partial",
+      "rejected": [],
+      "files": [
+        ".aikit/codebase_map.md",
+        ".aikit/decisions.md",
+        ".aikit/media.json",
+        ".aikit/project.json",
+        ".aikit/task_ledger_archive.jsonl",
+        ".aikit/ui.json",
+        "LICENSE",
+        "LICENSES/LicenseRef-AL-1.1.txt",
+        "README.md",
+        "exports.py",
+        "main.py",
+        "scheduler.py",
+        "tests/test_exports.py",
+        "tests/test_scheduler.py",
+        "tests/test_ui_helpers.py",
+        "ui_helpers.py"
+      ],
+      "packet": ".aikit\\reforge.reviews\\stage-run-1-1-6d45e056e976.md",
+      "redacted": 0,
+      "reason": "the answer attested 102/104 hunks; 2 missing, 0 unknown, 2 unattested; 7f36232fe246:.aikit/project.json#3: the quote is missing or shorter than a real line",
+      "method": "host",
+      "coverage": {
+        "reported": 102,
+        "total": 104,
+        "missing": [
+          "7f36232fe246:.aikit/project.json#3",
+          "f8b591d1b60e:.aikit/ui.json#1"
+        ],
+        "unknown": [],
+        "invalid": [
+          {
+            "id": "7f36232fe246:.aikit/project.json#3",
+            "reason": "the quote is missing or shorter than a real line"
+          },
+          {
+            "id": "f8b591d1b60e:.aikit/ui.json#1",
+            "reason": "the quote is missing or shorter than a real line"
+          }
+        ]
+      },
+      "findings": [
+        {
+          "code": "review-duplicate-name-whitespace",
+          "category": "review",
+          "severity": "medium",
+          "path": "scheduler.py",
+          "line": 319,
+          "message": "The duplicate-name guard compares raw names, so 'P1' and 'P1 ' pass validation and both enter the roster even though they are indistinguishable in the calendar, stats and exports; the UI add form strips names but the personnel editor does not.",
+          "evidence": "if name in seen_names:",
+          "commit": "01ab35d5de2f0321c5fc8f21ba2875cb17f11a41",
+          "hunk": "01ab35d5de2f:scheduler.py#2",
+          "symbol": "",
+          "introduced": true,
+          "reproducible": false,
+          "fixable": true,
+          "interaction": "",
+          "repaired": false,
+          "source": "review",
+          "patch_old": "            if name in seen_names:\n                return False, {}, f\"Duplicate personnel name '{name}'; names must be unique.\"\n            seen_names.add(name)",
+          "patch_new": "            normalized = name.strip()\n            if normalized in seen_names:\n                return False, {}, f\"Duplicate personnel name '{name}'; names must be unique.\"\n            seen_names.add(normalized)"
+        },
+        {
+          "code": "review-ics-missing-final-crlf",
+          "category": "review",
+          "severity": "low",
+          "path": "exports.py",
+          "line": 69,
+          "message": "Every RFC 5545 content line must be delimited by CRLF, but the joined document ends without a trailing CRLF after END:VCALENDAR, so strict parsers and byte-level conformance checks see an unterminated last line despite ADR-008 claiming conformance.",
+          "evidence": "return \"\\r\\n\".join(folded).encode(\"utf-8\")",
+          "commit": "45883bd20633ec54c626979196deb5dab5638e39",
+          "hunk": "45883bd20633:exports.py#2",
+          "symbol": "",
+          "introduced": true,
+          "reproducible": false,
+          "fixable": true,
+          "interaction": "",
+          "repaired": false,
+          "source": "review",
+          "patch_old": "    return \"\\r\\n\".join(folded).encode(\"utf-8\")",
+          "patch_new": "    return (\"\\r\\n\".join(folded) + \"\\r\\n\").encode(\"utf-8\")"
+        }
+      ]
+    },
+    "skipped": [
+      "assets/logo.jpg",
+      "assets/logo.png",
+      "assets/screenshots/2026-11-03-app.png",
+      "assets/social-preview.jpg",
+      "assets/social-preview.png"
+    ],
+    "tests": {
+      "command": "C:\\Python314\\python.exe -m unittest discover tests",
+      "code": 0,
+      "passed": true,
+      "output": "......................................\n----------------------------------------------------------------------\nRan 38 tests in 0.069s\n\nOK",
+      "tail": [
+        "......................................",
+        "----------------------------------------------------------------------",
+        "Ran 38 tests in 0.069s",
+        "OK"
+      ]
+    },
+    "gates": {},
+    "delivery": {
+      "commit": "",
+      "short": "",
+      "pushed": false,
+      "push_error": null,
+      "empty": true,
+      "timestamp": "2026-11-14T11:53:47"
+    },
+    "timestamp": "2026-11-14T11:53:47",
+    "dirty_targets": []
+  },
+  "history": [
+    {
+      "run": "run-1",
+      "stage": 1,
+      "window": 20,
+      "commits": [
+        "6d45e056e97612f169e198fe557cc17196ba31da",
+        "5f68fc9af3e8378aa98f0ff59d98bf4c2f640de4",
+        "45883bd20633ec54c626979196deb5dab5638e39",
+        "4c0ffebf3d94daf20ff35e36ba429c570dfc5eee",
+        "b483900477e6b1106ade9221b458d11aa19e6c4e",
+        "01ab35d5de2f0321c5fc8f21ba2875cb17f11a41",
+        "8401ca32bcbfc089521cb5a3002738227b749e99",
+        "19967c7052e9ff46932914df24ff2d7f58443fd9",
+        "f8b591d1b60e40c03e278925935bc5210365a794",
+        "ee3ec3ff2e2d52a30f6f43cc13f0ea2249e85ba6",
+        "de7e0dea2a53a4b9562dd77be3f7399a0a982b8a",
+        "7a66868085dda5a410c708a2ea902c43cc78ebf7",
+        "a1c428dcaaacbcf69c4b061a51ed4d95b7669fdc",
+        "7f36232fe246d3d6cbc4544fb9c847d9c363d0ee",
+        "ff93855bf3f78fcf9cdf753471a6a3160f16de1f",
+        "335dfbf6d39b87d661f5480af2403c6cacc5a7b9",
+        "41a50404f1acd0ec3207b08611ed1c0f90ffa47e",
+        "d46504a64584bf353e6a9b913b6a9d7a75f6a413",
+        "a6d76d44ef1bc66a54104348504fdf0c1467fe6c",
+        "88a277778c5744daeab468e4861c5fbd7d41e857"
+      ],
+      "new_commits": [
+        "6d45e056e97612f169e198fe557cc17196ba31da",
+        "5f68fc9af3e8378aa98f0ff59d98bf4c2f640de4",
+        "45883bd20633ec54c626979196deb5dab5638e39",
+        "4c0ffebf3d94daf20ff35e36ba429c570dfc5eee",
+        "b483900477e6b1106ade9221b458d11aa19e6c4e",
+        "01ab35d5de2f0321c5fc8f21ba2875cb17f11a41",
+        "8401ca32bcbfc089521cb5a3002738227b749e99",
+        "19967c7052e9ff46932914df24ff2d7f58443fd9",
+        "f8b591d1b60e40c03e278925935bc5210365a794",
+        "ee3ec3ff2e2d52a30f6f43cc13f0ea2249e85ba6",
+        "de7e0dea2a53a4b9562dd77be3f7399a0a982b8a",
+        "7a66868085dda5a410c708a2ea902c43cc78ebf7",
+        "a1c428dcaaacbcf69c4b061a51ed4d95b7669fdc",
+        "7f36232fe246d3d6cbc4544fb9c847d9c363d0ee",
+        "ff93855bf3f78fcf9cdf753471a6a3160f16de1f",
+        "335dfbf6d39b87d661f5480af2403c6cacc5a7b9",
+        "41a50404f1acd0ec3207b08611ed1c0f90ffa47e",
+        "d46504a64584bf353e6a9b913b6a9d7a75f6a413",
+        "a6d76d44ef1bc66a54104348504fdf0c1467fe6c",
+        "88a277778c5744daeab468e4861c5fbd7d41e857"
+      ],
+      "prior_commits": [],
+      "findings": [
+        {
+          "code": "review-duplicate-name-whitespace",
+          "category": "review",
+          "severity": "medium",
+          "path": "scheduler.py",
+          "line": 319,
+          "message": "The duplicate-name guard compares raw names, so 'P1' and 'P1 ' pass validation and both enter the roster even though they are indistinguishable in the calendar, stats and exports; the UI add form strips names but the personnel editor does not.",
+          "evidence": "if name in seen_names:",
+          "commit": "01ab35d5de2f0321c5fc8f21ba2875cb17f11a41",
+          "hunk": "01ab35d5de2f:scheduler.py#2",
+          "symbol": "",
+          "introduced": true,
+          "reproducible": false,
+          "fixable": true,
+          "interaction": "",
+          "repaired": true,
+          "source": "review",
+          "patch_old": "            if name in seen_names:\n                return False, {}, f\"Duplicate personnel name '{name}'; names must be unique.\"\n            seen_names.add(name)",
+          "patch_new": "            normalized = name.strip()\n            if normalized in seen_names:\n                return False, {}, f\"Duplicate personnel name '{name}'; names must be unique.\"\n            seen_names.add(normalized)"
+        },
+        {
+          "code": "review-ics-missing-final-crlf",
+          "category": "review",
+          "severity": "low",
+          "path": "exports.py",
+          "line": 69,
+          "message": "Every RFC 5545 content line must be delimited by CRLF, but the joined document ends without a trailing CRLF after END:VCALENDAR, so strict parsers and byte-level conformance checks see an unterminated last line despite ADR-008 claiming conformance.",
+          "evidence": "return \"\\r\\n\".join(folded).encode(\"utf-8\")",
+          "commit": "45883bd20633ec54c626979196deb5dab5638e39",
+          "hunk": "45883bd20633:exports.py#2",
+          "symbol": "",
+          "introduced": true,
+          "reproducible": false,
+          "fixable": true,
+          "interaction": "",
+          "repaired": true,
+          "source": "review",
+          "patch_old": "    return \"\\r\\n\".join(folded).encode(\"utf-8\")",
+          "patch_new": "    return (\"\\r\\n\".join(folded) + \"\\r\\n\").encode(\"utf-8\")"
+        }
+      ],
+      "repairs": [
+        {
+          "code": "review-ics-missing-final-crlf",
+          "path": "exports.py",
+          "line": 69,
+          "summary": "applied review suggestion: Every RFC 5545 content line must be delimited by CRLF, but the joined document e",
+          "test_name": "",
+          "applied": true
+        },
+        {
+          "code": "review-duplicate-name-whitespace",
+          "path": "scheduler.py",
+          "line": 319,
+          "summary": "applied review suggestion: The duplicate-name guard compares raw names, so 'P1' and 'P1 ' pass validation a",
+          "test_name": "",
+          "applied": true
+        }
+      ],
+      "counts": {
+        "review": 2
+      },
+      "reviewed": 16,
+      "review": {
+        "status": "partial",
+        "rejected": [],
+        "files": [
+          ".aikit/codebase_map.md",
+          ".aikit/decisions.md",
+          ".aikit/media.json",
+          ".aikit/project.json",
+          ".aikit/task_ledger_archive.jsonl",
+          ".aikit/ui.json",
+          "LICENSE",
+          "LICENSES/LicenseRef-AL-1.1.txt",
+          "README.md",
+          "exports.py",
+          "main.py",
+          "scheduler.py",
+          "tests/test_exports.py",
+          "tests/test_scheduler.py",
+          "tests/test_ui_helpers.py",
+          "ui_helpers.py"
+        ],
+        "packet": ".aikit\\reforge.reviews\\stage-run-1-1-6d45e056e976.md",
+        "redacted": 0,
+        "reason": "the answer attested 102/104 hunks; 2 missing, 0 unknown, 2 unattested; 7f36232fe246:.aikit/project.json#3: the quote is missing or shorter than a real line",
+        "method": "host",
+        "coverage": {
+          "reported": 102,
+          "total": 104,
+          "missing": [
+            "7f36232fe246:.aikit/project.json#3",
+            "f8b591d1b60e:.aikit/ui.json#1"
+          ],
+          "unknown": [],
+          "invalid": [
+            {
+              "id": "7f36232fe246:.aikit/project.json#3",
+              "reason": "the quote is missing or shorter than a real line"
+            },
+            {
+              "id": "f8b591d1b60e:.aikit/ui.json#1",
+              "reason": "the quote is missing or shorter than a real line"
+            }
+          ]
+        },
+        "findings": [
+          {
+            "code": "review-duplicate-name-whitespace",
+            "category": "review",
+            "severity": "medium",
+            "path": "scheduler.py",
+            "line": 319,
+            "message": "The duplicate-name guard compares raw names, so 'P1' and 'P1 ' pass validation and both enter the roster even though they are indistinguishable in the calendar, stats and exports; the UI add form strips names but the personnel editor does not.",
+            "evidence": "if name in seen_names:",
+            "commit": "01ab35d5de2f0321c5fc8f21ba2875cb17f11a41",
+            "hunk": "01ab35d5de2f:scheduler.py#2",
+            "symbol": "",
+            "introduced": true,
+            "reproducible": false,
+            "fixable": true,
+            "interaction": "",
+            "repaired": false,
+            "source": "review",
+            "patch_old": "            if name in seen_names:\n                return False, {}, f\"Duplicate personnel name '{name}'; names must be unique.\"\n            seen_names.add(name)",
+            "patch_new": "            normalized = name.strip()\n            if normalized in seen_names:\n                return False, {}, f\"Duplicate personnel name '{name}'; names must be unique.\"\n            seen_names.add(normalized)"
+          },
+          {
+            "code": "review-ics-missing-final-crlf",
+            "category": "review",
+            "severity": "low",
+            "path": "exports.py",
+            "line": 69,
+            "message": "Every RFC 5545 content line must be delimited by CRLF, but the joined document ends without a trailing CRLF after END:VCALENDAR, so strict parsers and byte-level conformance checks see an unterminated last line despite ADR-008 claiming conformance.",
+            "evidence": "return \"\\r\\n\".join(folded).encode(\"utf-8\")",
+            "commit": "45883bd20633ec54c626979196deb5dab5638e39",
+            "hunk": "45883bd20633:exports.py#2",
+            "symbol": "",
+            "introduced": true,
+            "reproducible": false,
+            "fixable": true,
+            "interaction": "",
+            "repaired": false,
+            "source": "review",
+            "patch_old": "    return \"\\r\\n\".join(folded).encode(\"utf-8\")",
+            "patch_new": "    return (\"\\r\\n\".join(folded) + \"\\r\\n\").encode(\"utf-8\")"
+          }
+        ]
+      },
+      "skipped": [
+        "assets/logo.jpg",
+        "assets/logo.png",
+        "assets/screenshots/2026-11-03-app.png",
+        "assets/social-preview.jpg",
+        "assets/social-preview.png"
+      ],
+      "tests": {
+        "command": "C:\\Python314\\python.exe -m unittest discover tests",
+        "code": 0,
+        "passed": true,
+        "output": "......................................\n----------------------------------------------------------------------\nRan 38 tests in 0.069s\n\nOK",
+        "tail": [
+          "......................................",
+          "----------------------------------------------------------------------",
+          "Ran 38 tests in 0.069s",
+          "OK"
+        ]
+      },
+      "gates": {},
+      "delivery": {
+        "commit": "",
+        "short": "",
+        "pushed": false,
+        "push_error": null,
+        "empty": true,
+        "timestamp": "2026-11-14T11:53:47"
+      },
+      "timestamp": "2026-11-14T11:53:47",
+      "dirty_targets": []
+    }
+  ]
+}
