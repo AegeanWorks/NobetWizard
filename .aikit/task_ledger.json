@@ -1,43 +1,16 @@
 {
   "version": 1,
   "active_task": {
-    "task_id": "streamlit-width-migration",
+    "task_id": "font-artifact-hygiene",
     "last_phase": "in_progress",
-    "active_phase": 5,
-    "status": "completed",
-    "updated_at": 1794659678.1524882,
+    "active_phase": 4,
+    "status": "in_progress",
+    "updated_at": 1794660019.7143595,
     "owner": "kilo:goal",
     "started_by": "kilo:goal",
-    "continuations": [],
-    "completed_at": 1794659749.7802386
+    "continuations": []
   },
   "checkpoints": [
-    {
-      "task_id": "reforge:run-1",
-      "phase": "reforge stage 1",
-      "phase_num": 3,
-      "description": "Reforge stage 1: stage 1 host review reviewed; run active; coverage 104/104",
-      "files_affected": [],
-      "status": "in_progress",
-      "timestamp": 1794649438.119976,
-      "timestamp_str": "2026-11-14 12:43:58",
-      "agent": "unidentified"
-    },
-    {
-      "task_id": "reforge:run-1",
-      "phase": "reforge stage 2",
-      "phase_num": 3,
-      "description": "Reforge stage 2: window 40, 20 commit(s), 24 file(s) reviewed (unreviewed), 0 finding(s), 0 repaired, empty \u2014 nothing to commit, 3 binary not analysed",
-      "files_affected": [
-        "assets/artwork.jpg",
-        "assets/logo.png",
-        "assets/social-preview.png"
-      ],
-      "status": "in_progress",
-      "timestamp": 1794649598.1242454,
-      "timestamp_str": "2026-11-14 12:46:38",
-      "agent": "unidentified"
-    },
     {
       "task_id": "reforge:run-1",
       "phase": "reforge stage 2",
@@ -295,6 +268,35 @@
         ],
         "forced": false
       }
+    },
+    {
+      "task_id": "font-artifact-hygiene",
+      "phase": "in_progress",
+      "phase_num": 2,
+      "description": "[1/3] Keep runtime-downloaded PDF fonts out of the tracked tree",
+      "files_affected": [],
+      "status": "in_progress",
+      "timestamp": 1794659964.3657763,
+      "timestamp_str": "2026-11-14 15:39:24",
+      "agent": "kilo:goal",
+      "impact_assessment": {
+        "why": "generate_pdf downloads Roboto-Regular.ttf and Roboto-Bold.ttf into the project root on first PDF export; they are untracked and not ignored, so a normal export dirties the worktree and risks committing ~1 MB of binary assets",
+        "benefits": "PDF export no longer makes the repository look modified, and generated fonts cannot be committed accidentally",
+        "risks": "contract: .gitignore only; dependency: none; concurrency: none; state: generated cache files stay local",
+        "mitigation": "Ignore the generated names, verify with git check-ignore and the hygiene gate, explicit staging, no push"
+      },
+      "plan_digest": "34361448dee51507154563c07672a17fcb3c34a346e6b336c3800b6fd753aa4b"
+    },
+    {
+      "task_id": "font-artifact-hygiene",
+      "phase": "in_progress",
+      "phase_num": 4,
+      "description": "[2/3] Roboto-*.ttf is ignored; git check-ignore confirms both generated fonts; hygiene, guidelines and secrets gates pass; checklists: passed (test 44, hygiene, guidelines, secrets)",
+      "files_affected": [],
+      "status": "in_progress",
+      "timestamp": 1794660019.7143595,
+      "timestamp_str": "2026-11-14 15:40:19",
+      "agent": "kilo:goal"
     }
   ]
 }
