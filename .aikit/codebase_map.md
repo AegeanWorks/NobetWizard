@@ -7,10 +7,10 @@
 
 ## 📊 Codebase Metrics
 - **Total Python Modules**: `12`
-- **Total Classes**: `9`
-- **Total Top-Level Functions**: `27`
-- **Total Class Methods**: `52`
-- **Total Source Lines**: `2636`
+- **Total Classes**: `10`
+- **Total Top-Level Functions**: `28`
+- **Total Class Methods**: `55`
+- **Total Source Lines**: `2681`
 
 ## 🧭 Map Coverage
 - **Indexed**: python (`12` module(s))
@@ -34,7 +34,7 @@
 ---
 
 ### [`main.py`](main.py)
-**Size**: `1453` lines (`66216` bytes)
+**Size**: `1447` lines (`66026` bytes)
 
 **Functions:**
 - `def get_secrets()` - *st.secrets raises when no secrets file exists; an empty mapping keeps local runs working.*
@@ -89,9 +89,10 @@
 ---
 
 ### [`storage.py`](storage.py)
-**Size**: `27` lines (`916` bytes)
+**Size**: `49` lines (`1722` bytes)
 
 **Functions:**
+- `def load_json_or_default(path, default)` - *Read a JSON document, quarantining an unreadable file instead of raising.*
 - `def atomic_write_json(path, data)` - *Write JSON without leaving a truncated file when the process dies mid-write.*
 
 ---
@@ -160,9 +161,13 @@
 ---
 
 ### [`tests/test_storage.py`](tests/test_storage.py)
-**Size**: `34` lines (`1098` bytes)
+**Size**: `63` lines (`2446` bytes)
 
 **Classes:**
+- `class LoadJsonOrDefaultTest`
+  - Method `.test_reads_an_existing_document()`
+  - Method `.test_missing_file_returns_the_default()`
+  - Method `.test_corrupt_file_is_quarantined_and_default_returned()`
 - `class AtomicWriteJsonTest`
   - Method `.test_writes_and_overwrites_json()`
   - Method `.test_leaves_no_temporary_files()`

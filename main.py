@@ -3,7 +3,7 @@ import pandas as pd
 from datetime import date, timedelta
 import calendar
 from scheduler import DutyScheduler
-from storage import atomic_write_json
+from storage import atomic_write_json, load_json_or_default
 from exports import download_font, generate_ics
 from security import check_hashes, make_hashes, secure_equals
 from ui_helpers import GENDER_MODES, gender_label, get_calendar_html, normalize_gender_mode
@@ -366,14 +366,11 @@ def load_db(username):
 
     # 2. Fallback to Local JSON
     path = get_user_db_path(username)
-    if os.path.exists(path):
-        with open(path, "r", encoding="utf-8") as f:
-            data = json.load(f)
-            # Backward compatibility: if list, it's just personnel
-            if isinstance(data, list):
-                return {"personnel": data}
-            return data
-    return {"personnel": []}
+    data = load_json_or_default(path, {"personnel": []})
+    # Backward compatibility: if list, it's just personnel
+    if isinstance(data, list):
+        return {"personnel": data}
+    return data
 
 def save_db(personnel, username):
     # Prepare full state data
@@ -417,10 +414,7 @@ def save_db(personnel, username):
     atomic_write_json(path, state_data)
 
 def load_users():
-    if os.path.exists(USER_DB_FILE):
-        with open(USER_DB_FILE, "r", encoding="utf-8") as f:
-            return json.load(f)
-    return {}
+    return load_json_or_default(USER_DB_FILE, {})
 
 def save_users(data):
     atomic_write_json(USER_DB_FILE, data)

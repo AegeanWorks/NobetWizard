@@ -73,6 +73,13 @@ contract, a dependency, a data format or the architecture; IDs are consecutive a
 - **Decision**: Include the selected year and month in the `hist_p1`/`hist_p2` widget keys.
 - **Consequences**: Changing the month starts the history empty; Streamlit discards widget state that is not rendered on a run, so returning to an earlier month does not restore a stale selection, and the `hist_` prefix still clears everything on logout.
 
+### ADR-011: Quarantine unreadable local state instead of failing the login
+- **Date**: 2026-11-14
+- **Status**: Accepted
+- **Context**: `load_db` and `load_users` parsed their JSON files directly, so a truncated `personnel_db_<user>.json` or `users_db.json` raised `JSONDecodeError` inside `main()` and the user could not open the app or log in; the damaged file also stayed in place, repeating the crash.
+- **Decision**: Add `storage.load_json_or_default`, which returns a caller-supplied default and renames an unreadable file to `<name>.corrupt_<epoch>`; route both `load_db` and `load_users` through it.
+- **Consequences**: A corrupt state file costs the saved roster or local accounts for that session but no longer blocks startup, and the quarantined bytes remain on disk for inspection. A missing file still returns the default without creating one.
+
 <!-- Entry format:
 ### ADR-NNN: <decision in one line>
 - **Date**: YYYY-MM-DD

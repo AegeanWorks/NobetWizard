@@ -3,7 +3,36 @@ import tempfile
 import unittest
 from pathlib import Path
 
-from storage import atomic_write_json
+from storage import atomic_write_json, load_json_or_default
+
+
+class LoadJsonOrDefaultTest(unittest.TestCase):
+    def test_reads_an_existing_document(self):
+        with tempfile.TemporaryDirectory() as folder:
+            path = Path(folder) / "data.json"
+            path.write_text('{"personnel": [1, 2]}', encoding="utf-8")
+
+            self.assertEqual(load_json_or_default(path, {"personnel": []}), {"personnel": [1, 2]})
+
+    def test_missing_file_returns_the_default(self):
+        with tempfile.TemporaryDirectory() as folder:
+            path = Path(folder) / "data.json"
+
+            self.assertEqual(load_json_or_default(path, {"personnel": []}), {"personnel": []})
+            self.assertFalse(path.exists())
+
+    def test_corrupt_file_is_quarantined_and_default_returned(self):
+        with tempfile.TemporaryDirectory() as folder:
+            path = Path(folder) / "personnel_db_user.json"
+            path.write_text('{"personnel": [ {"name": "P1",', encoding="utf-8")
+
+            result = load_json_or_default(path, {"personnel": []})
+
+            self.assertEqual(result, {"personnel": []})
+            self.assertFalse(path.exists())
+            quarantined = [item for item in Path(folder).iterdir() if ".corrupt_" in item.name]
+            self.assertEqual(len(quarantined), 1)
+            self.assertIn('{"personnel"', quarantined[0].read_text(encoding="utf-8"))
 
 
 class AtomicWriteJsonTest(unittest.TestCase):
