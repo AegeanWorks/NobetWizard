@@ -858,10 +858,10 @@ def main():
             mime = "text/calendar"
             
         with col_dl_btn:
-            st.download_button(label="⬇️ Download", data=data, file_name=file_name, mime=mime, use_container_width=True, key="btn_download_top")
+            st.download_button(label="⬇️ Download", data=data, file_name=file_name, mime=mime, width="stretch", key="btn_download_top")
 
     with col_gen_btn:
-        btn_gen_clicked = st.button(t["btn_gen"], type="primary", use_container_width=True, key="btn_gen_schedule")
+        btn_gen_clicked = st.button(t["btn_gen"], type="primary", width="stretch", key="btn_gen_schedule")
     
     # Form to add new person
     with st.expander(t["add_expander"], expanded=True):
@@ -902,7 +902,7 @@ def main():
         with c_row2_4:
             fixed_dates = st.multiselect(t["fixed_dates"], date_options, placeholder=t["placeholder_select"])
             
-        add_btn = st.button(t["add_btn"], use_container_width=True)
+        add_btn = st.button(t["add_btn"], width="stretch")
 
         if add_btn:
             clean_name = (name or "").strip()
@@ -1009,7 +1009,7 @@ def main():
                 "duty_count": st.column_config.NumberColumn(t["col_assigned"], disabled=True, help=t["col_assigned_help"]),
                 "weekend_duty_count": st.column_config.NumberColumn(t["type_wknd"], disabled=True)
             },
-            use_container_width=True,
+            width="stretch",
             num_rows="dynamic",
             key="personnel_editor"
         )
@@ -1070,7 +1070,7 @@ def main():
                 with c_b3:
                     st.write("") # Spacer
                     st.write("") # Spacer
-                    if st.button(t["btn_add_leave"], use_container_width=True, key="btn_tool_leave"):
+                    if st.button(t["btn_add_leave"], width="stretch", key="btn_tool_leave"):
                         if selected_person_leave and len(leave_range_bulk) in (1, 2):
                             start = leave_range_bulk[0]
                             end = leave_range_bulk[-1]
@@ -1116,7 +1116,7 @@ def main():
                 with c_bu3:
                     st.write("")
                     st.write("")
-                    if st.button(t["btn_save_busy"], use_container_width=True, key="btn_tool_busy"):
+                    if st.button(t["btn_save_busy"], width="stretch", key="btn_tool_busy"):
                         for p in st.session_state.personnel:
                             if p['name'] == selected_person_busy:
                                 p['busy_days'] = ", ".join(new_busy_days)
@@ -1151,7 +1151,7 @@ def main():
                 with c_o3:
                     st.write("")
                     st.write("")
-                    if st.button(t["btn_save_off"], use_container_width=True, key="btn_tool_off"):
+                    if st.button(t["btn_save_off"], width="stretch", key="btn_tool_off"):
                         for p in st.session_state.personnel:
                             if p['name'] == selected_person_off:
                                 # Preserve dates from other months
@@ -1188,7 +1188,7 @@ def main():
                 with c_f3:
                     st.write("")
                     st.write("")
-                    if st.button(t["btn_save_fixed"], use_container_width=True, key="btn_tool_fixed"):
+                    if st.button(t["btn_save_fixed"], width="stretch", key="btn_tool_fixed"):
                         for p in st.session_state.personnel:
                             if p['name'] == selected_person_fixed:
                                 other_dates = [d for d in current_fixed if d not in date_options]
@@ -1204,7 +1204,7 @@ def main():
     col_act1, col_act2, col_act3 = st.columns(3)
     
     with col_act1:
-        if st.button(t["save_db"], use_container_width=True):
+        if st.button(t["save_db"], width="stretch"):
             save_db(st.session_state.personnel, st.session_state.get('username'))
             st.toast(t["db_saved"], icon="💾")
 
@@ -1241,7 +1241,7 @@ def main():
             
             st.toast(t["loaded"], icon="✅")
 
-        st.button(t["load_db_btn"], use_container_width=True, on_click=load_cloud_data)
+        st.button(t["load_db_btn"], width="stretch", on_click=load_cloud_data)
 
     with col_act3:
         json_data = json.dumps(st.session_state.personnel, ensure_ascii=False, indent=4)
@@ -1250,13 +1250,13 @@ def main():
             data=json_data,
             file_name="personnel_db.json",
             mime="application/json",
-            use_container_width=True
+            width="stretch"
         )
         
     col_act4, col_act5, col_act6 = st.columns(3)
     
     with col_act4:
-        if st.button(t["btn_reset_month"], use_container_width=True, help=t["reset_month_help"]):
+        if st.button(t["btn_reset_month"], width="stretch", help=t["reset_month_help"]):
             for p in st.session_state.personnel:
                 p['busy_days'] = ""
                 p['off_dates'] = ""
@@ -1267,7 +1267,7 @@ def main():
             st.rerun()
 
     with col_act5:
-        if st.button(t["clear_all"], use_container_width=True):
+        if st.button(t["clear_all"], width="stretch"):
             st.session_state.personnel = []
             st.session_state.generated_schedule = {}
             st.session_state.schedule_success = False
@@ -1278,19 +1278,19 @@ def main():
             st.session_state.confirm_clear_db = False
         
         if not st.session_state.confirm_clear_db:
-            if st.button(t["clear_db_btn"], use_container_width=True):
+            if st.button(t["clear_db_btn"], width="stretch"):
                 st.session_state.confirm_clear_db = True
                 st.rerun()
         else:
             c_yes, c_no = st.columns(2)
             with c_yes:
-                if st.button(t["confirm_yes"], use_container_width=True):
+                if st.button(t["confirm_yes"], width="stretch"):
                     save_db([], st.session_state.get('username'))
                     st.toast(t["db_cleared"], icon="🔥")
                     st.session_state.confirm_clear_db = False
                     st.rerun()
             with c_no:
-                if st.button(t["confirm_no"], use_container_width=True):
+                if st.button(t["confirm_no"], width="stretch"):
                     st.session_state.confirm_clear_db = False
                     st.rerun()
 
@@ -1374,7 +1374,7 @@ def main():
         tab_list, tab_cal, tab_stats = st.tabs([t["list_view"], t["cal_view"], t["stats"]])
 
         with tab_list:
-            st.dataframe(df_res, use_container_width=True, hide_index=True)
+            st.dataframe(df_res, width="stretch", hide_index=True)
 
         with tab_cal:
             cal_html = get_calendar_html(gen_year, gen_month, schedule, t, holidays=holiday_set)
@@ -1399,7 +1399,7 @@ def main():
                 stdev = statistics.stdev(duty_counts)
                 st.metric(label=t["fairness_score"], value=f"{stdev:.2f}", help=t["fairness_help"])
             
-            st.dataframe(pd.DataFrame(stats), use_container_width=True)
+            st.dataframe(pd.DataFrame(stats), width="stretch")
             
             if stats:
                 # Chart
@@ -1419,7 +1419,7 @@ def main():
                             day_counts[p['name']][day_name] += 1
                 
                 df_days = pd.DataFrame(day_counts).T
-                st.dataframe(df_days.style.background_gradient(cmap="Blues", axis=1), use_container_width=True)
+                st.dataframe(df_days.style.background_gradient(cmap="Blues", axis=1), width="stretch")
 
                 # 2. Co-occurrence Matrix
                 st.subheader(t["co_occurrence"])
@@ -1435,7 +1435,7 @@ def main():
                                 co_matrix.loc[p2, p1] += 1
                     
                     # Display with gradient
-                    st.dataframe(co_matrix.style.background_gradient(cmap="Reds"), use_container_width=True)
+                    st.dataframe(co_matrix.style.background_gradient(cmap="Reds"), width="stretch")
 
 if __name__ == '__main__':
     if st.runtime.exists():

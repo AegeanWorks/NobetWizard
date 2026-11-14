@@ -87,6 +87,13 @@ contract, a dependency, a data format or the architecture; IDs are consecutive a
 - **Decision**: Add `ui_helpers.calendar_title`, which drops a leading non-text token and any parenthetical, appends the roster month and year, and falls back to `Duty Roster`; the export call uses it.
 - **Consequences**: Events read `Nöbet Wizard 2/2026` or `Nöbet Sihirbazı 2/2026`, and the helper is unit-tested for both languages and for emoji-only or empty titles.
 
+### ADR-013: Use the width= API instead of the deprecated use_container_width
+- **Date**: 2026-11-14
+- **Status**: Accepted
+- **Context**: Streamlit logs a removal warning on every rerun for `use_container_width`, whose announced removal date (2025-12-31) has passed; the installed release supports the replacement `width=` argument on buttons, download buttons, dataframes and the data editor.
+- **Decision**: Replace every `use_container_width=True` call site with `width="stretch"`.
+- **Consequences**: Logs are clean and the UI keeps its existing full-width layout; the implicit minimum Streamlit version is one that accepts `width=`, which the unpinned `streamlit` requirement resolves to on install.
+
 <!-- Entry format:
 ### ADR-NNN: <decision in one line>
 - **Date**: YYYY-MM-DD
