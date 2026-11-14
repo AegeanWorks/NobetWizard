@@ -8,6 +8,10 @@ personnel_db_*.json
 # Ignore Python cache
 __pycache__/
 *.pyc
+
+# Runtime-downloaded PDF fonts
+Roboto-*.ttf
+
 # AIKit transient state
 .aikit/*.lock
 .aikit/*.bak
