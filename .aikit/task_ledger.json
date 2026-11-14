@@ -3,25 +3,16 @@
   "active_task": {
     "task_id": "nw-review-fixes",
     "last_phase": "verification",
-    "active_phase": 4,
-    "status": "in_progress",
+    "active_phase": 5,
+    "status": "completed",
     "updated_at": 1794692067.9570038,
     "owner": "kiro:nw-fixes",
     "started_by": "kiro:nw-fixes",
-    "continuations": []
+    "continuations": [],
+    "completed_at": 1794692082.1909032,
+    "completed_head": "a5951c7d681b280e701b65fe36f6057f6a8c8312"
   },
   "checkpoints": [
-    {
-      "task_id": "secrets-parse-guard",
-      "phase": "in_progress",
-      "phase_num": 4,
-      "description": "[2/3] Malformed TOML, scalar admin and missing secrets all degrade cleanly; valid admin still logs in; AppTest proved all four shapes; checklists: passed (test 48, hygiene, guidelines, secrets)",
-      "files_affected": [],
-      "status": "in_progress",
-      "timestamp": 1794667631.4520984,
-      "timestamp_str": "2026-11-14 17:47:11",
-      "agent": "kilo:goal"
-    },
     {
       "task_id": "secrets-parse-guard",
       "phase": "completed",
@@ -278,6 +269,22 @@
       "timestamp_str": "2026-11-15 00:34:27",
       "agent": "kiro:nw-fixes",
       "checklists": "passed"
+    },
+    {
+      "task_id": "nw-review-fixes",
+      "phase": "completed",
+      "phase_num": 5,
+      "description": "Task 'nw-review-fixes' completed successfully.",
+      "status": "completed",
+      "timestamp": 1794692082.2269201,
+      "timestamp_str": "2026-11-15 00:34:42",
+      "agent": "kiro:nw-fixes",
+      "delivery": {
+        "roots": [
+          "."
+        ],
+        "forced": false
+      }
     }
   ]
 }
