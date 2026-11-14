@@ -1,67 +1,17 @@
 {
   "version": 1,
   "active_task": {
-    "task_id": "login-failure-backoff",
+    "task_id": "license-reference-links",
     "last_phase": "in_progress",
     "active_phase": 5,
     "status": "completed",
-    "updated_at": 1794662227.5350237,
+    "updated_at": 1794662789.8718922,
     "owner": "kilo:goal",
     "started_by": "kilo:goal",
     "continuations": [],
-    "forced_completion": {
-      "agent": "kilo:goal",
-      "reason": "The task\\\\'s own files are committed in 4c598d2; the remaining uncommitted LICENSE and LICENSES changes are a concurrent licensing-file update from another session, outside this task.",
-      "at": 1794662428.0348673
-    },
-    "completed_at": 1794662428.0348685
+    "completed_at": 1794662790.1188912
   },
   "checkpoints": [
-    {
-      "task_id": "reforge-run-1-audit",
-      "phase": "in_progress",
-      "phase_num": 4,
-      "description": "[2/2] Four stages reviewed (104/107/140/95 hunks); whitespace-safe duplicate names, ICS final CRLF, nullable duty limits repaired; devcontainer JSONC documented; checklists: passed (test, hygiene, guidelines, secrets)",
-      "files_affected": [],
-      "status": "in_progress",
-      "timestamp": 1794652059.0778372,
-      "timestamp_str": "2026-11-14 13:27:39",
-      "agent": "kilo:goal"
-    },
-    {
-      "task_id": "reforge-run-1-audit",
-      "phase": "completed",
-      "phase_num": 5,
-      "description": "Task 'reforge-run-1-audit' completed successfully.",
-      "status": "completed",
-      "timestamp": 1794652059.3288522,
-      "timestamp_str": "2026-11-14 13:27:39",
-      "agent": "kilo:goal",
-      "delivery": {
-        "roots": [
-          "."
-        ],
-        "forced": false
-      }
-    },
-    {
-      "task_id": "corrupt-state-quarantine",
-      "phase": "in_progress",
-      "phase_num": 2,
-      "description": "[1/3] Quarantine unreadable local state files instead of crashing at login",
-      "files_affected": [],
-      "status": "in_progress",
-      "timestamp": 1794652839.672128,
-      "timestamp_str": "2026-11-14 13:40:39",
-      "agent": "kilo:goal",
-      "impact_assessment": {
-        "why": "A truncated or corrupt personnel_db_<user>.json or users_db.json raises JSONDecodeError inside load_db/load_users, so the app cannot start for that user and the corrupt file is never recovered",
-        "benefits": "Login and state restore fall back to empty defaults while the corrupt file is preserved for inspection, matching the PRINCIPLE-013 corrupt-state contract already used by the scheduler/ledger",
-        "risks": "contract: storage gains one reader used by load_db and load_users; dependency: standard library only; concurrency: same single-writer atomic model; state: corrupt file renamed to <name>.corrupt_<epoch>",
-        "mitigation": "Failing-first unit tests for valid, missing, and corrupt files plus AppTest proof, full gates, explicit staging, no push"
-      },
-      "plan_digest": "eaf1ced0e651dcca56b1b0f25d4cc9f1d398e89ea37719d648e712252202fd7f"
-    },
     {
       "task_id": "corrupt-state-quarantine",
       "phase": "in_progress",
@@ -312,6 +262,51 @@
           "."
         ],
         "forced": true
+      }
+    },
+    {
+      "task_id": "license-reference-links",
+      "phase": "in_progress",
+      "phase_num": 2,
+      "description": "[1/2] Commit the licensing reference update that was present in the working tree",
+      "files_affected": [],
+      "status": "in_progress",
+      "timestamp": 1794662789.663093,
+      "timestamp_str": "2026-11-14 16:26:29",
+      "agent": "kilo:goal",
+      "impact_assessment": {
+        "why": "The concurrent licensing update replaced local contributor and commercial license paths with Aegean-Licensing repository URLs; leaving it uncommitted blocked strict delivery",
+        "benefits": "Both license copies are identical and committed, and the project is delivery-ready again",
+        "risks": "contract: license references now remote URLs; dependency: none; concurrency: another session may continue the licensing campaign; state: none",
+        "mitigation": "Byte-identical check of both copies, hygiene/secrets/guidelines gates, explicit staging, no push"
+      },
+      "plan_digest": "d08c97c2aac9b33314d43c9f53475c4e0fb33f192e54ffe4253ffbff8cbf9f28"
+    },
+    {
+      "task_id": "license-reference-links",
+      "phase": "in_progress",
+      "phase_num": 4,
+      "description": "[2/2] LICENSE and LICENSES copy identical at 16710 bytes; URLs verified; all four gates pass; checklists: passed (test 48, hygiene, guidelines, secrets)",
+      "files_affected": [],
+      "status": "in_progress",
+      "timestamp": 1794662789.8718922,
+      "timestamp_str": "2026-11-14 16:26:29",
+      "agent": "kilo:goal"
+    },
+    {
+      "task_id": "license-reference-links",
+      "phase": "completed",
+      "phase_num": 5,
+      "description": "Task 'license-reference-links' completed successfully.",
+      "status": "completed",
+      "timestamp": 1794662790.1188955,
+      "timestamp_str": "2026-11-14 16:26:30",
+      "agent": "kilo:goal",
+      "delivery": {
+        "roots": [
+          "."
+        ],
+        "forced": false
       }
     }
   ]
