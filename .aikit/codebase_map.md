@@ -34,10 +34,10 @@
 ---
 
 ### [`main.py`](main.py)
-**Size**: `1457` lines (`66497` bytes)
+**Size**: `1457` lines (`66516` bytes)
 
 **Functions:**
-- `def get_secrets()` - *st.secrets raises when no secrets file exists; an empty mapping keeps local runs working.*
+- `def get_secrets()` - *Parse Streamlit secrets now; a missing or malformed file is a supported local configuration.*
 - `def clear_user_state()` - *Drop every user-scoped key so the next login starts from a clean session.*
 - `def clear_auth_state()` - *Drop the credentials and identity shown by the login page after logout.*
 - `def get_firestore_db()` - *Initialize Firestore Client from Streamlit Secrets*

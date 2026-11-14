@@ -290,10 +290,10 @@ DAYS_TR = ["Pazartesi", "Salı", "Çarşamba", "Perşembe", "Cuma", "Cumartesi",
 
 
 def get_secrets():
-    """st.secrets raises when no secrets file exists; an empty mapping keeps local runs working."""
+    """Parse Streamlit secrets now; a missing or malformed file is a supported local configuration."""
     try:
-        return st.secrets
-    except Exception:  # hygiene: allow a missing secrets file is a supported local configuration
+        return dict(st.secrets)
+    except Exception:  # hygiene: allow a missing or malformed secrets file must not block login
         return {}
 
 # Everything below belongs to the logged-in user; it must not survive a logout.
@@ -443,7 +443,7 @@ def authenticate(username, password):
         try:
             if username == admin["username"] and secure_equals(password, admin["password"]):
                 return True
-        except KeyError:  # hygiene: allow admin secrets may omit one of the two keys; login falls through to False
+        except (KeyError, TypeError):  # hygiene: allow a scalar or partial admin entry fails the check without crashing login
             pass
             
     return False

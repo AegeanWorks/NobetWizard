@@ -108,6 +108,13 @@ contract, a dependency, a data format or the architecture; IDs are consecutive a
 - **Decision**: Authenticate first; on success clear the session counter; on each failure increment `login_failures` and pause `security.login_backoff_seconds` (1s, 2s, then a 3s cap). The counter is auth-scoped and cleared on success and logout.
 - **Consequences**: Valid logins return in about 0.1s, repeated failures in one session back off predictably, and the delay policy is pinned by unit tests instead of a sleep call.
 
+### ADR-016: Treat malformed secrets and scalar admin entries as absent
+- **Date**: 2026-11-14
+- **Status**: Accepted
+- **Context**: `get_secrets()` returned Streamlit's lazy `st.secrets` object, so the TOML parse and the admin lookup happened inside `authenticate()`/`load_db()`. A malformed `.streamlit/secrets.toml` raised during login for every user, and a scalar `admin = "..."` entry raised `TypeError` (`string indices must be integers`); only a missing file was handled.
+- **Decision**: Parse eagerly with `dict(st.secrets)` inside the existing guard so a missing or malformed file returns `{}`, and catch `(KeyError, TypeError)` around the admin lookup so a scalar or partial admin entry fails the check instead of crashing.
+- **Consequences**: A broken secrets file degrades to local-account/admin-none login rather than a dead login page; a valid admin table still works, and misconfiguration is silent by design (logs are not available on Streamlit Cloud).
+
 <!-- Entry format:
 ### ADR-NNN: <decision in one line>
 - **Date**: YYYY-MM-DD
