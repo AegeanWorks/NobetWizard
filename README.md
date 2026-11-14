@@ -51,7 +51,7 @@
 *   **Rest & Spacing Rules:**
     *   **Consecutive Days:** Toggle to allow or disallow back-to-back duties (e.g., Mon & Tue).
     *   **2-Day Rest (Nöbet Arası 2 Gün):** Prevent duties on alternate days (e.g., Mon -> Wed forbidden, must wait until Thu).
-    *   **Weekly Limits:** Soft constraint to prevent burnout (max ~3 duties per week).
+    *   **Weekly Limits:** Hard limit to prevent burnout: no one is assigned more than the configured duties per calendar week (default 3, set with Max Duties per Week).
     *   **Previous Month Continuity:** Input who worked on the last days of the previous month to ensure rest rules are respected at the start of the new month.
 *   **Advanced Logic:**
     *   **Conditional Rules:** Create custom logic like "If someone holds duty on Wednesday, they cannot hold duty on Saturday".

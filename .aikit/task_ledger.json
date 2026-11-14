@@ -5,30 +5,12 @@
     "last_phase": "verification",
     "active_phase": 4,
     "status": "in_progress",
-    "updated_at": 1794689218.7763512,
+    "updated_at": 1794689246.5707135,
     "owner": "kiro:nw-fixes",
     "started_by": "kiro:nw-fixes",
     "continuations": []
   },
   "checkpoints": [
-    {
-      "task_id": "load-clears-stale-roster",
-      "phase": "in_progress",
-      "phase_num": 2,
-      "description": "[1/3] Clear the in-session roster when a loaded database has none",
-      "files_affected": [],
-      "status": "in_progress",
-      "timestamp": 1794660776.856005,
-      "timestamp_str": "2026-11-14 15:52:56",
-      "agent": "kilo:goal",
-      "impact_assessment": {
-        "why": "load_cloud_data only restores generated_schedule when the database contains one, so loading a database without a roster keeps the previous roster active, displayed against the new personnel and persisted by the next Save",
-        "benefits": "Loading a database always yields a state consistent with that database",
-        "risks": "contract: load resets generated_schedule, schedule_success, gen_year and gen_month before the optional restore; dependency: none; concurrency: none; state: session widget/state keys only",
-        "mitigation": "AppTest reproduction before and after, full gates, explicit staging, no push"
-      },
-      "plan_digest": "5116345ad54bf34be41b22c43db3b64676e04687b8aa3f0db8459e3ae24cd0fc"
-    },
     {
       "task_id": "load-clears-stale-roster",
       "phase": "in_progress",
@@ -289,6 +271,18 @@
       "status": "in_progress",
       "timestamp": 1794689218.7763512,
       "timestamp_str": "2026-11-14 23:46:58",
+      "agent": "kiro:nw-fixes",
+      "checklists": "passed"
+    },
+    {
+      "task_id": "nw-reforge-fixes",
+      "phase": "verification",
+      "phase_num": 4,
+      "description": "[milestone 3/3] README weekly limit documented as hard and configurable; Streamlit floor deferred; checklists: passed (test, hygiene, guidelines, secrets)",
+      "files_affected": [],
+      "status": "in_progress",
+      "timestamp": 1794689246.5707135,
+      "timestamp_str": "2026-11-14 23:47:26",
       "agent": "kiro:nw-fixes",
       "checklists": "passed"
     }
