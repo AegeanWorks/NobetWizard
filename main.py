@@ -394,8 +394,9 @@ def save_db(personnel, username):
         "cfg_language": st.session_state.get("cfg_language")
     }
 
-    # Save generated schedule if exists (Convert date keys to strings)
-    if st.session_state.get("schedule_success") and st.session_state.get("generated_schedule"):
+    # Save generated schedule if exists (Convert date keys to strings); an empty
+    # personnel list means no roster belongs to this database.
+    if personnel and st.session_state.get("schedule_success") and st.session_state.get("generated_schedule"):
         sched_serializable = {}
         for d, team in st.session_state.generated_schedule.items():
             sched_serializable[d.strftime("%Y-%m-%d")] = team
@@ -1225,6 +1226,12 @@ def main():
                 if key in db_data:
                     st.session_state[key] = db_data[key]
             
+            # A loaded database without a roster must not keep the previous one active.
+            st.session_state.generated_schedule = {}
+            st.session_state.schedule_success = False
+            st.session_state.gen_year = None
+            st.session_state.gen_month = None
+
             # Restore generated schedule
             if "generated_schedule" in db_data:
                 try:

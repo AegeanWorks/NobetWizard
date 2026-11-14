@@ -94,6 +94,13 @@ contract, a dependency, a data format or the architecture; IDs are consecutive a
 - **Decision**: Replace every `use_container_width=True` call site with `width="stretch"`.
 - **Consequences**: Logs are clean and the UI keeps its existing full-width layout; the implicit minimum Streamlit version is one that accepts `width=`, which the unpinned `streamlit` requirement resolves to on install.
 
+### ADR-014: Keep loaded, saved and cleared databases consistent with their rosters
+- **Date**: 2026-11-14
+- **Status**: Accepted
+- **Context**: `load_cloud_data` restored a saved roster only when the database contained one, so loading a roster-free database kept the previous session's roster active against the newly loaded personnel; `save_db` persisted the current roster even when saving an empty personnel list, so "Clear Personnel Database" wrote a document with a roster but no personnel.
+- **Decision**: Loading clears `generated_schedule`, `schedule_success`, `gen_year` and `gen_month` before the optional restore, and `save_db` only persists a roster when the personnel list is non-empty.
+- **Consequences**: A database always describes its personnel and roster consistently; loading a database never displays a roster left over from the previous session, and clearing the database leaves a roster-free document.
+
 <!-- Entry format:
 ### ADR-NNN: <decision in one line>
 - **Date**: YYYY-MM-DD

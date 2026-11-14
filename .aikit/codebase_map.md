@@ -10,7 +10,7 @@
 - **Total Classes**: `11`
 - **Total Top-Level Functions**: `29`
 - **Total Class Methods**: `58`
-- **Total Source Lines**: `2711`
+- **Total Source Lines**: `2718`
 
 ## 🧭 Map Coverage
 - **Indexed**: python (`12` module(s))
@@ -34,7 +34,7 @@
 ---
 
 ### [`main.py`](main.py)
-**Size**: `1447` lines (`65875` bytes)
+**Size**: `1454` lines (`66249` bytes)
 
 **Functions:**
 - `def get_secrets()` - *st.secrets raises when no secrets file exists; an empty mapping keeps local runs working.*
