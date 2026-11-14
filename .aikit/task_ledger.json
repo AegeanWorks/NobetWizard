@@ -1,46 +1,16 @@
 {
   "version": 1,
   "active_task": {
-    "task_id": "secrets-parse-guard",
-    "last_phase": "in_progress",
-    "active_phase": 5,
-    "status": "completed",
-    "updated_at": 1794667631.4520984,
-    "owner": "kilo:goal",
-    "started_by": "kilo:goal",
-    "continuations": [],
-    "completed_at": 1794667678.6826532
+    "task_id": "nw-reforge-fixes",
+    "last_phase": "verification",
+    "active_phase": 4,
+    "status": "in_progress",
+    "updated_at": 1794689127.619997,
+    "owner": "kiro:nw-fixes",
+    "started_by": "kiro:nw-fixes",
+    "continuations": []
   },
   "checkpoints": [
-    {
-      "task_id": "font-artifact-hygiene",
-      "phase": "in_progress",
-      "phase_num": 2,
-      "description": "[1/3] Keep runtime-downloaded PDF fonts out of the tracked tree",
-      "files_affected": [],
-      "status": "in_progress",
-      "timestamp": 1794659964.3657763,
-      "timestamp_str": "2026-11-14 15:39:24",
-      "agent": "kilo:goal",
-      "impact_assessment": {
-        "why": "generate_pdf downloads Roboto-Regular.ttf and Roboto-Bold.ttf into the project root on first PDF export; they are untracked and not ignored, so a normal export dirties the worktree and risks committing ~1 MB of binary assets",
-        "benefits": "PDF export no longer makes the repository look modified, and generated fonts cannot be committed accidentally",
-        "risks": "contract: .gitignore only; dependency: none; concurrency: none; state: generated cache files stay local",
-        "mitigation": "Ignore the generated names, verify with git check-ignore and the hygiene gate, explicit staging, no push"
-      },
-      "plan_digest": "34361448dee51507154563c07672a17fcb3c34a346e6b336c3800b6fd753aa4b"
-    },
-    {
-      "task_id": "font-artifact-hygiene",
-      "phase": "in_progress",
-      "phase_num": 4,
-      "description": "[2/3] Roboto-*.ttf is ignored; git check-ignore confirms both generated fonts; hygiene, guidelines and secrets gates pass; checklists: passed (test 44, hygiene, guidelines, secrets)",
-      "files_affected": [],
-      "status": "in_progress",
-      "timestamp": 1794660019.7143595,
-      "timestamp_str": "2026-11-14 15:40:19",
-      "agent": "kilo:goal"
-    },
     {
       "task_id": "font-artifact-hygiene",
       "phase": "completed",
@@ -295,6 +265,36 @@
       "timestamp": 1794688558.8491771,
       "timestamp_str": "2026-11-14 23:35:58",
       "agent": "unidentified"
+    },
+    {
+      "task_id": "nw-reforge-fixes",
+      "phase": "planning",
+      "phase_num": 2,
+      "description": "[1/3] Migrate legacy SHA-256 logins to bcrypt on first login; [2/3] collision-proof quarantine names; [3/3] README weekly-limit wording (Streamlit floor deferred until per-widget versions are verified)",
+      "files_affected": [],
+      "status": "in_progress",
+      "timestamp": 1794688890.24262,
+      "timestamp_str": "2026-11-14 23:41:30",
+      "agent": "kiro:nw-fixes",
+      "impact_assessment": {
+        "why": "Reforge run-1 review found pre-bcrypt accounts cannot log in (check_hashes rejects non-bcrypt), quarantine files can overwrite within one second, and README calls the hard weekly limit soft",
+        "benefits": "Legacy users regain access and are upgraded to bcrypt; no quarantined state is lost; docs match code",
+        "risks": "contract: authenticate may write the user store on login; dependency: none; concurrency: whole-file users rewrite could drop a concurrent registration, narrowed by reloading before the write; state: stored hashes change",
+        "mitigation": "Failing-first tests per milestone, reload-before-write updating only that key, rehash failure never blocks login, project check before each commit, no push"
+      },
+      "plan_digest": "0d09a261dfe3c49bfb636cdfa7bc1f14e4b2822647fd665bcb0b55afe8d3e2c9"
+    },
+    {
+      "task_id": "nw-reforge-fixes",
+      "phase": "verification",
+      "phase_num": 4,
+      "description": "[milestone 1/3] legacy SHA-256 logins upgrade to bcrypt (local and Firestore); tests 56 pass; checklists: passed (test, hygiene, guidelines, secrets)",
+      "files_affected": [],
+      "status": "in_progress",
+      "timestamp": 1794689127.619997,
+      "timestamp_str": "2026-11-14 23:45:27",
+      "agent": "kiro:nw-fixes",
+      "checklists": "passed"
     }
   ]
 }

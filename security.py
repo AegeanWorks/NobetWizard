@@ -1,5 +1,6 @@
 """Password and credential helpers kept free of UI dependencies."""
 
+import hashlib
 import hmac
 import re
 
@@ -34,3 +35,22 @@ def check_hashes(password, hashed_text):
         return bcrypt.checkpw(password.encode(), hashed_text.encode())
     except (ValueError, TypeError):
         return False
+
+
+LEGACY_SHA256_HASH = re.compile(r"^[0-9a-fA-F]{64}$")
+
+
+def verify_password(password, stored):
+    """Check a password against a stored hash and report whether the hash needs upgrading.
+
+    Returns (matched, upgraded_hash). Accounts created before the bcrypt switch hold an
+    unsalted SHA-256 hex digest; a correct password for one returns a fresh bcrypt hash so the
+    caller can replace it. A wrong password or an unreadable stored value never upgrades.
+    """
+    if check_hashes(password, stored):
+        return True, None
+    if isinstance(stored, str) and LEGACY_SHA256_HASH.match(stored):
+        digest = hashlib.sha256(str(password).encode("utf-8")).hexdigest()
+        if hmac.compare_digest(digest.encode("ascii"), stored.lower().encode("ascii")):
+            return True, make_hashes(password)
+    return False, None

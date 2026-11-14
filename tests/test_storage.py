@@ -3,7 +3,7 @@ import tempfile
 import unittest
 from pathlib import Path
 
-from storage import atomic_write_json, load_json_or_default
+from storage import atomic_write_json, load_json_or_default, replace_json_entry
 
 
 class LoadJsonOrDefaultTest(unittest.TestCase):
@@ -57,6 +57,33 @@ class AtomicWriteJsonTest(unittest.TestCase):
             atomic_write_json(path, {"ok": True})
 
             self.assertTrue(path.is_file())
+
+
+class ReplaceJsonEntryTest(unittest.TestCase):
+    def test_replaces_only_the_named_entry_when_it_is_unchanged(self):
+        with tempfile.TemporaryDirectory() as folder:
+            path = Path(folder) / "users.json"
+            atomic_write_json(path, {"ann": "old", "bob": "keep"})
+            self.assertTrue(replace_json_entry(path, "ann", "old", "new"))
+            self.assertEqual(json.loads(path.read_text(encoding="utf-8")), {"ann": "new", "bob": "keep"})
+
+    def test_keeps_an_entry_added_after_the_caller_read_the_file(self):
+        with tempfile.TemporaryDirectory() as folder:
+            path = Path(folder) / "users.json"
+            atomic_write_json(path, {"ann": "old"})
+            atomic_write_json(path, {"ann": "old", "late": "registered"})
+            self.assertTrue(replace_json_entry(path, "ann", "old", "new"))
+            self.assertEqual(
+                json.loads(path.read_text(encoding="utf-8")), {"ann": "new", "late": "registered"}
+            )
+
+    def test_leaves_the_file_alone_when_the_entry_changed_or_is_missing(self):
+        with tempfile.TemporaryDirectory() as folder:
+            path = Path(folder) / "users.json"
+            atomic_write_json(path, {"ann": "changed"})
+            self.assertFalse(replace_json_entry(path, "ann", "old", "new"))
+            self.assertFalse(replace_json_entry(path, "ghost", "old", "new"))
+            self.assertEqual(json.loads(path.read_text(encoding="utf-8")), {"ann": "changed"})
 
 
 if __name__ == "__main__":

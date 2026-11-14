@@ -3,9 +3,9 @@ import pandas as pd
 from datetime import date, timedelta
 import calendar
 from scheduler import DutyScheduler
-from storage import atomic_write_json, load_json_or_default
+from storage import atomic_write_json, load_json_or_default, replace_json_entry
 from exports import download_font, generate_ics
-from security import check_hashes, login_backoff_seconds, make_hashes, secure_equals
+from security import login_backoff_seconds, make_hashes, secure_equals, verify_password
 from ui_helpers import GENDER_MODES, calendar_title, gender_label, get_calendar_html, normalize_gender_mode
 import json
 import os
@@ -425,15 +425,28 @@ def authenticate(username, password):
     # 1. Check Cloud DB
     db = get_firestore_db()
     if db:
-        doc = db.collection("users").document(username).get()
+        doc_ref = db.collection("users").document(username)
+        doc = doc_ref.get()
         if doc.exists:
-            stored_hash = doc.to_dict().get("password_hash")
-            return check_hashes(password, stored_hash)
-    
+            matched, upgraded = verify_password(password, doc.to_dict().get("password_hash"))
+            if upgraded:
+                try:
+                    doc_ref.update({"password_hash": upgraded})
+                except Exception:  # hygiene: allow a failed hash upgrade must not block a valid login; it retries next login
+                    pass
+            return matched
+
     # 2. Check Local DB (Hashed passwords)
     users = load_users()
-    if username in users and check_hashes(password, users[username]):
-        return True
+    if username in users:
+        matched, upgraded = verify_password(password, users[username])
+        if matched:
+            if upgraded:
+                try:
+                    replace_json_entry(USER_DB_FILE, username, users[username], upgraded)
+                except OSError:  # hygiene: allow a failed hash upgrade must not block a valid login; it retries next login
+                    pass
+            return True
     
     # 2. Check Secrets (Fallback Admin - Plain text in secrets)
     # Useful if the local DB is wiped or empty

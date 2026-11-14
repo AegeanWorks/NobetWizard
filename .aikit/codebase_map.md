@@ -7,10 +7,10 @@
 
 ## 📊 Codebase Metrics
 - **Total Python Modules**: `12`
-- **Total Classes**: `12`
-- **Total Top-Level Functions**: `30`
-- **Total Class Methods**: `62`
-- **Total Source Lines**: `2742`
+- **Total Classes**: `14`
+- **Total Top-Level Functions**: `32`
+- **Total Class Methods**: `71`
+- **Total Source Lines**: `2850`
 
 ## 🧭 Map Coverage
 - **Indexed**: python (`12` module(s))
@@ -34,7 +34,7 @@
 ---
 
 ### [`main.py`](main.py)
-**Size**: `1457` lines (`66516` bytes)
+**Size**: `1470` lines (`67163` bytes)
 
 **Functions:**
 - `def get_secrets()` - *Parse Streamlit secrets now; a missing or malformed file is a supported local configuration.*
@@ -79,21 +79,23 @@
 ### [`security.py`](security.py)
 > *Password and credential helpers kept free of UI dependencies.*
 
-**Size**: `36` lines (`1076` bytes)
+**Size**: `56` lines (`1928` bytes)
 
 **Functions:**
 - `def secure_equals(left, right)` - *Compare two values in constant time, including non-ASCII text.*
 - `def login_backoff_seconds(failures)` - *Seconds to pause after this many consecutive failed logins, capped at three.*
 - `def make_hashes(password)` - *Hash a password with bcrypt.*
 - `def check_hashes(password, hashed_text)` - *Return True only when the stored hash is a valid bcrypt hash matching the password.*
+- `def verify_password(password, stored)` - *Check a password against a stored hash and report whether the hash needs upgrading.*
 
 ---
 
 ### [`storage.py`](storage.py)
-**Size**: `49` lines (`1722` bytes)
+**Size**: `63` lines (`2255` bytes)
 
 **Functions:**
 - `def load_json_or_default(path, default)` - *Read a JSON document, quarantining an unreadable file instead of raising.*
+- `def replace_json_entry(path, key, expected, new_value)` - *Set one top-level entry of a JSON object file, only while it still equals `expected`.*
 - `def atomic_write_json(path, data)` - *Write JSON without leaving a truncated file when the process dies mid-write.*
 
 ---
@@ -150,7 +152,7 @@
 ---
 
 ### [`tests/test_security.py`](tests/test_security.py)
-**Size**: `41` lines (`1417` bytes)
+**Size**: `75` lines (`2780` bytes)
 
 **Classes:**
 - `class SecureEqualsTest`
@@ -163,11 +165,18 @@
   - Method `.test_non_positive_counter_is_minimum()`
 - `class CheckHashesTest`
   - Method `.test_rejects_missing_or_malformed_hashes()`
+- `class VerifyPasswordTest` - *Accounts created before the bcrypt switch store an unsalted SHA-256 hex digest.*
+  - Method `.legacy(password)`
+  - Method `.test_bcrypt_hash_matches_without_upgrade()`
+  - Method `.test_legacy_hash_matches_and_returns_a_bcrypt_upgrade()`
+  - Method `.test_legacy_hash_is_case_insensitive_hex()`
+  - Method `.test_wrong_password_never_upgrades()`
+  - Method `.test_missing_or_malformed_stored_values_fail()`
 
 ---
 
 ### [`tests/test_storage.py`](tests/test_storage.py)
-**Size**: `63` lines (`2446` bytes)
+**Size**: `90` lines (`3939` bytes)
 
 **Classes:**
 - `class LoadJsonOrDefaultTest`
@@ -178,6 +187,10 @@
   - Method `.test_writes_and_overwrites_json()`
   - Method `.test_leaves_no_temporary_files()`
   - Method `.test_creates_missing_parent_directory()`
+- `class ReplaceJsonEntryTest`
+  - Method `.test_replaces_only_the_named_entry_when_it_is_unchanged()`
+  - Method `.test_keeps_an_entry_added_after_the_caller_read_the_file()`
+  - Method `.test_leaves_the_file_alone_when_the_entry_changed_or_is_missing()`
 
 ---
 

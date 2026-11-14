@@ -115,6 +115,13 @@ contract, a dependency, a data format or the architecture; IDs are consecutive a
 - **Decision**: Parse eagerly with `dict(st.secrets)` inside the existing guard so a missing or malformed file returns `{}`, and catch `(KeyError, TypeError)` around the admin lookup so a scalar or partial admin entry fails the check instead of crashing.
 - **Consequences**: A broken secrets file degrades to local-account/admin-none login rather than a dead login page; a valid admin table still works, and misconfiguration is silent by design (logs are not available on Streamlit Cloud).
 
+### ADR-017: Upgrade legacy SHA-256 password hashes to bcrypt on first login
+- **Date**: 2026-11-14
+- **Status**: Accepted
+- **Context**: Accounts registered before the bcrypt switch store an unsalted SHA-256 hex digest. `check_hashes` accepts only bcrypt hashes, so those users could not log in, locally or in Firestore, and saw only the generic failure message.
+- **Decision**: `security.verify_password` accepts a 64-character hex digest with a constant-time compare and returns a fresh bcrypt hash. `authenticate` stores it after a successful login: `storage.replace_json_entry` re-reads the users file and replaces only that user while the old hash is still there, and Firestore gets an `update` of `password_hash`. A failed upgrade never blocks the login and retries on the next one.
+- **Consequences**: Legacy accounts work again and leave the weak format on first login. The SHA-256 check stays until no active user has one; delete it then. The reload narrows the lost-update window on the users file but does not lock it, as registration already behaves.
+
 <!-- Entry format:
 ### ADR-NNN: <decision in one line>
 - **Date**: YYYY-MM-DD

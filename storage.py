@@ -26,6 +26,20 @@ def load_json_or_default(path, default):
         return default
 
 
+def replace_json_entry(path, key, expected, new_value):
+    """Set one top-level entry of a JSON object file, only while it still equals `expected`.
+
+    The file is re-read right before the write so entries added since the caller last read it
+    are kept. Returns True when the entry was replaced.
+    """
+    document = load_json_or_default(path, {})
+    if not isinstance(document, dict) or document.get(key) != expected:
+        return False
+    document[key] = new_value
+    atomic_write_json(path, document)
+    return True
+
+
 def atomic_write_json(path, data):
     """Write JSON without leaving a truncated file when the process dies mid-write."""
     target = Path(path)
