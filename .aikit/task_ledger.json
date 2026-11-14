@@ -3,32 +3,15 @@
   "active_task": {
     "task_id": "secrets-parse-guard",
     "last_phase": "in_progress",
-    "active_phase": 4,
-    "status": "in_progress",
+    "active_phase": 5,
+    "status": "completed",
     "updated_at": 1794667631.4520984,
     "owner": "kilo:goal",
     "started_by": "kilo:goal",
-    "continuations": []
+    "continuations": [],
+    "completed_at": 1794667678.6826532
   },
   "checkpoints": [
-    {
-      "task_id": "ics-title-derivation",
-      "phase": "in_progress",
-      "phase_num": 2,
-      "description": "[1/3] Give exported calendar events a readable month-scoped title",
-      "files_affected": [],
-      "status": "in_progress",
-      "timestamp": 1794654124.6187804,
-      "timestamp_str": "2026-11-14 14:02:04",
-      "agent": "kilo:goal",
-      "impact_assessment": {
-        "why": "The ICS export derives its title with t['title'].split(' ')[0], which keeps only the leading emoji, so every exported event is titled '\ud83e\uddd9\u200d\u2642\ufe0f Duty' regardless of language",
-        "benefits": "Calendar clients show a meaningful monthly roster title in both languages",
-        "risks": "contract: main passes a helper-derived title instead of the emoji; dependency: none; concurrency: none; state: none",
-        "mitigation": "Failing-first helper tests for both languages and fallback, AppTest proof of the ICS path, full gates, explicit staging, no push"
-      },
-      "plan_digest": "8fa635c2b361c3c8674ffef673d4f2c2bb9c7c460350a1758358162d79490e16"
-    },
     {
       "task_id": "ics-title-derivation",
       "phase": "in_progress",
@@ -309,6 +292,22 @@
       "timestamp": 1794667631.4520984,
       "timestamp_str": "2026-11-14 17:47:11",
       "agent": "kilo:goal"
+    },
+    {
+      "task_id": "secrets-parse-guard",
+      "phase": "completed",
+      "phase_num": 5,
+      "description": "Task 'secrets-parse-guard' completed successfully.",
+      "status": "completed",
+      "timestamp": 1794667678.682656,
+      "timestamp_str": "2026-11-14 17:47:58",
+      "agent": "kilo:goal",
+      "delivery": {
+        "roots": [
+          "."
+        ],
+        "forced": false
+      }
     }
   ]
 }
