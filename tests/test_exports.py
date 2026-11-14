@@ -45,6 +45,16 @@ class IcsEscapingTest(unittest.TestCase):
 
         self.assertEqual(first_uid, second_uid)
 
+    def test_generated_ics_uses_crlf_and_folds_long_lines(self):
+        schedule = {date(2026, 2, 1): [{"name": "A" * 100}]}
+
+        payload = generate_ics(schedule).decode("utf-8")
+
+        self.assertNotIn("\n", payload.replace("\r\n", ""))
+        for line in payload.split("\r\n"):
+            self.assertLessEqual(len(line.encode("utf-8")), 75)
+        self.assertIn("SUMMARY:Duty Roster: ", payload.replace("\r\n ", ""))
+
 
 class DownloadFontTest(unittest.TestCase):
     def test_existing_font_is_not_downloaded(self):

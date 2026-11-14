@@ -469,7 +469,8 @@ class DutyScheduler:
             
             return True, self.schedule, None
 
-        # A failed search leaves partial counters on the personnel objects; restore
-        # the fixed-duty baseline so the UI does not display a half-filled attempt.
+        # A failed search leaves a partial roster and partial counters on the
+        # personnel objects; leave neither behind.
+        self.schedule = {}
         self._restore_baseline()
         return False, {}, last_error

@@ -52,6 +52,13 @@ contract, a dependency, a data format or the architecture; IDs are consecutive a
 - **Decision**: `generate()` rejects non-text or whitespace-only names before reserving fixed duties; a failed fixed-duty validation resets the duty counters and schedule so no partial state survives; the busy, off and fixed multiselects key their widget state by person while their defaults still come from that person's saved values.
 - **Consequences**: Invalid personnel fail fast with an actionable message; a failed fixed-duty validation leaves the editor at a zero counter baseline while the ADR-006 failed-search baseline behavior is unchanged; each person's tool selections are independent and are dropped on logout.
 
+### ADR-008: Clear partial rosters on failure and emit RFC 5545 calendar lines
+- **Date**: 2026-11-14
+- **Status**: Accepted
+- **Context**: A failed search returned an empty roster but left the last partial attempt on `DutyScheduler.schedule`; the `.ics` export separated lines with bare LF and let long SUMMARY/DESCRIPTION lines exceed the 75-octet folding limit.
+- **Decision**: Failed searches clear `schedule` together with restoring counters; `generate_ics` folds every content line at the RFC 5545 octet limit and joins the physical lines with CRLF.
+- **Consequences**: Callers never observe a partial roster after a failed generation, and exports are accepted by strict iCalendar parsers; long name lists unfold identically in clients.
+
 <!-- Entry format:
 ### ADR-NNN: <decision in one line>
 - **Date**: YYYY-MM-DD

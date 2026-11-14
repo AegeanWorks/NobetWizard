@@ -219,6 +219,17 @@ class DutySchedulerTest(unittest.TestCase):
         for person in crew[1:]:
             self.assertEqual(person["duty_count"], 0)
 
+    def test_failed_search_clears_partial_schedule(self):
+        crew = personnel(2)
+        for person in crew:
+            person["max_duties"] = 1
+        scheduler = DutyScheduler(2026, 2, crew, config())
+
+        success, _schedule, _error = scheduler.generate()
+
+        self.assertFalse(success)
+        self.assertEqual(scheduler.schedule, {})
+
     def test_list_format_constraints_block_assignment(self):
         crew = personnel()
         scheduler = DutyScheduler(2026, 2, crew, config())

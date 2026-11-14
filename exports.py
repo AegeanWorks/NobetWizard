@@ -19,9 +19,25 @@ def escape_ics_text(value):
     )
 
 
+def _fold_content_line(line, limit=75):
+    """Split a content line so every physical line stays within the octet limit."""
+    if len(line.encode("utf-8")) <= limit:
+        return [line]
+    chunks = []
+    current = ""
+    for character in line:
+        if len((current + character).encode("utf-8")) > limit:
+            chunks.append(current)
+            current = " " + character
+        else:
+            current += character
+    chunks.append(current)
+    return chunks
+
+
 def generate_ics(schedule, title="Duty Roster"):
     """Generate an iCalendar document for the schedule."""
-    ics_content = [
+    lines = [
         "BEGIN:VCALENDAR",
         "VERSION:2.0",
         "PRODID:-//NobetWizard//DutyRoster//EN",
@@ -37,17 +53,20 @@ def generate_ics(schedule, title="Duty Roster"):
         uid_seed = f"{dt_start}:{names}".encode("utf-8")
         uid = hashlib.sha256(uid_seed).hexdigest()[:32] + "@nobetwizard"
 
-        ics_content.append("BEGIN:VEVENT")
-        ics_content.append(f"UID:{uid}")
-        ics_content.append(f"DTSTAMP:{stamp}")
-        ics_content.append(f"DTSTART;VALUE=DATE:{dt_start}")
-        ics_content.append(f"DTEND;VALUE=DATE:{dt_end}")
-        ics_content.append(f"SUMMARY:{escape_ics_text(title)}: {names}")
-        ics_content.append(f"DESCRIPTION:Team: {names}")
-        ics_content.append("END:VEVENT")
+        lines.append("BEGIN:VEVENT")
+        lines.append(f"UID:{uid}")
+        lines.append(f"DTSTAMP:{stamp}")
+        lines.append(f"DTSTART;VALUE=DATE:{dt_start}")
+        lines.append(f"DTEND;VALUE=DATE:{dt_end}")
+        lines.append(f"SUMMARY:{escape_ics_text(title)}: {names}")
+        lines.append(f"DESCRIPTION:Team: {names}")
+        lines.append("END:VEVENT")
 
-    ics_content.append("END:VCALENDAR")
-    return "\n".join(ics_content).encode("utf-8")
+    lines.append("END:VCALENDAR")
+    folded = []
+    for line in lines:
+        folded.extend(_fold_content_line(line))
+    return "\r\n".join(folded).encode("utf-8")
 
 
 def download_font(url, path, timeout=10):

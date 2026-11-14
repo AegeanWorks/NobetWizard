@@ -8,9 +8,9 @@
 ## 📊 Codebase Metrics
 - **Total Python Modules**: `12`
 - **Total Classes**: `9`
-- **Total Top-Level Functions**: `25`
-- **Total Class Methods**: `50`
-- **Total Source Lines**: `2577`
+- **Total Top-Level Functions**: `26`
+- **Total Class Methods**: `52`
+- **Total Source Lines**: `2618`
 
 ## 🧭 Map Coverage
 - **Indexed**: python (`12` module(s))
@@ -23,10 +23,11 @@
 ### [`exports.py`](exports.py)
 > *Calendar export helpers that do not depend on the Streamlit UI.*
 
-**Size**: `74` lines (`2485` bytes)
+**Size**: `93` lines (`2988` bytes)
 
 **Functions:**
 - `def escape_ics_text(value)` - *Escape a value so it cannot break out of an iCalendar text property.*
+- `def _fold_content_line(line, limit)` - *Split a content line so every physical line stays within the octet limit.*
 - `def generate_ics(schedule, title)` - *Generate an iCalendar document for the schedule.*
 - `def download_font(url, path, timeout)` - *Download a font once, with a timeout and without leaving a partial file.*
 
@@ -53,7 +54,7 @@
 ---
 
 ### [`scheduler.py`](scheduler.py)
-**Size**: `475` lines (`21042` bytes)
+**Size**: `476` lines (`21030` bytes)
 
 **Classes:**
 - `class DutyScheduler`
@@ -100,7 +101,7 @@
 ---
 
 ### [`tests/test_exports.py`](tests/test_exports.py)
-**Size**: `85` lines (`3110` bytes)
+**Size**: `95` lines (`3540` bytes)
 
 **Classes:**
 - `class IcsEscapingTest`
@@ -108,6 +109,7 @@
   - Method `.test_generated_event_escapes_personnel_names()`
   - Method `.test_generated_events_carry_uid_and_dtstamp()`
   - Method `.test_generated_uid_is_stable_for_the_same_event()`
+  - Method `.test_generated_ics_uses_crlf_and_folds_long_lines()`
 - `class DownloadFontTest`
   - Method `.test_existing_font_is_not_downloaded()`
   - Method `.test_download_uses_a_timeout_and_replaces_the_target()`
@@ -115,7 +117,7 @@
 ---
 
 ### [`tests/test_scheduler.py`](tests/test_scheduler.py)
-**Size**: `244` lines (`8480` bytes)
+**Size**: `255` lines (`8834` bytes)
 
 **Classes:**
 - `class DutySchedulerTest`
@@ -135,6 +137,7 @@
   - Method `.test_duplicate_personnel_names_are_rejected()`
   - Method `.test_same_day_conditional_rule_is_rejected()`
   - Method `.test_failed_search_restores_fixed_baseline_counts()`
+  - Method `.test_failed_search_clears_partial_schedule()`
   - Method `.test_list_format_constraints_block_assignment()`
 
 **Functions:**
