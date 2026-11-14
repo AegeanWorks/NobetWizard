@@ -38,6 +38,7 @@ def check_hashes(password, hashed_text):
 
 
 LEGACY_SHA256_HASH = re.compile(r"^[0-9a-fA-F]{64}$")
+BCRYPT_MAX_BYTES = 72
 
 
 def verify_password(password, stored):
@@ -45,12 +46,16 @@ def verify_password(password, stored):
 
     Returns (matched, upgraded_hash). Accounts created before the bcrypt switch hold an
     unsalted SHA-256 hex digest; a correct password for one returns a fresh bcrypt hash so the
-    caller can replace it. A wrong password or an unreadable stored value never upgrades.
+    caller can replace it. A wrong password or an unreadable stored value never upgrades, and a
+    password over bcrypt's 72-byte limit logs in but keeps its legacy hash.
     """
     if check_hashes(password, stored):
         return True, None
     if isinstance(stored, str) and LEGACY_SHA256_HASH.match(stored):
-        digest = hashlib.sha256(str(password).encode("utf-8")).hexdigest()
+        encoded = str(password).encode("utf-8")
+        digest = hashlib.sha256(encoded).hexdigest()
         if hmac.compare_digest(digest.encode("ascii"), stored.lower().encode("ascii")):
+            if len(encoded) > BCRYPT_MAX_BYTES:
+                return True, None  # bcrypt cannot hash this; keep the legacy hash rather than fail the login
             return True, make_hashes(password)
     return False, None

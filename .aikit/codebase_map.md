@@ -6,14 +6,14 @@
 ---
 
 ## 📊 Codebase Metrics
-- **Total Python Modules**: `12`
-- **Total Classes**: `15`
+- **Total Python Modules**: `13`
+- **Total Classes**: `17`
 - **Total Top-Level Functions**: `32`
-- **Total Class Methods**: `72`
-- **Total Source Lines**: `2871`
+- **Total Class Methods**: `81`
+- **Total Source Lines**: `2947`
 
 ## 🧭 Map Coverage
-- **Indexed**: python (`12` module(s))
+- **Indexed**: python (`13` module(s))
 - **Not indexed by this map**: none (no non-Python source files were found)
 
 ---
@@ -79,7 +79,7 @@
 ### [`security.py`](security.py)
 > *Password and credential helpers kept free of UI dependencies.*
 
-**Size**: `56` lines (`1928` bytes)
+**Size**: `61` lines (`2216` bytes)
 
 **Functions:**
 - `def secure_equals(left, right)` - *Compare two values in constant time, including non-ASCII text.*
@@ -102,6 +102,23 @@
 
 ### [`tests/__init__.py`](tests/__init__.py)
 **Size**: `0` lines (`0` bytes)
+
+---
+
+### [`tests/test_app_flows.py`](tests/test_app_flows.py)
+> *End-to-end checks that drive main.py through Streamlit's AppTest in a throwaway folder.*
+
+**Size**: `56` lines (`2030` bytes)
+
+**Classes:**
+- `class AppFlowCase` - *Runs each test inside its own temp folder so local state files never touch the repo.*
+  - Method `.setUp()`
+  - Method `.write(name, text)`
+  - Method `.new_app()`
+  - Method `.log_in(username, password)`
+- `class LegacyLoginTest`
+  - Method `.test_legacy_account_with_a_long_password_can_log_in()`
+  - Method `.test_legacy_account_with_a_short_password_is_upgraded_to_bcrypt()`
 
 ---
 
@@ -152,7 +169,7 @@
 ---
 
 ### [`tests/test_security.py`](tests/test_security.py)
-**Size**: `75` lines (`2780` bytes)
+**Size**: `90` lines (`3565` bytes)
 
 **Classes:**
 - `class SecureEqualsTest`
@@ -171,6 +188,9 @@
   - Method `.test_legacy_hash_matches_and_returns_a_bcrypt_upgrade()`
   - Method `.test_legacy_hash_is_case_insensitive_hex()`
   - Method `.test_wrong_password_never_upgrades()`
+  - Method `.test_legacy_password_over_72_bytes_logs_in_without_an_upgrade()`
+  - Method `.test_legacy_password_of_exactly_72_bytes_is_upgraded()`
+  - Method `.test_wrong_long_password_still_fails()`
   - Method `.test_missing_or_malformed_stored_values_fail()`
 
 ---

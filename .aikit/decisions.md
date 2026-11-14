@@ -129,6 +129,13 @@ contract, a dependency, a data format or the architecture; IDs are consecutive a
 - **Decision**: `load_json_or_default` appends `_1`, `_2`, ... while the quarantine name exists, and .gitignore covers `*_db.json.corrupt_*` and `personnel_db_*.json.corrupt_*`.
 - **Consequences**: No damaged state is lost to a name collision and none can be staged by accident. Quarantined files still accumulate until the user removes them.
 
+### ADR-019: Log in legacy accounts whose passwords exceed bcrypt's 72-byte limit without upgrading them
+- **Date**: 2026-11-15
+- **Status**: Accepted
+- **Context**: ADR-017 rehashes a legacy SHA-256 account to bcrypt on its first login. Registration caps passwords at 72 bytes, but legacy accounts had no cap, and bcrypt 5 raises ValueError above 72 bytes (bcrypt 4 silently truncates), so such a user crashed the login page.
+- **Decision**: verify_password returns (True, None) for a correct legacy password longer than 72 bytes: the login succeeds and the legacy hash stays. The limit is counted in UTF-8 bytes.
+- **Consequences**: These accounts keep the weak hash until the password is changed to 72 bytes or fewer, and no bcrypt call can raise during login. ADR-017's removal condition for the SHA-256 check now also depends on these accounts.
+
 <!-- Entry format:
 ### ADR-NNN: <decision in one line>
 - **Date**: YYYY-MM-DD

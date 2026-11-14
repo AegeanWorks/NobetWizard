@@ -1,52 +1,16 @@
 {
   "version": 1,
   "active_task": {
-    "task_id": "nw-streamlit-floor",
+    "task_id": "nw-review-fixes",
     "last_phase": "verification",
-    "active_phase": 5,
-    "status": "completed",
-    "updated_at": 1794689900.0188422,
+    "active_phase": 4,
+    "status": "in_progress",
+    "updated_at": 1794690956.6758354,
     "owner": "kiro:nw-fixes",
     "started_by": "kiro:nw-fixes",
-    "continuations": [],
-    "completed_at": 1794689900.9579933,
-    "completed_head": "b87d289bd0d441614e658f1ed34ce02fcab37ef2"
+    "continuations": []
   },
   "checkpoints": [
-    {
-      "task_id": "login-failure-backoff",
-      "phase": "completed",
-      "phase_num": 5,
-      "description": "Task 'login-failure-backoff' completed successfully.",
-      "status": "completed",
-      "timestamp": 1794662428.0348694,
-      "timestamp_str": "2026-11-14 16:20:28",
-      "agent": "kilo:goal",
-      "delivery": {
-        "roots": [
-          "."
-        ],
-        "forced": true
-      }
-    },
-    {
-      "task_id": "license-reference-links",
-      "phase": "in_progress",
-      "phase_num": 2,
-      "description": "[1/2] Commit the licensing reference update that was present in the working tree",
-      "files_affected": [],
-      "status": "in_progress",
-      "timestamp": 1794662789.663093,
-      "timestamp_str": "2026-11-14 16:26:29",
-      "agent": "kilo:goal",
-      "impact_assessment": {
-        "why": "The concurrent licensing update replaced local contributor and commercial license paths with Aegean-Licensing repository URLs; leaving it uncommitted blocked strict delivery",
-        "benefits": "Both license copies are identical and committed, and the project is delivery-ready again",
-        "risks": "contract: license references now remote URLs; dependency: none; concurrency: another session may continue the licensing campaign; state: none",
-        "mitigation": "Byte-identical check of both copies, hygiene/secrets/guidelines gates, explicit staging, no push"
-      },
-      "plan_digest": "d08c97c2aac9b33314d43c9f53475c4e0fb33f192e54ffe4253ffbff8cbf9f28"
-    },
     {
       "task_id": "license-reference-links",
       "phase": "in_progress",
@@ -293,6 +257,36 @@
         ],
         "forced": false
       }
+    },
+    {
+      "task_id": "nw-review-fixes",
+      "phase": "planning",
+      "phase_num": 2,
+      "description": "[1/4] Legacy logins with passwords over 72 bytes succeed without upgrade; [2/4] normalize loaded state documents (local and Firestore) and quarantine unusable shapes; [3/4] fullmatch usernames and refuse case-insensitive duplicates locally; [4/4] pinned, hash-verified, size-capped font download",
+      "files_affected": [],
+      "status": "in_progress",
+      "timestamp": 1794690825.3388102,
+      "timestamp_str": "2026-11-15 00:13:45",
+      "agent": "kiro:nw-fixes",
+      "impact_assessment": {
+        "why": "Verification found a login crash for legacy accounts with passwords over 72 bytes, a page crash on any malformed state document, a case-colliding per-user file, and an unverified mutable font download",
+        "benefits": "No crash from malformed state or long legacy passwords, no new shared personnel files, and a tamper-evident font",
+        "risks": "contract: registration refuses more names and loaded documents are normalized; dependency: none; concurrency: none beyond ADR-017; state: more files may be quarantined and bad values are repaired in memory",
+        "mitigation": "Failing-first unit and AppTest tests per milestone, project check before each commit, repair in memory rather than rewrite, explicit staging, no push"
+      },
+      "plan_digest": "a1afc941b2972fd031850dbd16b28eeac2e4e0979b944c492d7489da0b19d3d6"
+    },
+    {
+      "task_id": "nw-review-fixes",
+      "phase": "verification",
+      "phase_num": 4,
+      "description": "[milestone 1/4] legacy logins over 72 bytes succeed without upgrade; tests 62 pass incl. AppTest; checklists: passed (test, hygiene, guidelines, secrets)",
+      "files_affected": [],
+      "status": "in_progress",
+      "timestamp": 1794690956.6758354,
+      "timestamp_str": "2026-11-15 00:15:56",
+      "agent": "kiro:nw-fixes",
+      "checklists": "passed"
     }
   ]
 }

@@ -67,6 +67,21 @@ class VerifyPasswordTest(unittest.TestCase):
         self.assertEqual(verify_password("wrong", self.legacy("secret")), (False, None))
         self.assertEqual(verify_password("wrong", make_hashes("secret")), (False, None))
 
+    def test_legacy_password_over_72_bytes_logs_in_without_an_upgrade(self):
+        # bcrypt cannot hash more than 72 bytes; the legacy hash stays and the login still works.
+        for password in ("p" * 80, "ş" * 37):
+            self.assertEqual(verify_password(password, self.legacy(password)), (True, None))
+
+    def test_legacy_password_of_exactly_72_bytes_is_upgraded(self):
+        password = "ş" * 36
+        self.assertEqual(len(password.encode("utf-8")), 72)
+        matched, upgraded = verify_password(password, self.legacy(password))
+        self.assertTrue(matched)
+        self.assertTrue(check_hashes(password, upgraded))
+
+    def test_wrong_long_password_still_fails(self):
+        self.assertEqual(verify_password("q" * 80, self.legacy("p" * 80)), (False, None))
+
     def test_missing_or_malformed_stored_values_fail(self):
         for stored in (None, "", 7, ["x"], "not-a-hash", "g" * 64, self.legacy("secret")[:-1]):
             self.assertEqual(verify_password("secret", stored), (False, None))
