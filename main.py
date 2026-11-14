@@ -713,12 +713,12 @@ def main():
     personnel_names = [p['name'] for p in st.session_state.get('personnel', [])]
     
     # Input for Last Day (Always needed for consecutive check)
-    history_prev_1 = st.sidebar.multiselect(t["worked_on"].format(prev_1.strftime("%d/%m")), personnel_names, key="hist_p1", placeholder=t["placeholder_select"])
+    history_prev_1 = st.sidebar.multiselect(t["worked_on"].format(prev_1.strftime("%d/%m")), personnel_names, key=f"hist_p1_{year}_{month}", placeholder=t["placeholder_select"])
     
     # Input for Day Before Last (Only needed if 2-day rest is active)
     history_prev_2 = []
     if require_two_rest:
-        history_prev_2 = st.sidebar.multiselect(t["worked_on"].format(prev_2.strftime("%d/%m")), personnel_names, key="hist_p2", placeholder=t["placeholder_select"])
+        history_prev_2 = st.sidebar.multiselect(t["worked_on"].format(prev_2.strftime("%d/%m")), personnel_names, key=f"hist_p2_{year}_{month}", placeholder=t["placeholder_select"])
     
     # Holidays Selection
     num_days_in_month = calendar.monthrange(year, month)[1]

@@ -34,7 +34,7 @@
 ---
 
 ### [`main.py`](main.py)
-**Size**: `1453` lines (`66184` bytes)
+**Size**: `1453` lines (`66216` bytes)
 
 **Functions:**
 - `def get_secrets()` - *st.secrets raises when no secrets file exists; an empty mapping keeps local runs working.*

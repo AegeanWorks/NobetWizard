@@ -66,6 +66,13 @@ contract, a dependency, a data format or the architecture; IDs are consecutive a
 - **Decision**: Clear the login/registration fields and the username through a dedicated `clear_auth_state()` invoked only on the logout path, before the login page renders; treat `confirm_clear_db` as user-scoped state.
 - **Consequences**: Logout leaves an empty login form and no previous identity; the login page recreates its widget keys with empty defaults, while a successful login never touches auth widgets that were already rendered in the same run.
 
+### ADR-010: Scope previous-month history widgets to the selected month
+- **Date**: 2026-11-14
+- **Status**: Accepted
+- **Context**: The fixed `hist_p1`/`hist_p2` widget keys kept the selected names when the sidebar month changed, while the label pointed at a different previous-month date, so the roster could silently inherit the wrong rest-rule history.
+- **Decision**: Include the selected year and month in the `hist_p1`/`hist_p2` widget keys.
+- **Consequences**: Changing the month starts the history empty; Streamlit discards widget state that is not rendered on a run, so returning to an earlier month does not restore a stale selection, and the `hist_` prefix still clears everything on logout.
+
 <!-- Entry format:
 ### ADR-NNN: <decision in one line>
 - **Date**: YYYY-MM-DD
