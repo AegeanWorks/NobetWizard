@@ -60,6 +60,32 @@ class AtomicWriteJsonTest(unittest.TestCase):
             self.assertTrue(path.is_file())
 
 
+class AcceptTest(unittest.TestCase):
+    def test_a_document_the_check_rejects_is_quarantined_like_a_corrupt_one(self):
+        with tempfile.TemporaryDirectory() as folder:
+            path = Path(folder) / "users.json"
+            path.write_text("[1, 2]", encoding="utf-8")
+            result = load_json_or_default(path, {}, accept=lambda data: isinstance(data, dict))
+            self.assertEqual(result, {})
+            self.assertFalse(path.exists())
+            kept = [item for item in Path(folder).iterdir() if ".corrupt_" in item.name]
+            self.assertEqual([item.read_text(encoding="utf-8") for item in kept], ["[1, 2]"])
+
+    def test_a_document_the_check_accepts_is_returned_and_kept(self):
+        with tempfile.TemporaryDirectory() as folder:
+            path = Path(folder) / "users.json"
+            path.write_text('{"ann": "x"}', encoding="utf-8")
+            self.assertEqual(
+                load_json_or_default(path, {}, accept=lambda data: isinstance(data, dict)), {"ann": "x"}
+            )
+            self.assertTrue(path.exists())
+
+    def test_the_default_is_not_checked(self):
+        with tempfile.TemporaryDirectory() as folder:
+            missing = Path(folder) / "none.json"
+            self.assertEqual(load_json_or_default(missing, 7, accept=lambda data: False), 7)
+
+
 class QuarantineCollisionTest(unittest.TestCase):
     def test_two_corrupt_files_in_the_same_second_are_both_kept(self):
         with tempfile.TemporaryDirectory() as folder:

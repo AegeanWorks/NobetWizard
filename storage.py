@@ -5,30 +5,41 @@ import time
 from pathlib import Path
 
 
-def load_json_or_default(path, default):
+def _quarantine(target):
+    """Move an unusable state file aside, never overwriting an earlier quarantined copy."""
+    stamp = int(time.time())
+    quarantine = target.with_name(f"{target.name}.corrupt_{stamp}")
+    suffix = 1
+    while quarantine.exists():  # a second corruption in the same second must not overwrite the first
+        quarantine = target.with_name(f"{target.name}.corrupt_{stamp}_{suffix}")
+        suffix += 1
+    try:
+        os.replace(target, quarantine)
+    except OSError:  # hygiene: allow best-effort quarantine; the unusable state still falls back
+        pass
+
+
+def load_json_or_default(path, default, accept=None):
     """Read a JSON document, quarantining an unreadable file instead of raising.
 
     A truncated or hand-edited state file must not lock the user out of the app, and the
-    damaged bytes are kept next to it for inspection rather than deleted.
+    damaged bytes are kept next to it for inspection rather than deleted. `accept`, when given,
+    is called with the parsed document; a document it rejects is set aside exactly like a corrupt
+    one, so a valid-JSON file of the wrong shape cannot reach the caller.
     """
     target = Path(path)
     if not target.exists():
         return default
     try:
         with open(target, "r", encoding="utf-8") as handle:
-            return json.load(handle)
+            document = json.load(handle)
     except (OSError, ValueError):
-        stamp = int(time.time())
-        quarantine = target.with_name(f"{target.name}.corrupt_{stamp}")
-        suffix = 1
-        while quarantine.exists():  # a second corruption in the same second must not overwrite the first
-            quarantine = target.with_name(f"{target.name}.corrupt_{stamp}_{suffix}")
-            suffix += 1
-        try:
-            os.replace(target, quarantine)
-        except OSError:  # hygiene: allow best-effort quarantine; the unreadable state still falls back
-            pass
+        _quarantine(target)
         return default
+    if accept is not None and not accept(document):
+        _quarantine(target)
+        return default
+    return document
 
 
 def replace_json_entry(path, key, expected, new_value):

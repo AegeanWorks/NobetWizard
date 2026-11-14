@@ -52,5 +52,68 @@ class LegacyLoginTest(AppFlowCase):
         self.assertTrue(stored["olduser"].startswith("$2"))
 
 
+PERSON = {
+    "name": "Ann", "gender": "F", "role": "Senior", "fixed_duties_total": 0, "fixed_duties_weekend": 0,
+    "max_duties": 20, "max_weekends": 10, "mixed_gender_allowed": True, "busy_days": "", "off_dates": "",
+    "leave_dates": "", "fixed_dates": "", "duty_count": 0, "weekend_duty_count": 0,
+}
+
+
+class MalformedPersonnelStateTest(AppFlowCase):
+    def open_page(self, raw):
+        self.write("personnel_db_probe.json", raw)
+        app = self.new_app()
+        app.session_state["logged_in"] = True
+        app.session_state["username"] = "probe"
+        return app.run()
+
+    def quarantined(self):
+        return [name for name in os.listdir(self.folder.name) if ".corrupt_" in name]
+
+    def test_unusable_shapes_are_quarantined_and_the_page_loads(self):
+        for raw in ("5", '{"personnel": null}'):
+            with self.subTest(raw=raw):
+                for name in self.quarantined():
+                    os.remove(os.path.join(self.folder.name, name))
+                app = self.open_page(raw)
+                self.assertEqual([item.value for item in app.exception], [])
+                self.assertEqual(len(self.quarantined()), 1)
+                self.assertEqual(app.session_state["personnel"], [])
+
+    def test_unusable_people_are_dropped_with_a_warning_and_the_file_is_kept(self):
+        raw = json.dumps({"personnel": [PERSON, 1, {"name": "NoGender"}]})
+        app = self.open_page(raw)
+        self.assertEqual([item.value for item in app.exception], [])
+        self.assertEqual([p["name"] for p in app.session_state["personnel"]], ["Ann"])
+        self.assertTrue(any("2" in item.value for item in app.warning))
+        self.assertEqual(self.quarantined(), [])
+
+    def test_bad_settings_do_not_crash_the_page(self):
+        for key, value in (("conditional_rules", 5), ("cfg_year", "x")):
+            with self.subTest(key=key):
+                app = self.open_page(json.dumps({"personnel": [PERSON], key: value}))
+                self.assertEqual([item.value for item in app.exception], [])
+
+    def test_a_person_without_limits_gets_defaults(self):
+        record = {k: v for k, v in PERSON.items() if k not in ("max_duties", "max_weekends")}
+        app = self.open_page(json.dumps({"personnel": [record]}))
+        self.assertEqual([item.value for item in app.exception], [])
+        self.assertEqual((app.session_state["personnel"][0]["max_duties"]), 5)
+
+
+class MalformedUsersStateTest(AppFlowCase):
+    def test_unusable_users_files_are_quarantined_and_login_fails_cleanly(self):
+        for raw in ("5", '["olduser"]'):
+            with self.subTest(raw=raw):
+                self.write("users_db.json", raw)
+                app = self.log_in("olduser", "whatever12")
+                self.assertEqual([item.value for item in app.exception], [])
+                self.assertFalse(app.session_state["logged_in"])
+                self.assertFalse(Path(self.folder.name, "users_db.json").exists())
+                for name in os.listdir(self.folder.name):
+                    if ".corrupt_" in name:
+                        os.remove(os.path.join(self.folder.name, name))
+
+
 if __name__ == "__main__":
     unittest.main()

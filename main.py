@@ -4,6 +4,7 @@ from datetime import date, timedelta
 import calendar
 from scheduler import DutyScheduler
 from storage import atomic_write_json, load_json_or_default, replace_json_entry
+from state_documents import is_users_document, normalize_personnel_document
 from exports import download_font, generate_ics
 from security import login_backoff_seconds, make_hashes, secure_equals, verify_password
 from ui_helpers import GENDER_MODES, calendar_title, gender_label, get_calendar_html, normalize_gender_mode
@@ -68,6 +69,7 @@ LANG_TEXT = {
         "load_db_btn": "☁️ Load Personnel Database",
         "db_saved": "Database saved to user profile!",
         "db_cleared": "Database cleared!",
+        "state_dropped": "{} saved entries could not be used and were skipped. Saving now would remove them.",
         "download_db": "📥 Download Personnel Database",
         "clear_all": "🗑️ Clear Current List",
         "clear_db_btn": "🔥 Clear Personnel Database",
@@ -194,6 +196,7 @@ LANG_TEXT = {
         "load_db_btn": "☁️ Personel Veritabanını Yükle",
         "db_saved": "Veritabanı kullanıcı profiline kaydedildi!",
         "db_cleared": "Veritabanı temizlendi!",
+        "state_dropped": "{} kayıtlı giriş kullanılamadığı için atlandı. Şimdi kaydederseniz silinirler.",
         "download_db": "📥 Personel Veritabanını İndir",
         "clear_all": "🗑️ Mevcut Listeyi Temizle",
         "clear_db_btn": "🔥 Personel Veritabanını Temizle",
@@ -357,21 +360,22 @@ def get_user_db_path(username):
     return f"personnel_db_{safe_user}.json"
 
 def load_db(username):
+    """Return (document, dropped): the saved state repaired in memory, and how many people were unusable."""
+    empty = {"personnel": []}
     # 1. Try Cloud Database
     db = get_firestore_db()
     if db:
         doc = db.collection("personnel_data").document(username).get()
-        if doc.exists:
-            return doc.to_dict()
-        return {"personnel": []}
+        document, dropped = normalize_personnel_document(doc.to_dict()) if doc.exists else (None, 0)
+        return (document or empty), dropped
 
-    # 2. Fallback to Local JSON
+    # 2. Fallback to Local JSON; a bare list is the legacy personnel-only format
     path = get_user_db_path(username)
-    data = load_json_or_default(path, {"personnel": []})
-    # Backward compatibility: if list, it's just personnel
-    if isinstance(data, list):
-        return {"personnel": data}
-    return data
+    data = load_json_or_default(
+        path, empty, accept=lambda loaded: normalize_personnel_document(loaded)[0] is not None
+    )
+    document, dropped = normalize_personnel_document(data)
+    return (document or empty), dropped
 
 def save_db(personnel, username):
     # Prepare full state data
@@ -416,7 +420,7 @@ def save_db(personnel, username):
     atomic_write_json(path, state_data)
 
 def load_users():
-    return load_json_or_default(USER_DB_FILE, {})
+    return load_json_or_default(USER_DB_FILE, {}, accept=is_users_document)
 
 def save_users(data):
     atomic_write_json(USER_DB_FILE, data)
@@ -606,7 +610,8 @@ def main():
     
     if 'personnel' not in st.session_state:
         # Load full project state
-        db_data = load_db(st.session_state.get('username'))
+        db_data, dropped = load_db(st.session_state.get('username'))
+        st.session_state.state_dropped = dropped
         st.session_state.personnel = db_data.get("personnel", [])
         
         # Restore other settings if available
@@ -653,6 +658,9 @@ def main():
     col_header, col_lang, col_logout = st.columns([6, 1.5, 1])
     with col_header:
         st.title(t["title"])
+        dropped_entries = st.session_state.pop("state_dropped", 0)
+        if dropped_entries:
+            st.warning(t["state_dropped"].format(dropped_entries))
     with col_lang:
         def save_lang():
             save_db(st.session_state.get('personnel', []), st.session_state.get('username'))
@@ -1227,7 +1235,8 @@ def main():
 
     with col_act2:
         def load_cloud_data():
-            db_data = load_db(st.session_state.get('username'))
+            db_data, dropped = load_db(st.session_state.get('username'))
+            st.session_state.state_dropped = dropped
             st.session_state.personnel = db_data.get("personnel", [])
             
             # Restore other settings

@@ -5,23 +5,12 @@
     "last_phase": "verification",
     "active_phase": 4,
     "status": "in_progress",
-    "updated_at": 1794690956.6758354,
+    "updated_at": 1794691424.8994915,
     "owner": "kiro:nw-fixes",
     "started_by": "kiro:nw-fixes",
     "continuations": []
   },
   "checkpoints": [
-    {
-      "task_id": "license-reference-links",
-      "phase": "in_progress",
-      "phase_num": 4,
-      "description": "[2/2] LICENSE and LICENSES copy identical at 16710 bytes; URLs verified; all four gates pass; checklists: passed (test 48, hygiene, guidelines, secrets)",
-      "files_affected": [],
-      "status": "in_progress",
-      "timestamp": 1794662789.8718922,
-      "timestamp_str": "2026-11-14 16:26:29",
-      "agent": "kilo:goal"
-    },
     {
       "task_id": "license-reference-links",
       "phase": "completed",
@@ -285,6 +274,18 @@
       "status": "in_progress",
       "timestamp": 1794690956.6758354,
       "timestamp_str": "2026-11-15 00:15:56",
+      "agent": "kiro:nw-fixes",
+      "checklists": "passed"
+    },
+    {
+      "task_id": "nw-review-fixes",
+      "phase": "verification",
+      "phase_num": 4,
+      "description": "[milestone 2/4] loaded state documents normalized for local and Firestore, unusable shapes quarantined, users file must be an object; checklists: passed (test, hygiene, guidelines, secrets)",
+      "files_affected": [],
+      "status": "in_progress",
+      "timestamp": 1794691424.8994915,
+      "timestamp_str": "2026-11-15 00:23:44",
       "agent": "kiro:nw-fixes",
       "checklists": "passed"
     }

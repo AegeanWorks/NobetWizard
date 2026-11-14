@@ -136,6 +136,13 @@ contract, a dependency, a data format or the architecture; IDs are consecutive a
 - **Decision**: verify_password returns (True, None) for a correct legacy password longer than 72 bytes: the login succeeds and the legacy hash stays. The limit is counted in UTF-8 bytes.
 - **Consequences**: These accounts keep the weak hash until the password is changed to 72 bytes or fewer, and no bcrypt call can raise during login. ADR-017's removal condition for the SHA-256 check now also depends on these accounts.
 
+### ADR-020: Normalize loaded state documents instead of trusting parsed JSON
+- **Date**: 2026-11-15
+- **Status**: Accepted
+- **Context**: ADR-011 quarantines state files that fail to parse, but a document that parses can still be unusable: a number or null instead of an object, a null roster, a person without a gender, a setting of the wrong type. Each of these crashed the page on load, and the Firestore path returned the cloud document unchecked.
+- **Decision**: A new state_documents module decides the shape. normalize_personnel_document returns None for an unusable whole (not an object or list, or personnel not a list), drops people without a name or an M or F gender, fills missing limits with the add-form defaults (5 duties, 2 weekends), and discards settings of the wrong type or range. load_json_or_default takes an accept check and quarantines a rejected document like a corrupt one. The users file must be an object. Local and Firestore documents use the same normalization, and load_db returns how many people were dropped so the page can warn.
+- **Consequences**: Only an unusable whole is renamed; field-level problems are repaired in memory and the file is untouched until the next save, which would then remove the dropped entries, and the warning says so. Dropping a person without a valid gender loses that record on save, a deliberate trade against guessing a gender that drives the mixed-team rules.
+
 <!-- Entry format:
 ### ADR-NNN: <decision in one line>
 - **Date**: YYYY-MM-DD

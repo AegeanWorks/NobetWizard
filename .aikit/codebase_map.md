@@ -6,14 +6,14 @@
 ---
 
 ## 📊 Codebase Metrics
-- **Total Python Modules**: `13`
-- **Total Classes**: `17`
-- **Total Top-Level Functions**: `32`
-- **Total Class Methods**: `81`
-- **Total Source Lines**: `2947`
+- **Total Python Modules**: `15`
+- **Total Classes**: `22`
+- **Total Top-Level Functions**: `38`
+- **Total Class Methods**: `102`
+- **Total Source Lines**: `3220`
 
 ## 🧭 Map Coverage
-- **Indexed**: python (`13` module(s))
+- **Indexed**: python (`15` module(s))
 - **Not indexed by this map**: none (no non-Python source files were found)
 
 ---
@@ -34,7 +34,7 @@
 ---
 
 ### [`main.py`](main.py)
-**Size**: `1470` lines (`67163` bytes)
+**Size**: `1479` lines (`68054` bytes)
 
 **Functions:**
 - `def get_secrets()` - *Parse Streamlit secrets now; a missing or malformed file is a supported local configuration.*
@@ -42,7 +42,7 @@
 - `def clear_auth_state()` - *Drop the credentials and identity shown by the login page after logout.*
 - `def get_firestore_db()` - *Initialize Firestore Client from Streamlit Secrets*
 - `def get_user_db_path(username)`
-- `def load_db(username)`
+- `def load_db(username)` - *Return (document, dropped): the saved state repaired in memory, and how many people were unusable.*
 - `def save_db(personnel, username)`
 - `def load_users()`
 - `def save_users(data)`
@@ -90,11 +90,25 @@
 
 ---
 
-### [`storage.py`](storage.py)
-**Size**: `68` lines (`2511` bytes)
+### [`state_documents.py`](state_documents.py)
+> *Shape checks for the saved personnel and users documents, free of UI dependencies.*
+
+**Size**: `79` lines (`3054` bytes)
 
 **Functions:**
-- `def load_json_or_default(path, default)` - *Read a JSON document, quarantining an unreadable file instead of raising.*
+- `def _is_int(value, low, high)`
+- `def _usable_person(entry)` - *Return a repaired copy of a personnel entry, or None when it cannot be used.*
+- `def normalize_personnel_document(data)` - *Return (document, dropped) for a loaded personnel document, or (None, 0) when unusable.*
+- `def is_users_document(data)` - *The users file maps usernames to password hashes, so it must be an object.*
+
+---
+
+### [`storage.py`](storage.py)
+**Size**: `79` lines (`2950` bytes)
+
+**Functions:**
+- `def _quarantine(target)` - *Move an unusable state file aside, never overwriting an earlier quarantined copy.*
+- `def load_json_or_default(path, default, accept)` - *Read a JSON document, quarantining an unreadable file instead of raising.*
 - `def replace_json_entry(path, key, expected, new_value)` - *Set one top-level entry of a JSON object file, only while it still equals `expected`.*
 - `def atomic_write_json(path, data)` - *Write JSON without leaving a truncated file when the process dies mid-write.*
 
@@ -108,7 +122,7 @@
 ### [`tests/test_app_flows.py`](tests/test_app_flows.py)
 > *End-to-end checks that drive main.py through Streamlit's AppTest in a throwaway folder.*
 
-**Size**: `56` lines (`2030` bytes)
+**Size**: `119` lines (`5143` bytes)
 
 **Classes:**
 - `class AppFlowCase` - *Runs each test inside its own temp folder so local state files never touch the repo.*
@@ -119,6 +133,15 @@
 - `class LegacyLoginTest`
   - Method `.test_legacy_account_with_a_long_password_can_log_in()`
   - Method `.test_legacy_account_with_a_short_password_is_upgraded_to_bcrypt()`
+- `class MalformedPersonnelStateTest`
+  - Method `.open_page(raw)`
+  - Method `.quarantined()`
+  - Method `.test_unusable_shapes_are_quarantined_and_the_page_loads()`
+  - Method `.test_unusable_people_are_dropped_with_a_warning_and_the_file_is_kept()`
+  - Method `.test_bad_settings_do_not_crash_the_page()`
+  - Method `.test_a_person_without_limits_gets_defaults()`
+- `class MalformedUsersStateTest`
+  - Method `.test_unusable_users_files_are_quarantined_and_login_fails_cleanly()`
 
 ---
 
@@ -195,8 +218,31 @@
 
 ---
 
+### [`tests/test_state_documents.py`](tests/test_state_documents.py)
+**Size**: `85` lines (`4171` bytes)
+
+**Classes:**
+- `class NormalizePersonnelDocumentTest`
+  - Method `.test_a_saved_document_passes_through_unchanged()`
+  - Method `.test_a_bare_list_is_the_legacy_personnel_format()`
+  - Method `.test_unusable_top_level_shapes_return_none()`
+  - Method `.test_an_empty_object_or_list_is_an_empty_roster()`
+  - Method `.test_entries_that_are_not_usable_people_are_dropped_and_counted()`
+  - Method `.test_missing_limits_get_the_add_form_defaults()`
+  - Method `.test_limits_of_the_wrong_type_get_the_defaults()`
+  - Method `.test_settings_of_the_wrong_type_or_range_are_dropped()`
+  - Method `.test_unknown_keys_are_kept()`
+  - Method `.test_the_input_is_not_modified()`
+- `class IsUsersDocumentTest`
+  - Method `.test_only_an_object_is_a_users_document()`
+
+**Functions:**
+- `def person(**overrides)`
+
+---
+
 ### [`tests/test_storage.py`](tests/test_storage.py)
-**Size**: `106` lines (`4689` bytes)
+**Size**: `132` lines (`6002` bytes)
 
 **Classes:**
 - `class LoadJsonOrDefaultTest`
@@ -207,6 +253,10 @@
   - Method `.test_writes_and_overwrites_json()`
   - Method `.test_leaves_no_temporary_files()`
   - Method `.test_creates_missing_parent_directory()`
+- `class AcceptTest`
+  - Method `.test_a_document_the_check_rejects_is_quarantined_like_a_corrupt_one()`
+  - Method `.test_a_document_the_check_accepts_is_returned_and_kept()`
+  - Method `.test_the_default_is_not_checked()`
 - `class QuarantineCollisionTest`
   - Method `.test_two_corrupt_files_in_the_same_second_are_both_kept()`
 - `class ReplaceJsonEntryTest`
