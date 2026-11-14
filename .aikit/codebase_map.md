@@ -7,10 +7,10 @@
 
 ## 📊 Codebase Metrics
 - **Total Python Modules**: `12`
-- **Total Classes**: `10`
-- **Total Top-Level Functions**: `28`
-- **Total Class Methods**: `55`
-- **Total Source Lines**: `2681`
+- **Total Classes**: `11`
+- **Total Top-Level Functions**: `29`
+- **Total Class Methods**: `58`
+- **Total Source Lines**: `2711`
 
 ## 🧭 Map Coverage
 - **Indexed**: python (`12` module(s))
@@ -34,7 +34,7 @@
 ---
 
 ### [`main.py`](main.py)
-**Size**: `1447` lines (`66026` bytes)
+**Size**: `1447` lines (`66055` bytes)
 
 **Functions:**
 - `def get_secrets()` - *st.secrets raises when no secrets file exists; an empty mapping keeps local runs working.*
@@ -176,7 +176,7 @@
 ---
 
 ### [`tests/test_ui_helpers.py`](tests/test_ui_helpers.py)
-**Size**: `61` lines (`2428` bytes)
+**Size**: `82` lines (`3136` bytes)
 
 **Classes:**
 - `class GenderModeTest`
@@ -184,6 +184,10 @@
   - Method `.test_legacy_localized_labels_normalize()`
   - Method `.test_unknown_value_falls_back_to_any()`
   - Method `.test_label_follows_the_selected_language()`
+- `class CalendarTitleTest`
+  - Method `.test_english_title_drops_the_emoji_and_parenthetical()`
+  - Method `.test_turkish_title_drops_the_emoji()`
+  - Method `.test_empty_or_emoji_only_title_falls_back()`
 - `class CalendarHtmlTest`
   - Method `.test_personnel_names_are_html_escaped()`
   - Method `.test_empty_cells_and_assignments_still_render()`
@@ -194,11 +198,12 @@
 ### [`ui_helpers.py`](ui_helpers.py)
 > *Pure presentation helpers shared by the Streamlit UI and the test suite.*
 
-**Size**: `85` lines (`3111` bytes)
+**Size**: `94` lines (`3513` bytes)
 
 **Functions:**
 - `def gender_label(options, mode)` - *Return the localized label for an internal gender mode.*
 - `def normalize_gender_mode(value, option_sets)` - *Accept an internal mode or a legacy localized label from saved data.*
+- `def calendar_title(app_title, month, year)` - *A readable title for an exported calendar: the app name plus the roster month.*
 - `def get_calendar_html(year, month, schedule, t, holidays)` - *Render the month grid, escaping every personnel name it embeds.*
 
 ---

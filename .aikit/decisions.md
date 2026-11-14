@@ -80,6 +80,13 @@ contract, a dependency, a data format or the architecture; IDs are consecutive a
 - **Decision**: Add `storage.load_json_or_default`, which returns a caller-supplied default and renames an unreadable file to `<name>.corrupt_<epoch>`; route both `load_db` and `load_users` through it.
 - **Consequences**: A corrupt state file costs the saved roster or local accounts for that session but no longer blocks startup, and the quarantined bytes remain on disk for inspection. A missing file still returns the default without creating one.
 
+### ADR-012: Derive a readable, month-scoped calendar title
+- **Date**: 2026-11-14
+- **Status**: Accepted
+- **Context**: The ICS export derived its title with `t["title"].split(" ")[0]`, which keeps only the leading wizard emoji in both languages, so every exported event was titled `🧙‍♂️ Duty: <names>` in calendar clients.
+- **Decision**: Add `ui_helpers.calendar_title`, which drops a leading non-text token and any parenthetical, appends the roster month and year, and falls back to `Duty Roster`; the export call uses it.
+- **Consequences**: Events read `Nöbet Wizard 2/2026` or `Nöbet Sihirbazı 2/2026`, and the helper is unit-tested for both languages and for emoji-only or empty titles.
+
 <!-- Entry format:
 ### ADR-NNN: <decision in one line>
 - **Date**: YYYY-MM-DD

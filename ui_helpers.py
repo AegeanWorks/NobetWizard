@@ -23,6 +23,15 @@ def normalize_gender_mode(value, option_sets):
     return "Any"
 
 
+def calendar_title(app_title, month, year):
+    """A readable title for an exported calendar: the app name plus the roster month."""
+    tokens = str(app_title).split()
+    if tokens and not any(character.isascii() and character.isalpha() for character in tokens[0]):
+        tokens = tokens[1:]
+    core = " ".join(tokens).split(" (")[0].strip() or "Duty Roster"
+    return f"{core} {month}/{year}"
+
+
 def get_calendar_html(year, month, schedule, t, holidays=None):
     """Render the month grid, escaping every personnel name it embeds."""
     weeks = calendar.monthcalendar(year, month)

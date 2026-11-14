@@ -6,7 +6,7 @@ from scheduler import DutyScheduler
 from storage import atomic_write_json, load_json_or_default
 from exports import download_font, generate_ics
 from security import check_hashes, make_hashes, secure_equals
-from ui_helpers import GENDER_MODES, gender_label, get_calendar_html, normalize_gender_mode
+from ui_helpers import GENDER_MODES, calendar_title, gender_label, get_calendar_html, normalize_gender_mode
 import json
 import os
 from io import BytesIO
@@ -853,7 +853,7 @@ def main():
             file_name = f"nobet_list_{gen_year}_{gen_month}.pdf"
             mime = "application/pdf"
         elif dl_format == "ICS":
-            data = generate_ics(schedule, t["title"].split(" ")[0] + " Duty")
+            data = generate_ics(schedule, calendar_title(t["title"], gen_month, gen_year))
             file_name = f"nobet_list_{gen_year}_{gen_month}.ics"
             mime = "text/calendar"
             

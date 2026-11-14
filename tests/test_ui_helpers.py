@@ -1,7 +1,13 @@
 import unittest
 from datetime import date
 
-from ui_helpers import GENDER_MODES, gender_label, get_calendar_html, normalize_gender_mode
+from ui_helpers import (
+    GENDER_MODES,
+    calendar_title,
+    gender_label,
+    get_calendar_html,
+    normalize_gender_mode,
+)
 
 
 ENGLISH_OPTIONS = ["Any", "Mixed (Must have M & F)", "Single Gender (All M or All F)"]
@@ -25,6 +31,21 @@ class GenderModeTest(unittest.TestCase):
     def test_label_follows_the_selected_language(self):
         self.assertEqual(gender_label(ENGLISH_OPTIONS, "Mixed"), ENGLISH_OPTIONS[1])
         self.assertEqual(gender_label(TURKISH_OPTIONS, "Mixed"), TURKISH_OPTIONS[1])
+
+
+class CalendarTitleTest(unittest.TestCase):
+    def test_english_title_drops_the_emoji_and_parenthetical(self):
+        self.assertEqual(
+            calendar_title("🧙‍♂️ Nöbet Wizard (Duty Roster Generator)", 2, 2026),
+            "Nöbet Wizard 2/2026",
+        )
+
+    def test_turkish_title_drops_the_emoji(self):
+        self.assertEqual(calendar_title("🧙‍♂️ Nöbet Sihirbazı", 12, 2026), "Nöbet Sihirbazı 12/2026")
+
+    def test_empty_or_emoji_only_title_falls_back(self):
+        self.assertEqual(calendar_title("🧙‍♂️", 5, 2026), "Duty Roster 5/2026")
+        self.assertEqual(calendar_title("", 5, 2026), "Duty Roster 5/2026")
 
 
 class CalendarHtmlTest(unittest.TestCase):
