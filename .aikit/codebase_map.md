@@ -7,10 +7,10 @@
 
 ## 📊 Codebase Metrics
 - **Total Python Modules**: `12`
-- **Total Classes**: `11`
-- **Total Top-Level Functions**: `29`
-- **Total Class Methods**: `58`
-- **Total Source Lines**: `2718`
+- **Total Classes**: `12`
+- **Total Top-Level Functions**: `30`
+- **Total Class Methods**: `62`
+- **Total Source Lines**: `2742`
 
 ## 🧭 Map Coverage
 - **Indexed**: python (`12` module(s))
@@ -34,7 +34,7 @@
 ---
 
 ### [`main.py`](main.py)
-**Size**: `1454` lines (`66249` bytes)
+**Size**: `1457` lines (`66497` bytes)
 
 **Functions:**
 - `def get_secrets()` - *st.secrets raises when no secrets file exists; an empty mapping keeps local runs working.*
@@ -79,10 +79,11 @@
 ### [`security.py`](security.py)
 > *Password and credential helpers kept free of UI dependencies.*
 
-**Size**: `31` lines (`909` bytes)
+**Size**: `36` lines (`1076` bytes)
 
 **Functions:**
 - `def secure_equals(left, right)` - *Compare two values in constant time, including non-ASCII text.*
+- `def login_backoff_seconds(failures)` - *Seconds to pause after this many consecutive failed logins, capped at three.*
 - `def make_hashes(password)` - *Hash a password with bcrypt.*
 - `def check_hashes(password, hashed_text)` - *Return True only when the stored hash is a valid bcrypt hash matching the password.*
 
@@ -149,12 +150,17 @@
 ---
 
 ### [`tests/test_security.py`](tests/test_security.py)
-**Size**: `25` lines (`824` bytes)
+**Size**: `41` lines (`1417` bytes)
 
 **Classes:**
 - `class SecureEqualsTest`
   - Method `.test_compares_ascii_and_unicode_text()`
   - Method `.test_treats_missing_values_as_text()`
+- `class LoginBackoffTest`
+  - Method `.test_first_failure_waits_one_second()`
+  - Method `.test_delay_grows_with_consecutive_failures()`
+  - Method `.test_delay_is_capped()`
+  - Method `.test_non_positive_counter_is_minimum()`
 - `class CheckHashesTest`
   - Method `.test_rejects_missing_or_malformed_hashes()`
 

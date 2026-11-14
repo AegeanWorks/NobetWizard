@@ -101,6 +101,13 @@ contract, a dependency, a data format or the architecture; IDs are consecutive a
 - **Decision**: Loading clears `generated_schedule`, `schedule_success`, `gen_year` and `gen_month` before the optional restore, and `save_db` only persists a roster when the personnel list is non-empty.
 - **Consequences**: A database always describes its personnel and roster consistently; loading a database never displays a roster left over from the previous session, and clearing the database leaves a roster-free document.
 
+### ADR-015: Back off only failed logins
+- **Date**: 2026-11-14
+- **Status**: Accepted
+- **Context**: The login button slept one second before authentication on every attempt, so a correct login took about 1.5s while guessing scripts could still open parallel sessions unthrottled; the delay only punished legitimate users.
+- **Decision**: Authenticate first; on success clear the session counter; on each failure increment `login_failures` and pause `security.login_backoff_seconds` (1s, 2s, then a 3s cap). The counter is auth-scoped and cleared on success and logout.
+- **Consequences**: Valid logins return in about 0.1s, repeated failures in one session back off predictably, and the delay policy is pinned by unit tests instead of a sleep call.
+
 <!-- Entry format:
 ### ADR-NNN: <decision in one line>
 - **Date**: YYYY-MM-DD

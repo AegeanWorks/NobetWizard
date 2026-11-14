@@ -5,7 +5,7 @@ import calendar
 from scheduler import DutyScheduler
 from storage import atomic_write_json, load_json_or_default
 from exports import download_font, generate_ics
-from security import check_hashes, make_hashes, secure_equals
+from security import check_hashes, login_backoff_seconds, make_hashes, secure_equals
 from ui_helpers import GENDER_MODES, calendar_title, gender_label, get_calendar_html, normalize_gender_mode
 import json
 import os
@@ -317,6 +317,7 @@ AUTH_STATE_KEYS = {
     "username",
     "login_user",
     "login_pass",
+    "login_failures",
     "reg_user",
     "reg_pass",
 }
@@ -460,16 +461,18 @@ def login_page():
         password = st.text_input(t["password"], type='password', key="login_pass")
         
         if st.button(t["login_btn"]):
-            # Anti-Brute Force: Simple Rate Limiting
-            time.sleep(1) # Artificial delay to slow down guessing scripts
-            
             if authenticate(username, password):
+                st.session_state.pop("login_failures", None)
                 clear_user_state()
                 st.session_state['logged_in'] = True
                 st.session_state['username'] = username
                 st.success(t["login_success"].format(username))
                 st.rerun()
             else:
+                # Slow repeated failures in this session without delaying valid logins.
+                failures = st.session_state.get("login_failures", 0) + 1
+                st.session_state["login_failures"] = failures
+                time.sleep(login_backoff_seconds(failures))
                 st.error(t["login_failed"])
 
     with tab2:

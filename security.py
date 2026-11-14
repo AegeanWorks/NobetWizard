@@ -12,6 +12,11 @@ def secure_equals(left, right):
     return hmac.compare_digest(str(left).encode("utf-8"), str(right).encode("utf-8"))
 
 
+def login_backoff_seconds(failures):
+    """Seconds to pause after this many consecutive failed logins, capped at three."""
+    return min(3, max(1, int(failures)))
+
+
 def make_hashes(password):
     """Hash a password with bcrypt."""
     import bcrypt
