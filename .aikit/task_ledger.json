@@ -13,78 +13,6 @@
   },
   "checkpoints": [
     {
-      "task_id": "ics-title-derivation",
-      "phase": "in_progress",
-      "phase_num": 4,
-      "description": "[2/3] ICS title derived by ui_helpers.calendar_title (N\u00f6bet Wizard 2/2026); three unit tests plus AppTest ICS path; checklists: passed (test 44, hygiene, guidelines, secrets)",
-      "files_affected": [],
-      "status": "in_progress",
-      "timestamp": 1794657894.8655875,
-      "timestamp_str": "2026-11-14 15:04:54",
-      "agent": "kilo:goal"
-    },
-    {
-      "task_id": "ics-title-derivation",
-      "phase": "completed",
-      "phase_num": 5,
-      "description": "Task 'ics-title-derivation' completed successfully.",
-      "status": "completed",
-      "timestamp": 1794657944.4593308,
-      "timestamp_str": "2026-11-14 15:05:44",
-      "agent": "kilo:goal",
-      "delivery": {
-        "roots": [
-          "."
-        ],
-        "forced": false
-      }
-    },
-    {
-      "task_id": "streamlit-width-migration",
-      "phase": "in_progress",
-      "phase_num": 2,
-      "description": "[1/3] Replace the deprecated use_container_width parameter with width='stretch'",
-      "files_affected": [],
-      "status": "in_progress",
-      "timestamp": 1794658411.2310925,
-      "timestamp_str": "2026-11-14 15:13:31",
-      "agent": "kilo:goal",
-      "impact_assessment": {
-        "why": "Streamlit warns on every rerun that use_container_width will be removed after 2025-12-31; the installed release supports the width= API for buttons, download buttons, dataframes and the data editor",
-        "benefits": "No deprecation noise and no breakage when the old parameter is removed",
-        "risks": "contract: requires a Streamlit release with width= (requirements stay unpinned and resolves current); dependency: none beyond that; concurrency: none; state: none",
-        "mitigation": "Global replace verified by count, AppTest generate and export flow, full gates, explicit staging, no push"
-      },
-      "plan_digest": "1883c6bb7c8a6ee1b6a4f34ffed00e60c6a62f0a7c5980f1e20522e6d235e784"
-    },
-    {
-      "task_id": "streamlit-width-migration",
-      "phase": "in_progress",
-      "phase_num": 4,
-      "description": "[2/3] All 20 deprecated use_container_width sites now use width='stretch'; AppTest generate/ICS flow clean and no deprecation warnings; checklists: passed (test 44, hygiene, guidelines, secrets)",
-      "files_affected": [],
-      "status": "in_progress",
-      "timestamp": 1794659678.1524882,
-      "timestamp_str": "2026-11-14 15:34:38",
-      "agent": "kilo:goal"
-    },
-    {
-      "task_id": "streamlit-width-migration",
-      "phase": "completed",
-      "phase_num": 5,
-      "description": "Task 'streamlit-width-migration' completed successfully.",
-      "status": "completed",
-      "timestamp": 1794659749.7802417,
-      "timestamp_str": "2026-11-14 15:35:49",
-      "agent": "kilo:goal",
-      "delivery": {
-        "roots": [
-          "."
-        ],
-        "forced": false
-      }
-    },
-    {
       "task_id": "font-artifact-hygiene",
       "phase": "in_progress",
       "phase_num": 2,
@@ -308,6 +236,65 @@
         ],
         "forced": false
       }
+    },
+    {
+      "task_id": "reforge:run-1",
+      "phase": "reforge stage 5",
+      "phase_num": 3,
+      "description": "Reforge stage 5: window 100, 21 commit(s), 13 file(s) reviewed (unreviewed), 1 finding(s), 0 repaired, empty \u2014 nothing to commit (regression=1)",
+      "files_affected": [
+        "main.py"
+      ],
+      "status": "in_progress",
+      "timestamp": 1794688202.1093674,
+      "timestamp_str": "2026-11-14 23:30:02",
+      "agent": "unidentified"
+    },
+    {
+      "task_id": "reforge:run-1",
+      "phase": "reforge stage 5",
+      "phase_num": 3,
+      "description": "Reforge stage 5: stage 5 host review partial; run active; coverage 49/77",
+      "files_affected": [],
+      "status": "in_progress",
+      "timestamp": 1794688363.0668776,
+      "timestamp_str": "2026-11-14 23:32:43",
+      "agent": "unidentified"
+    },
+    {
+      "task_id": "reforge:run-1",
+      "phase": "reforge stage 5",
+      "phase_num": 3,
+      "description": "Reforge stage 5: stage 5 host review reviewed; run active; coverage 77/77",
+      "files_affected": [],
+      "status": "in_progress",
+      "timestamp": 1794688427.3058133,
+      "timestamp_str": "2026-11-14 23:33:47",
+      "agent": "unidentified"
+    },
+    {
+      "task_id": "reforge:run-1",
+      "phase": "reforge stage 6",
+      "phase_num": 3,
+      "description": "Reforge stage 6: window 104, 3 commit(s), 4 file(s) reviewed (unreviewed), 1 finding(s), 0 repaired, empty \u2014 nothing to commit (regression=1)",
+      "files_affected": [
+        "main.py"
+      ],
+      "status": "in_progress",
+      "timestamp": 1794688489.3333468,
+      "timestamp_str": "2026-11-14 23:34:49",
+      "agent": "unidentified"
+    },
+    {
+      "task_id": "reforge:run-1",
+      "phase": "reforge stage 6",
+      "phase_num": 3,
+      "description": "Reforge stage 6: stage 6 host review reviewed; run completed; coverage 6/6",
+      "files_affected": [],
+      "status": "completed",
+      "timestamp": 1794688558.8491771,
+      "timestamp_str": "2026-11-14 23:35:58",
+      "agent": "unidentified"
     }
   ]
 }
