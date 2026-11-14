@@ -7,10 +7,10 @@
 
 ## 📊 Codebase Metrics
 - **Total Python Modules**: `15`
-- **Total Classes**: `24`
-- **Total Top-Level Functions**: `41`
-- **Total Class Methods**: `113`
-- **Total Source Lines**: `3312`
+- **Total Classes**: `26`
+- **Total Top-Level Functions**: `43`
+- **Total Class Methods**: `125`
+- **Total Source Lines**: `3404`
 
 ## 🧭 Map Coverage
 - **Indexed**: python (`15` module(s))
@@ -23,18 +23,19 @@
 ### [`exports.py`](exports.py)
 > *Calendar export helpers that do not depend on the Streamlit UI.*
 
-**Size**: `93` lines (`2999` bytes)
+**Size**: `125` lines (`4421` bytes)
 
 **Functions:**
 - `def escape_ics_text(value)` - *Escape a value so it cannot break out of an iCalendar text property.*
 - `def _fold_content_line(line, limit)` - *Split a content line so every physical line stays within the octet limit.*
 - `def generate_ics(schedule, title)` - *Generate an iCalendar document for the schedule.*
-- `def download_font(url, path, timeout)` - *Download a font once, with a timeout and without leaving a partial file.*
+- `def _file_sha256(path)`
+- `def download_font(url, path, expected_sha256, timeout, max_bytes)` - *Fetch a font whose SHA-256 is known, without leaving a partial or unverified file.*
 
 ---
 
 ### [`main.py`](main.py)
-**Size**: `1494` lines (`68526` bytes)
+**Size**: `1488` lines (`68376` bytes)
 
 **Functions:**
 - `def get_secrets()` - *Parse Streamlit secrets now; a missing or malformed file is a supported local configuration.*
@@ -156,7 +157,7 @@
 ---
 
 ### [`tests/test_exports.py`](tests/test_exports.py)
-**Size**: `95` lines (`3540` bytes)
+**Size**: `161` lines (`6334` bytes)
 
 **Classes:**
 - `class IcsEscapingTest`
@@ -165,9 +166,26 @@
   - Method `.test_generated_events_carry_uid_and_dtstamp()`
   - Method `.test_generated_uid_is_stable_for_the_same_event()`
   - Method `.test_generated_ics_uses_crlf_and_folds_long_lines()`
+- `class FakeResponse`
+  - Method `.__init__(payload)`
+  - Method `.__enter__()`
+  - Method `.__exit__(*args)`
+  - Method `.read(size)`
 - `class DownloadFontTest`
-  - Method `.test_existing_font_is_not_downloaded()`
+  - Method `.download(folder, payload, expected, **options)`
+  - Method `.test_existing_font_with_the_expected_hash_is_not_downloaded()`
+  - Method `.test_existing_font_with_another_hash_is_replaced()`
   - Method `.test_download_uses_a_timeout_and_replaces_the_target()`
+  - Method `.test_a_payload_with_another_hash_is_refused_and_leaves_nothing()`
+  - Method `.test_a_payload_over_the_size_cap_is_refused_and_leaves_nothing()`
+  - Method `.test_a_payload_exactly_at_the_cap_is_accepted()`
+  - Method `.test_the_read_is_bounded_by_the_cap()`
+- `class PinnedFontsTest`
+  - Method `.test_fonts_are_pinned_to_a_commit_with_a_sha256()`
+  - Method `.test_the_cap_leaves_room_for_the_real_fonts()`
+
+**Functions:**
+- `def sha256(payload)`
 
 ---
 

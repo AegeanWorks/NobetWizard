@@ -150,6 +150,13 @@ contract, a dependency, a data format or the architecture; IDs are consecutive a
 - **Decision**: security.is_valid_username uses fullmatch. security.username_taken compares ignoring case against existing and reserved names, and registration reserves the admin username from secrets, locally and in Firestore. Login stays case-sensitive and no file is renamed, because renaming would orphan existing files on case-sensitive hosts.
 - **Consequences**: New collisions are refused with the existing user-exists message. Collisions already present on a case-insensitive filesystem are not repaired. Firestore has no cheap exact case-insensitive lookup, so there only the admin name and exact duplicates are refused.
 
+### ADR-022: Download the PDF fonts from a pinned commit and verify their SHA-256
+- **Date**: 2026-11-15
+- **Status**: Accepted
+- **Context**: The PDF fonts were fetched from the main branch of the googlefonts Roboto repository, which has since moved to roboto-2 and is reachable only through a redirect. The response was read without a size limit and accepted without any integrity check, and the bytes went straight into reportlab's font parser.
+- **Decision**: exports.ROBOTO_REGULAR and ROBOTO_BOLD hold URLs pinned to commit eaef3058 of googlefonts/roboto-2 with the SHA-256 of each file, which I verified twice against the downloaded bytes and found identical to the current main files. download_font takes the expected hash, reads at most 2 MiB plus one byte, refuses an oversized or differently hashed payload before writing the final name, keeps an existing file only when its hash matches and replaces it otherwise.
+- **Consequences**: A tampered, truncated or moved font fails with ValueError, which the existing handler around the PDF export turns into the fallback font. A new font version requires updating the commit and the hashes together.
+
 <!-- Entry format:
 ### ADR-NNN: <decision in one line>
 - **Date**: YYYY-MM-DD

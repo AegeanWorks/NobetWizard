@@ -5,7 +5,7 @@ import calendar
 from scheduler import DutyScheduler
 from storage import atomic_write_json, load_json_or_default, replace_json_entry
 from state_documents import is_users_document, normalize_personnel_document
-from exports import download_font, generate_ics
+from exports import ROBOTO_BOLD, ROBOTO_REGULAR, download_font, generate_ics
 from security import (
     is_valid_username,
     login_backoff_seconds,
@@ -567,14 +567,8 @@ def generate_pdf(df_res, year, month, t):
         font_path_reg = "Roboto-Regular.ttf"
         font_path_bold = "Roboto-Bold.ttf"
         
-        download_font(
-            "https://raw.githubusercontent.com/googlefonts/roboto/main/src/hinted/Roboto-Regular.ttf",
-            font_path_reg,
-        )
-        download_font(
-            "https://raw.githubusercontent.com/googlefonts/roboto/main/src/hinted/Roboto-Bold.ttf",
-            font_path_bold,
-        )
+        download_font(ROBOTO_REGULAR[0], font_path_reg, ROBOTO_REGULAR[1])
+        download_font(ROBOTO_BOLD[0], font_path_bold, ROBOTO_BOLD[1])
         
         pdfmetrics.registerFont(TTFont('Roboto', font_path_reg))
         pdfmetrics.registerFont(TTFont('Roboto-Bold', font_path_bold))

@@ -5,30 +5,12 @@
     "last_phase": "verification",
     "active_phase": 4,
     "status": "in_progress",
-    "updated_at": 1794691837.9190257,
+    "updated_at": 1794692067.9570038,
     "owner": "kiro:nw-fixes",
     "started_by": "kiro:nw-fixes",
     "continuations": []
   },
   "checkpoints": [
-    {
-      "task_id": "secrets-parse-guard",
-      "phase": "in_progress",
-      "phase_num": 2,
-      "description": "[1/3] Make malformed or scalar secrets a supported fallback instead of a login crash",
-      "files_affected": [],
-      "status": "in_progress",
-      "timestamp": 1794666318.0306735,
-      "timestamp_str": "2026-11-14 17:25:18",
-      "agent": "kilo:goal",
-      "impact_assessment": {
-        "why": "get_secrets() returns the lazy st.secrets object, so a malformed secrets.toml raises during authenticate()/load_db and a scalar admin secret raises TypeError; both crash login for every user",
-        "benefits": "A broken secrets file behaves like a missing one: local accounts still log in, and a non-mapping admin entry simply fails the admin check",
-        "risks": "contract: get_secrets returns a plain dict and parses eagerly; malformed secrets no longer surface an exception; dependency: none; concurrency: none; state: none",
-        "mitigation": "AppTest before/after for malformed TOML and scalar admin, plus valid admin login and local-account paths, full gates, explicit staging, no push"
-      },
-      "plan_digest": "4139e58c86cc8f017ecf1b00ac1efe8a3519e56b61260f2f5a88cb647d7f6a53"
-    },
     {
       "task_id": "secrets-parse-guard",
       "phase": "in_progress",
@@ -282,6 +264,18 @@
       "status": "in_progress",
       "timestamp": 1794691837.9190257,
       "timestamp_str": "2026-11-15 00:30:37",
+      "agent": "kiro:nw-fixes",
+      "checklists": "passed"
+    },
+    {
+      "task_id": "nw-review-fixes",
+      "phase": "verification",
+      "phase_num": 4,
+      "description": "[milestone 4/4] fonts pinned to a commit, SHA-256 verified, size capped; live download and reportlab load verified; checklists: passed (test, hygiene, guidelines, secrets)",
+      "files_affected": [],
+      "status": "in_progress",
+      "timestamp": 1794692067.9570038,
+      "timestamp_str": "2026-11-15 00:34:27",
       "agent": "kiro:nw-fixes",
       "checklists": "passed"
     }
