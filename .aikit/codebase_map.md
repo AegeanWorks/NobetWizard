@@ -10,7 +10,7 @@
 - **Total Classes**: `9`
 - **Total Top-Level Functions**: `27`
 - **Total Class Methods**: `52`
-- **Total Source Lines**: `2635`
+- **Total Source Lines**: `2636`
 
 ## 🧭 Map Coverage
 - **Indexed**: python (`12` module(s))
@@ -23,7 +23,7 @@
 ### [`exports.py`](exports.py)
 > *Calendar export helpers that do not depend on the Streamlit UI.*
 
-**Size**: `93` lines (`2988` bytes)
+**Size**: `93` lines (`2999` bytes)
 
 **Functions:**
 - `def escape_ics_text(value)` - *Escape a value so it cannot break out of an iCalendar text property.*
@@ -55,7 +55,7 @@
 ---
 
 ### [`scheduler.py`](scheduler.py)
-**Size**: `476` lines (`21030` bytes)
+**Size**: `477` lines (`21080` bytes)
 
 **Classes:**
 - `class DutyScheduler`

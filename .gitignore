@@ -13,3 +13,5 @@ __pycache__/
 .aikit/*.bak
 .aikit/*.tmp_*
 .aikit/*.corrupt_*
+# Reforge run artifacts (review packets stay local; the run state is committed)
+.aikit/reforge.reviews/
