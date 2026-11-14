@@ -3,25 +3,16 @@
   "active_task": {
     "task_id": "nw-streamlit-floor",
     "last_phase": "verification",
-    "active_phase": 4,
-    "status": "in_progress",
+    "active_phase": 5,
+    "status": "completed",
     "updated_at": 1794689900.0188422,
     "owner": "kiro:nw-fixes",
     "started_by": "kiro:nw-fixes",
-    "continuations": []
+    "continuations": [],
+    "completed_at": 1794689900.9579933,
+    "completed_head": "b87d289bd0d441614e658f1ed34ce02fcab37ef2"
   },
   "checkpoints": [
-    {
-      "task_id": "login-failure-backoff",
-      "phase": "in_progress",
-      "phase_num": 4,
-      "description": "[2/3] Successful login ~0.12s, repeated failures 1s then 2s, cap helper unit-tested; AppTest timing with temporary admin secrets; checklists: passed (test 48, hygiene, guidelines, secrets)",
-      "files_affected": [],
-      "status": "in_progress",
-      "timestamp": 1794662227.5350237,
-      "timestamp_str": "2026-11-14 16:17:07",
-      "agent": "kilo:goal"
-    },
     {
       "task_id": "login-failure-backoff",
       "phase": "completed",
@@ -286,6 +277,22 @@
       "timestamp_str": "2026-11-14 23:58:20",
       "agent": "kiro:nw-fixes",
       "checklists": "passed"
+    },
+    {
+      "task_id": "nw-streamlit-floor",
+      "phase": "completed",
+      "phase_num": 5,
+      "description": "Task 'nw-streamlit-floor' completed successfully.",
+      "status": "completed",
+      "timestamp": 1794689901.0505207,
+      "timestamp_str": "2026-11-14 23:58:21",
+      "agent": "kiro:nw-fixes",
+      "delivery": {
+        "roots": [
+          "."
+        ],
+        "forced": false
+      }
     }
   ]
 }
