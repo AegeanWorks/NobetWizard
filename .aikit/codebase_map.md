@@ -7,10 +7,10 @@
 
 ## 📊 Codebase Metrics
 - **Total Python Modules**: `15`
-- **Total Classes**: `32`
-- **Total Top-Level Functions**: `49`
-- **Total Class Methods**: `158`
-- **Total Source Lines**: `3800`
+- **Total Classes**: `33`
+- **Total Top-Level Functions**: `51`
+- **Total Class Methods**: `160`
+- **Total Source Lines**: `3845`
 
 ## 🧭 Map Coverage
 - **Indexed**: python (`15` module(s))
@@ -132,7 +132,7 @@
 ### [`tests/test_app_flows.py`](tests/test_app_flows.py)
 > *End-to-end checks that drive main.py through Streamlit's AppTest in a throwaway folder.*
 
-**Size**: `271` lines (`12485` bytes)
+**Size**: `300` lines (`13678` bytes)
 
 **Classes:**
 - `class AppFlowCase` - *Runs each test inside its own temp folder so local state files never touch the repo.*
@@ -178,6 +178,10 @@
   - Method `.test_a_person_without_limits_gets_defaults()`
 - `class MalformedUsersStateTest`
   - Method `.test_unusable_users_files_are_quarantined_and_login_fails_cleanly()`
+
+**Functions:**
+- `def _skip_component_scan()` - *Streamlit scans every installed package for v2 component manifests on each AppTest run.*
+- `def _fast_bcrypt()` - *Hash with the minimum cost inside tests; the stored format and checks are unchanged.*
 
 ---
 
@@ -245,7 +249,7 @@
 ---
 
 ### [`tests/test_security.py`](tests/test_security.py)
-**Size**: `140` lines (`5912` bytes)
+**Size**: `156` lines (`6534` bytes)
 
 **Classes:**
 - `class SecureEqualsTest`
@@ -260,6 +264,8 @@
   - Method `.test_a_password_of_8_characters_up_to_72_bytes_has_no_problem()`
   - Method `.test_too_short_and_too_long_passwords_name_their_problem()`
   - Method `.test_non_text_is_a_problem()`
+- `class ProductionCostTest`
+  - Method `.test_real_hashes_use_bcrypts_default_cost()`
 - `class LegacyHashTest`
   - Method `.test_a_sha256_hex_digest_is_legacy_and_a_bcrypt_hash_is_not()`
 - `class UsernameTest`
@@ -271,6 +277,7 @@
 - `class CheckHashesTest`
   - Method `.test_rejects_missing_or_malformed_hashes()`
 - `class VerifyPasswordTest` - *Accounts created before the bcrypt switch store an unsalted SHA-256 hex digest.*
+  - Method `.setUp()`
   - Method `.legacy(password)`
   - Method `.test_bcrypt_hash_matches_without_upgrade()`
   - Method `.test_legacy_hash_matches_and_returns_a_bcrypt_upgrade()`

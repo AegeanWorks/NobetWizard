@@ -1,5 +1,8 @@
 import hashlib
 import unittest
+from unittest import mock
+
+import bcrypt
 
 from security import (
     check_hashes,
@@ -56,6 +59,12 @@ class PasswordRulesTest(unittest.TestCase):
         self.assertEqual(password_problem(None), "err_password_short")
 
 
+class ProductionCostTest(unittest.TestCase):
+    def test_real_hashes_use_bcrypts_default_cost(self):
+        # Tests lower the cost; this guards that production hashing never does.
+        self.assertEqual(make_hashes("cost-check-1")[4:6], bcrypt.gensalt()[4:6].decode())
+
+
 class LegacyHashTest(unittest.TestCase):
     def test_a_sha256_hex_digest_is_legacy_and_a_bcrypt_hash_is_not(self):
         self.assertTrue(is_legacy_hash(hashlib.sha256(b"x").hexdigest()))
@@ -96,6 +105,13 @@ class CheckHashesTest(unittest.TestCase):
 
 class VerifyPasswordTest(unittest.TestCase):
     """Accounts created before the bcrypt switch store an unsalted SHA-256 hex digest."""
+
+    def setUp(self):
+        # bcrypt's minimum cost keeps these tests fast; formats and checks are the same.
+        real = bcrypt.gensalt
+        patcher = mock.patch.object(bcrypt, "gensalt", lambda rounds=4, prefix=b"2b": real(4, prefix))
+        patcher.start()
+        self.addCleanup(patcher.stop)
 
     def legacy(self, password):
         return hashlib.sha256(password.encode()).hexdigest()

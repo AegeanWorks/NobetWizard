@@ -5,25 +5,12 @@
     "last_phase": "verification",
     "active_phase": 4,
     "status": "in_progress",
-    "updated_at": 1794735156.3093824,
+    "updated_at": 1794735663.6295946,
     "owner": "kiro:nw-fixes",
     "started_by": "kiro:nw-fixes",
     "continuations": []
   },
   "checkpoints": [
-    {
-      "task_id": "reforge:run-1",
-      "phase": "reforge stage 6",
-      "phase_num": 3,
-      "description": "Reforge stage 6: window 104, 3 commit(s), 4 file(s) reviewed (unreviewed), 1 finding(s), 0 repaired, empty \u2014 nothing to commit (regression=1)",
-      "files_affected": [
-        "main.py"
-      ],
-      "status": "in_progress",
-      "timestamp": 1794688489.3333468,
-      "timestamp_str": "2026-11-14 23:34:49",
-      "agent": "unidentified"
-    },
     {
       "task_id": "reforge:run-1",
       "phase": "reforge stage 6",
@@ -284,6 +271,18 @@
       "status": "in_progress",
       "timestamp": 1794735156.3093824,
       "timestamp_str": "2026-11-15 12:32:36",
+      "agent": "kiro:nw-fixes",
+      "checklists": "passed"
+    },
+    {
+      "task_id": "nw-hardening",
+      "phase": "verification",
+      "phase_num": 4,
+      "description": "[milestone 4/5] suite 75s to 28s via component-scan skip and test-only bcrypt cost; checklists: passed (test, hygiene, guidelines, secrets)",
+      "files_affected": [],
+      "status": "in_progress",
+      "timestamp": 1794735663.6295946,
+      "timestamp_str": "2026-11-15 12:41:03",
       "agent": "kiro:nw-fixes",
       "checklists": "passed"
     }

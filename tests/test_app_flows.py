@@ -14,6 +14,31 @@ from state_documents import LANGUAGES
 
 PROJECT = Path(__file__).resolve().parent.parent
 MAIN = str(PROJECT / "main.py")
+FAST_BCRYPT_ROUNDS = 4  # bcrypt's minimum cost; production uses the library default
+
+
+def _skip_component_scan():
+    """Streamlit scans every installed package for v2 component manifests on each AppTest run.
+
+    That scan is most of the run time and the app declares no components. Returns a patcher, or
+    None when this Streamlit version has no such scanner, in which case tests run unpatched.
+    """
+    try:
+        from streamlit.components.v2 import manifest_scanner
+    except ImportError:
+        return None
+    if not hasattr(manifest_scanner, "scan_component_manifests"):
+        return None
+    return mock.patch.object(manifest_scanner, "scan_component_manifests", return_value=[])
+
+
+def _fast_bcrypt():
+    """Hash with the minimum cost inside tests; the stored format and checks are unchanged."""
+    import bcrypt
+
+    real = bcrypt.gensalt
+    return mock.patch.object(bcrypt, "gensalt", lambda rounds=FAST_BCRYPT_ROUNDS, prefix=b"2b": real(
+        min(rounds, FAST_BCRYPT_ROUNDS), prefix))
 
 
 class AppFlowCase(unittest.TestCase):
@@ -25,6 +50,10 @@ class AppFlowCase(unittest.TestCase):
         self.addCleanup(self.folder.cleanup)
         self.addCleanup(os.chdir, previous)
         os.chdir(self.folder.name)
+        for patcher in (_skip_component_scan(), _fast_bcrypt()):
+            if patcher is not None:
+                patcher.start()
+                self.addCleanup(patcher.stop)
 
     def write(self, name, text):
         Path(self.folder.name, name).write_text(text, encoding="utf-8")

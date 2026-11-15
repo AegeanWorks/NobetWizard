@@ -178,6 +178,13 @@ contract, a dependency, a data format or the architecture; IDs are consecutive a
 - **Decision**: A Change password expander in the sidebar verifies the current password with verify_password, applies the registration rules through security.password_problem, and stores a bcrypt hash through replace_json_entry locally or a Firestore update. It opens by default with a prompt when security.is_legacy_hash matches the stored value. A wrong current password uses the login backoff, and the form fields are cleared on logout. The secrets-only admin has no stored hash and no form.
 - **Consequences**: Legacy accounts can upgrade themselves, and every user can now rotate a password. The change verifies with bcrypt once or twice, about half a second. Firestore writes are not checked for a concurrent change, the same as registration.
 
+### ADR-026: Speed up the test suite by skipping Streamlit's component scan and lowering bcrypt cost in tests only
+- **Date**: 2026-11-15
+- **Status**: Accepted
+- **Context**: The suite grew to 75 seconds. Profiling showed bcrypt was 11 seconds of it, and most of the rest was Streamlit scanning all 155 installed packages for v2 component manifests on every AppTest run, about 2.7 seconds each. The app declares no components.
+- **Decision**: tests/test_app_flows.py patches streamlit's scan_component_manifests to return nothing, guarded so a Streamlit version without it runs unpatched, and patches bcrypt.gensalt to cost 4 inside AppTest and password tests. ProductionCostTest checks that make_hashes still uses bcrypt's default cost.
+- **Consequences**: The suite runs in about 28 seconds instead of 75. The scan patch depends on a Streamlit internal and degrades to a slow but correct run if it changes. Tests no longer exercise the real bcrypt cost, which the guard test covers.
+
 <!-- Entry format:
 ### ADR-NNN: <decision in one line>
 - **Date**: YYYY-MM-DD
