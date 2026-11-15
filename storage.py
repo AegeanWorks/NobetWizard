@@ -1,8 +1,12 @@
+import contextlib
 import json
 import os
 import tempfile
 import time
 from pathlib import Path
+
+
+QUARANTINE_KEEP = 5  # set-aside copies kept per state file
 
 
 def _quarantine(target):
@@ -17,6 +21,10 @@ def _quarantine(target):
         os.replace(target, quarantine)
     except OSError:  # hygiene: allow best-effort quarantine; the unusable state still falls back
         return None
+    # Keep the copy just made plus the newest others, even if the clock moved backwards.
+    for old in [item for item in quarantined_copies(target) if item != quarantine][QUARANTINE_KEEP - 1:]:
+        with contextlib.suppress(OSError):
+            old.unlink()
     return quarantine
 
 

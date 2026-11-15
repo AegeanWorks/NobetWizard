@@ -5,23 +5,12 @@
     "last_phase": "verification",
     "active_phase": 4,
     "status": "in_progress",
-    "updated_at": 1794733790.1311471,
+    "updated_at": 1794733912.6835704,
     "owner": "kiro:nw-fixes",
     "started_by": "kiro:nw-fixes",
     "continuations": []
   },
   "checkpoints": [
-    {
-      "task_id": "reforge:run-1",
-      "phase": "reforge stage 5",
-      "phase_num": 3,
-      "description": "Reforge stage 5: stage 5 host review partial; run active; coverage 49/77",
-      "files_affected": [],
-      "status": "in_progress",
-      "timestamp": 1794688363.0668776,
-      "timestamp_str": "2026-11-14 23:32:43",
-      "agent": "unidentified"
-    },
     {
       "task_id": "reforge:run-1",
       "phase": "reforge stage 5",
@@ -282,6 +271,18 @@
       "status": "in_progress",
       "timestamp": 1794733790.1311471,
       "timestamp_str": "2026-11-15 12:09:50",
+      "agent": "kiro:nw-fixes",
+      "checklists": "passed"
+    },
+    {
+      "task_id": "nw-hardening",
+      "phase": "verification",
+      "phase_num": 4,
+      "description": "[milestone 2/5] quarantine keeps the five newest copies per file; checklists: passed (test, hygiene, guidelines, secrets)",
+      "files_affected": [],
+      "status": "in_progress",
+      "timestamp": 1794733912.6835704,
+      "timestamp_str": "2026-11-15 12:11:52",
       "agent": "kiro:nw-fixes",
       "checklists": "passed"
     }

@@ -7,6 +7,7 @@ from unittest import mock
 
 from storage import (
     atomic_write_json,
+    QUARANTINE_KEEP,
     load_json_or_default,
     quarantined_copies,
     replace_json_entry,
@@ -112,6 +113,42 @@ class QuarantineReportTest(unittest.TestCase):
             path.write_text("{}", encoding="utf-8")
             load_json_or_default(path, {}, on_quarantine=seen.append)
             self.assertEqual(seen, [])
+
+
+class QuarantineRetentionTest(unittest.TestCase):
+    def corrupt_and_load(self, path, stamp, label):
+        path.write_text(label, encoding="utf-8")
+        with mock.patch("storage.time.time", return_value=float(stamp)):
+            load_json_or_default(path, {})
+
+    def test_only_the_newest_copies_are_kept(self):
+        with tempfile.TemporaryDirectory() as folder:
+            path = Path(folder) / "data.json"
+            for stamp in range(1000, 1008):
+                self.corrupt_and_load(path, stamp, f"bad {{ {stamp}")
+            kept = [item.name for item in quarantined_copies(path)]
+            self.assertEqual(kept, [f"data.json.corrupt_{stamp}" for stamp in range(1007, 1002, -1)])
+            self.assertEqual(len(kept), QUARANTINE_KEEP)
+
+    def test_pruning_never_touches_other_files_or_the_live_file(self):
+        with tempfile.TemporaryDirectory() as folder:
+            path = Path(folder) / "data.json"
+            other = Path(folder) / "other.json.corrupt_1"
+            other.write_text("keep me", encoding="utf-8")
+            for stamp in range(1000, 1008):
+                self.corrupt_and_load(path, stamp, "bad {")
+            path.write_text("{}", encoding="utf-8")
+            self.assertTrue(other.exists())
+            self.assertEqual(json.loads(path.read_text(encoding="utf-8")), {})
+
+    def test_the_copy_just_made_is_never_the_one_pruned(self):
+        with tempfile.TemporaryDirectory() as folder:
+            path = Path(folder) / "data.json"
+            for stamp in range(2000, 2006):
+                self.corrupt_and_load(path, stamp, "bad {")
+            # an older stamp arrives after newer ones (clock moved back): it is still kept
+            self.corrupt_and_load(path, 5, "clock went back")
+            self.assertTrue(any(item.name.endswith("corrupt_5") for item in quarantined_copies(path)))
 
 
 class QuarantinedCopiesTest(unittest.TestCase):

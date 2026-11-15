@@ -7,10 +7,10 @@
 
 ## 📊 Codebase Metrics
 - **Total Python Modules**: `15`
-- **Total Classes**: `28`
+- **Total Classes**: `29`
 - **Total Top-Level Functions**: `45`
-- **Total Class Methods**: `138`
-- **Total Source Lines**: `3559`
+- **Total Class Methods**: `142`
+- **Total Source Lines**: `3604`
 
 ## 🧭 Map Coverage
 - **Indexed**: python (`15` module(s))
@@ -108,7 +108,7 @@
 ---
 
 ### [`storage.py`](storage.py)
-**Size**: `101` lines (`3888` bytes)
+**Size**: `109` lines (`4231` bytes)
 
 **Functions:**
 - `def _quarantine(target)` - *Move an unusable state file aside, never overwriting an earlier quarantined copy.*
@@ -287,7 +287,7 @@
 ---
 
 ### [`tests/test_storage.py`](tests/test_storage.py)
-**Size**: `177` lines (`8168` bytes)
+**Size**: `214` lines (`10043` bytes)
 
 **Classes:**
 - `class LoadJsonOrDefaultTest`
@@ -305,6 +305,11 @@
 - `class QuarantineReportTest`
   - Method `.test_on_quarantine_receives_the_new_path_for_corrupt_and_rejected_files()`
   - Method `.test_on_quarantine_is_not_called_for_a_good_or_missing_file()`
+- `class QuarantineRetentionTest`
+  - Method `.corrupt_and_load(path, stamp, label)`
+  - Method `.test_only_the_newest_copies_are_kept()`
+  - Method `.test_pruning_never_touches_other_files_or_the_live_file()`
+  - Method `.test_the_copy_just_made_is_never_the_one_pruned()`
 - `class QuarantinedCopiesTest`
   - Method `.test_lists_only_this_files_copies_newest_first()`
   - Method `.test_a_missing_folder_has_no_copies()`

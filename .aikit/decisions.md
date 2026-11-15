@@ -164,6 +164,13 @@ contract, a dependency, a data format or the architecture; IDs are consecutive a
 - **Decision**: normalize_personnel_document sets a fixed-duty target of the wrong type to 0 and keeps cfg_language only when it is English or Türkçe. load_json_or_default reports the set-aside path through on_quarantine, the page shows a warning naming the copy, and an expander offers every set-aside copy of the user's own personnel file for download. quarantined_copies orders copies by the epoch in the name because a rename keeps the old modification time.
 - **Consequences**: The user can recover data by hand. The users file is never offered for download because it holds password hashes. Copies still accumulate until ADR-024 limits them.
 
+### ADR-024: Keep only the five newest set-aside copies of each state file
+- **Date**: 2026-11-15
+- **Status**: Accepted
+- **Context**: ADR-018 keeps every quarantined copy so none is overwritten, but nothing ever removes them, so a file that is repeatedly damaged fills the folder with private data copies.
+- **Decision**: After a file is set aside, storage keeps the copy just made plus the newest others, five in total per state file, and deletes the rest. Order comes from the epoch in the name, not the modification time. A copy that sorts older because the clock moved backwards is still kept, because it is the newest event.
+- **Consequences**: At most five copies of the personnel or users file exist at once, so very old damaged data is lost eventually. Pruning ignores other files and the live file, and a failed delete is skipped.
+
 <!-- Entry format:
 ### ADR-NNN: <decision in one line>
 - **Date**: YYYY-MM-DD
