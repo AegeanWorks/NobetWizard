@@ -9,3 +9,4 @@ Persisted state carries a format version. A loader refuses a version it does not
 without modifying or quarantining that file; older versions migrate when a migration exists.
 
 ## Rules
+- **G-001** (ADR-027): Tracked files, including .aikit state, never hold an absolute path from a developer's machine; store paths relative to the project (enforced by tests/test_repo_hygiene.py)

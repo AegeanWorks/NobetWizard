@@ -185,6 +185,13 @@ contract, a dependency, a data format or the architecture; IDs are consecutive a
 - **Decision**: tests/test_app_flows.py patches streamlit's scan_component_manifests to return nothing, guarded so a Streamlit version without it runs unpatched, and patches bcrypt.gensalt to cost 4 inside AppTest and password tests. ProductionCostTest checks that make_hashes still uses bcrypt's default cost.
 - **Consequences**: The suite runs in about 28 seconds instead of 75. The scan patch depends on a Streamlit internal and degrades to a slow but correct run if it changes. Tests no longer exercise the real bcrypt cost, which the guard test covers.
 
+### ADR-027: Keep developer home paths out of tracked files and scrub them from unpushed history
+- **Date**: 2026-11-15
+- **Status**: Accepted
+- **Context**: Reforge and the task ledger wrote absolute paths such as the review packet and delivery roots into .aikit/reforge.json and the ledger archive. 23 lines across 48 unpushed commits named the developer's Windows home folder, and a push would have published them permanently.
+- **Decision**: Before the first push, the 48 commits after origin/main were replayed with the same trees, messages, authors and dates, except that those files hold paths relative to the project. A backup branch kept the original history. tests/test_repo_hygiene.py fails when any tracked text file names a home directory, and guideline G-001 records the rule. The kit tool that writes these paths is not changed here; the kit task aikit-home-path-guard covers it.
+- **Consequences**: No home path reaches the remote, and a regression fails the test suite. The unpushed commits have new SHAs, so reforge's record of which stages were pushed refers to the old ones. The writers in the kit still produce absolute paths until that task lands, and this test will catch them.
+
 <!-- Entry format:
 ### ADR-NNN: <decision in one line>
 - **Date**: YYYY-MM-DD

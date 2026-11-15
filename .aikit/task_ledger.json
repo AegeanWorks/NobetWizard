@@ -5,23 +5,12 @@
     "last_phase": "verification",
     "active_phase": 4,
     "status": "in_progress",
-    "updated_at": 1794735663.6295946,
+    "updated_at": 1794737047.593378,
     "owner": "kiro:nw-fixes",
     "started_by": "kiro:nw-fixes",
     "continuations": []
   },
   "checkpoints": [
-    {
-      "task_id": "reforge:run-1",
-      "phase": "reforge stage 6",
-      "phase_num": 3,
-      "description": "Reforge stage 6: stage 6 host review reviewed; run completed; coverage 6/6",
-      "files_affected": [],
-      "status": "completed",
-      "timestamp": 1794688558.8491771,
-      "timestamp_str": "2026-11-14 23:35:58",
-      "agent": "unidentified"
-    },
     {
       "task_id": "nw-reforge-fixes",
       "phase": "planning",
@@ -283,6 +272,18 @@
       "status": "in_progress",
       "timestamp": 1794735663.6295946,
       "timestamp_str": "2026-11-15 12:41:03",
+      "agent": "kiro:nw-fixes",
+      "checklists": "passed"
+    },
+    {
+      "task_id": "nw-hardening",
+      "phase": "verification",
+      "phase_num": 4,
+      "description": "[milestone 5/5] home path scrubbed from 48 unpushed commits, G-001 and a hygiene test guard it; checklists: passed (test, hygiene, guidelines, secrets)",
+      "files_affected": [],
+      "status": "in_progress",
+      "timestamp": 1794737047.593378,
+      "timestamp_str": "2026-11-15 13:04:07",
       "agent": "kiro:nw-fixes",
       "checklists": "passed"
     }

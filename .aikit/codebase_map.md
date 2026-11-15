@@ -6,14 +6,14 @@
 ---
 
 ## 📊 Codebase Metrics
-- **Total Python Modules**: `15`
-- **Total Classes**: `33`
-- **Total Top-Level Functions**: `51`
-- **Total Class Methods**: `160`
-- **Total Source Lines**: `3845`
+- **Total Python Modules**: `16`
+- **Total Classes**: `34`
+- **Total Top-Level Functions**: `52`
+- **Total Class Methods**: `162`
+- **Total Source Lines**: `3891`
 
 ## 🧭 Map Coverage
-- **Indexed**: python (`15` module(s))
+- **Indexed**: python (`16` module(s))
 - **Not indexed by this map**: none (no non-Python source files were found)
 
 ---
@@ -215,6 +215,21 @@
 
 **Functions:**
 - `def sha256(payload)`
+
+---
+
+### [`tests/test_repo_hygiene.py`](tests/test_repo_hygiene.py)
+> *Tracked files must not carry absolute paths from a developer's machine (G-001, ADR-027).*
+
+**Size**: `46` lines (`1947` bytes)
+
+**Classes:**
+- `class NoHomePathsTest`
+  - Method `.test_no_tracked_file_names_a_home_directory()`
+  - Method `.test_the_pattern_catches_the_forms_seen_so_far()`
+
+**Functions:**
+- `def tracked_text_files()`
 
 ---
 
