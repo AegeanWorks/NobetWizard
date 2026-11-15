@@ -57,5 +57,10 @@
     "source-available",
     "aegean-license",
     "commercial-license"
-  ]
+  ],
+  "archived": true,
+  "archived_at": "2026-11-15",
+  "archive_reason": "Will not be developed further.",
+  "archive_repo": "AegeanWorks/NobetWizard",
+  "archive_description": "[ARCHIVED] N\u00f6bet Wizard is a powerful, web-based application built with Python and Streamlit designed to automate the creation of monthly duty rosters (n\u00f6bet listesi). It handles complex constraints, personnel preferences, and fair distribution rules to generate optimal schedules in seconds."
 }
