@@ -1,6 +1,6 @@
 import unittest
 
-from state_documents import is_users_document, normalize_personnel_document
+from state_documents import LANGUAGES, is_users_document, normalize_personnel_document
 
 
 def person(**overrides):
@@ -65,6 +65,33 @@ class NormalizePersonnelDocumentTest(unittest.TestCase):
     def test_unknown_keys_are_kept(self):
         document, _ = normalize_personnel_document({"personnel": [], "generated_schedule": {"a": 1}})
         self.assertEqual(document["generated_schedule"], {"a": 1})
+
+    def test_fixed_duty_targets_of_the_wrong_type_become_zero(self):
+        people = [
+            person(name="A", fixed_duties_total="x", fixed_duties_weekend=None),
+            person(name="B", fixed_duties_total=True, fixed_duties_weekend=-1),
+            person(name="C", fixed_duties_total=3, fixed_duties_weekend=2),
+        ]
+        document, dropped = normalize_personnel_document({"personnel": people})
+        self.assertEqual(dropped, 0)
+        self.assertEqual(
+            [(p["fixed_duties_total"], p["fixed_duties_weekend"]) for p in document["personnel"]],
+            [(0, 0), (0, 0), (3, 2)],
+        )
+
+    def test_a_missing_fixed_duty_target_is_left_for_the_app_to_default(self):
+        record = person()
+        del record["fixed_duties_total"], record["fixed_duties_weekend"]
+        document, _ = normalize_personnel_document({"personnel": [record]})
+        self.assertNotIn("fixed_duties_total", document["personnel"][0])
+
+    def test_only_known_languages_are_kept(self):
+        for language in LANGUAGES:
+            document, _ = normalize_personnel_document({"personnel": [], "cfg_language": language})
+            self.assertEqual(document["cfg_language"], language)
+        for language in ("French", "", None, 3):
+            document, _ = normalize_personnel_document({"personnel": [], "cfg_language": language})
+            self.assertNotIn("cfg_language", document)
 
     def test_the_input_is_not_modified(self):
         original = {"personnel": [person(), 1], "cfg_month": 99}

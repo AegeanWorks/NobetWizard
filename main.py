@@ -3,7 +3,12 @@ import pandas as pd
 from datetime import date, timedelta
 import calendar
 from scheduler import DutyScheduler
-from storage import atomic_write_json, load_json_or_default, replace_json_entry
+from storage import (
+    atomic_write_json,
+    load_json_or_default,
+    quarantined_copies,
+    replace_json_entry,
+)
 from state_documents import is_users_document, normalize_personnel_document
 from exports import ROBOTO_BOLD, ROBOTO_REGULAR, download_font, generate_ics
 from security import (
@@ -76,6 +81,8 @@ LANG_TEXT = {
         "db_saved": "Database saved to user profile!",
         "db_cleared": "Database cleared!",
         "state_dropped": "{} saved entries could not be used and were skipped. Saving now would remove them.",
+        "state_quarantined": "Your saved personnel file could not be read, so it was set aside as {} and you are starting with an empty list. Download it below to recover it by hand.",
+        "recovered_files": "Set-aside data files ({})",
         "download_db": "📥 Download Personnel Database",
         "clear_all": "🗑️ Clear Current List",
         "clear_db_btn": "🔥 Clear Personnel Database",
@@ -203,6 +210,8 @@ LANG_TEXT = {
         "db_saved": "Veritabanı kullanıcı profiline kaydedildi!",
         "db_cleared": "Veritabanı temizlendi!",
         "state_dropped": "{} kayıtlı giriş kullanılamadığı için atlandı. Şimdi kaydederseniz silinirler.",
+        "state_quarantined": "Kayıtlı personel dosyanız okunamadığı için {} adıyla kenara alındı ve boş bir listeyle başlıyorsunuz. Elle kurtarmak için aşağıdan indirin.",
+        "recovered_files": "Kenara alınan veri dosyaları ({})",
         "download_db": "📥 Personel Veritabanını İndir",
         "clear_all": "🗑️ Mevcut Listeyi Temizle",
         "clear_db_btn": "🔥 Personel Veritabanını Temizle",
@@ -387,7 +396,10 @@ def load_db(username):
     # 2. Fallback to Local JSON; a bare list is the legacy personnel-only format
     path = get_user_db_path(username)
     data = load_json_or_default(
-        path, empty, accept=lambda loaded: normalize_personnel_document(loaded)[0] is not None
+        path,
+        empty,
+        accept=lambda loaded: normalize_personnel_document(loaded)[0] is not None,
+        on_quarantine=lambda moved: st.session_state.update(state_quarantined=os.path.basename(moved)),
     )
     document, dropped = normalize_personnel_document(data)
     return (document or empty), dropped
@@ -670,6 +682,19 @@ def main():
         dropped_entries = st.session_state.pop("state_dropped", 0)
         if dropped_entries:
             st.warning(t["state_dropped"].format(dropped_entries))
+        set_aside = st.session_state.pop("state_quarantined", None)
+        if set_aside:
+            st.warning(t["state_quarantined"].format(set_aside))
+        copies = quarantined_copies(get_user_db_path(st.session_state.get("username", "")))
+        if copies:
+            with st.expander(t["recovered_files"].format(len(copies))):
+                for copy_path in copies:
+                    st.download_button(
+                        copy_path.name,
+                        data=copy_path.read_bytes(),
+                        file_name=copy_path.name,
+                        key=f"dl_{copy_path.name}",
+                    )
     with col_lang:
         def save_lang():
             save_db(st.session_state.get('personnel', []), st.session_state.get('username'))

@@ -157,6 +157,13 @@ contract, a dependency, a data format or the architecture; IDs are consecutive a
 - **Decision**: exports.ROBOTO_REGULAR and ROBOTO_BOLD hold URLs pinned to commit eaef3058 of googlefonts/roboto-2 with the SHA-256 of each file, which I verified twice against the downloaded bytes and found identical to the current main files. download_font takes the expected hash, reads at most 2 MiB plus one byte, refuses an oversized or differently hashed payload before writing the final name, keeps an existing file only when its hash matches and replaces it otherwise.
 - **Consequences**: A tampered, truncated or moved font fails with ValueError, which the existing handler around the PDF export turns into the fallback font. A new font version requires updating the commit and the hashes together.
 
+### ADR-023: Repair fixed-duty targets, whitelist the saved language and tell the user when their file was set aside
+- **Date**: 2026-11-15
+- **Status**: Accepted
+- **Context**: A review of ADR-020 found three gaps: fixed_duties_total as text or fixed_duties_weekend as null crashed Generate, an unknown saved cfg_language such as French raised KeyError on load, and a personnel file that was set aside left the user with an empty roster and no explanation, which looks like data loss.
+- **Decision**: normalize_personnel_document sets a fixed-duty target of the wrong type to 0 and keeps cfg_language only when it is English or Türkçe. load_json_or_default reports the set-aside path through on_quarantine, the page shows a warning naming the copy, and an expander offers every set-aside copy of the user's own personnel file for download. quarantined_copies orders copies by the epoch in the name because a rename keeps the old modification time.
+- **Consequences**: The user can recover data by hand. The users file is never offered for download because it holds password hashes. Copies still accumulate until ADR-024 limits them.
+
 <!-- Entry format:
 ### ADR-NNN: <decision in one line>
 - **Date**: YYYY-MM-DD

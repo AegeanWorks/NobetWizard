@@ -8,6 +8,8 @@ from pathlib import Path
 
 from streamlit.testing.v1 import AppTest
 
+from state_documents import LANGUAGES
+
 PROJECT = Path(__file__).resolve().parent.parent
 MAIN = str(PROJECT / "main.py")
 
@@ -107,6 +109,10 @@ class MalformedPersonnelStateTest(AppFlowCase):
     def quarantined(self):
         return [name for name in os.listdir(self.folder.name) if ".corrupt_" in name]
 
+    def recovered_downloads(self, app):
+        """The download buttons for set-aside files (the page has other download buttons too)."""
+        return [item for item in app.get("download_button") if item.proto.label.startswith("personnel_db_")]
+
     def test_unusable_shapes_are_quarantined_and_the_page_loads(self):
         for raw in ("5", '{"personnel": null}'):
             with self.subTest(raw=raw):
@@ -130,6 +136,32 @@ class MalformedPersonnelStateTest(AppFlowCase):
             with self.subTest(key=key):
                 app = self.open_page(json.dumps({"personnel": [PERSON], key: value}))
                 self.assertEqual([item.value for item in app.exception], [])
+
+    def test_the_user_is_told_when_their_file_was_set_aside_and_can_download_it(self):
+        app = self.open_page("5")
+        [name] = self.quarantined()
+        self.assertTrue(any(name in item.value for item in app.warning), [w.value for w in app.warning])
+        self.assertEqual([item.proto.label for item in self.recovered_downloads(app)], [name])
+
+    def test_no_notice_or_download_when_nothing_was_set_aside(self):
+        app = self.open_page(json.dumps({"personnel": [PERSON]}))
+        self.assertEqual([item.value for item in app.warning], [])
+        self.assertEqual(self.recovered_downloads(app), [])
+
+    def test_a_fixed_duty_target_of_the_wrong_type_does_not_crash_generate(self):
+        record = dict(PERSON, fixed_duties_total="x", fixed_duties_weekend=None)
+        app = self.open_page(json.dumps({"personnel": [record]}))
+        [button for button in app.button if button.key == "btn_gen_schedule"][0].click().run()
+        self.assertEqual([item.value for item in app.exception], [])
+
+    def test_an_unknown_saved_language_falls_back_to_english(self):
+        app = self.open_page(json.dumps({"personnel": [PERSON], "cfg_language": "French"}))
+        self.assertEqual([item.value for item in app.exception], [])
+        self.assertEqual(app.session_state["cfg_language"], "English")
+
+    def test_the_language_choices_match_the_ones_a_saved_file_may_name(self):
+        app = self.open_page(json.dumps({"personnel": [PERSON]}))
+        self.assertEqual(list(app.selectbox(key="cfg_language").options), list(LANGUAGES))
 
     def test_a_person_without_limits_gets_defaults(self):
         record = {k: v for k, v in PERSON.items() if k not in ("max_duties", "max_weekends")}

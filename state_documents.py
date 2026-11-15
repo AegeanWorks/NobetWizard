@@ -9,6 +9,7 @@ import copy
 DEFAULT_MAX_DUTIES = 5  # the add-person form defaults
 DEFAULT_MAX_WEEKENDS = 2
 GENDERS = ("M", "F")
+LANGUAGES = ("English", "Türkçe")  # the choices of the language selector in main.py
 
 
 def _is_int(value, low=None, high=None):
@@ -29,7 +30,7 @@ SETTING_CHECKS = {
     "cfg_consecutive": lambda v: isinstance(v, bool),
     "cfg_two_rest": lambda v: isinstance(v, bool),
     "cfg_gender": lambda v: isinstance(v, str),
-    "cfg_language": lambda v: isinstance(v, str),
+    "cfg_language": lambda v: v in LANGUAGES,
 }
 
 
@@ -45,6 +46,9 @@ def _usable_person(entry):
         person["max_duties"] = DEFAULT_MAX_DUTIES
     if not _is_int(person.get("max_weekends"), 0):
         person["max_weekends"] = DEFAULT_MAX_WEEKENDS
+    for target in ("fixed_duties_total", "fixed_duties_weekend"):
+        if target in person and not _is_int(person[target], 0):
+            person[target] = 0  # a target of the wrong type means no target
     return person
 
 

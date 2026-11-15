@@ -1,10 +1,16 @@
 import json
+import os
 import tempfile
 import unittest
 from pathlib import Path
 from unittest import mock
 
-from storage import atomic_write_json, load_json_or_default, replace_json_entry
+from storage import (
+    atomic_write_json,
+    load_json_or_default,
+    quarantined_copies,
+    replace_json_entry,
+)
 
 
 class LoadJsonOrDefaultTest(unittest.TestCase):
@@ -84,6 +90,45 @@ class AcceptTest(unittest.TestCase):
         with tempfile.TemporaryDirectory() as folder:
             missing = Path(folder) / "none.json"
             self.assertEqual(load_json_or_default(missing, 7, accept=lambda data: False), 7)
+
+
+class QuarantineReportTest(unittest.TestCase):
+    def test_on_quarantine_receives_the_new_path_for_corrupt_and_rejected_files(self):
+        for content, accept in (("{ broken", None), ("[1]", lambda data: isinstance(data, dict))):
+            with tempfile.TemporaryDirectory() as folder:
+                path = Path(folder) / "data.json"
+                path.write_text(content, encoding="utf-8")
+                seen = []
+                load_json_or_default(path, {}, accept=accept, on_quarantine=seen.append)
+                self.assertEqual(len(seen), 1)
+                self.assertTrue(Path(seen[0]).exists())
+                self.assertIn(".corrupt_", Path(seen[0]).name)
+
+    def test_on_quarantine_is_not_called_for_a_good_or_missing_file(self):
+        with tempfile.TemporaryDirectory() as folder:
+            path = Path(folder) / "data.json"
+            seen = []
+            load_json_or_default(path, {}, on_quarantine=seen.append)
+            path.write_text("{}", encoding="utf-8")
+            load_json_or_default(path, {}, on_quarantine=seen.append)
+            self.assertEqual(seen, [])
+
+
+class QuarantinedCopiesTest(unittest.TestCase):
+    def test_lists_only_this_files_copies_newest_first(self):
+        with tempfile.TemporaryDirectory() as folder:
+            path = Path(folder) / "data.json"
+            # modification times deliberately disagree with the stamps: a rename keeps the old mtime
+            for index, name in enumerate(("data.json.corrupt_300", "data.json.corrupt_300_1",
+                                          "data.json.corrupt_100", "other.json.corrupt_999", "data.json")):
+                item = Path(folder) / name
+                item.write_text("x", encoding="utf-8")
+                os.utime(item, (1000 + index, 1000 + index))
+            names = [Path(item).name for item in quarantined_copies(path)]
+            self.assertEqual(names, ["data.json.corrupt_300_1", "data.json.corrupt_300", "data.json.corrupt_100"])
+
+    def test_a_missing_folder_has_no_copies(self):
+        self.assertEqual(quarantined_copies(Path("no-such-folder") / "data.json"), [])
 
 
 class QuarantineCollisionTest(unittest.TestCase):

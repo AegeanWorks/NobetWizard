@@ -7,10 +7,10 @@
 
 ## 📊 Codebase Metrics
 - **Total Python Modules**: `15`
-- **Total Classes**: `26`
-- **Total Top-Level Functions**: `43`
-- **Total Class Methods**: `125`
-- **Total Source Lines**: `3404`
+- **Total Classes**: `28`
+- **Total Top-Level Functions**: `45`
+- **Total Class Methods**: `138`
+- **Total Source Lines**: `3559`
 
 ## 🧭 Map Coverage
 - **Indexed**: python (`15` module(s))
@@ -35,7 +35,7 @@
 ---
 
 ### [`main.py`](main.py)
-**Size**: `1488` lines (`68376` bytes)
+**Size**: `1513` lines (`69670` bytes)
 
 **Functions:**
 - `def get_secrets()` - *Parse Streamlit secrets now; a missing or malformed file is a supported local configuration.*
@@ -97,7 +97,7 @@
 ### [`state_documents.py`](state_documents.py)
 > *Shape checks for the saved personnel and users documents, free of UI dependencies.*
 
-**Size**: `79` lines (`3054` bytes)
+**Size**: `83` lines (`3344` bytes)
 
 **Functions:**
 - `def _is_int(value, low, high)`
@@ -108,11 +108,13 @@
 ---
 
 ### [`storage.py`](storage.py)
-**Size**: `79` lines (`2950` bytes)
+**Size**: `101` lines (`3888` bytes)
 
 **Functions:**
 - `def _quarantine(target)` - *Move an unusable state file aside, never overwriting an earlier quarantined copy.*
-- `def load_json_or_default(path, default, accept)` - *Read a JSON document, quarantining an unreadable file instead of raising.*
+- `def quarantined_copies(path)` - *The quarantined copies of one state file, newest first.*
+- `def _quarantine_order(item)` - *Sort key from the `corrupt_<epoch>[_n]` suffix: a rename keeps the old modification time.*
+- `def load_json_or_default(path, default, accept, on_quarantine)` - *Read a JSON document, quarantining an unreadable file instead of raising.*
 - `def replace_json_entry(path, key, expected, new_value)` - *Set one top-level entry of a JSON object file, only while it still equals `expected`.*
 - `def atomic_write_json(path, data)` - *Write JSON without leaving a truncated file when the process dies mid-write.*
 
@@ -126,7 +128,7 @@
 ### [`tests/test_app_flows.py`](tests/test_app_flows.py)
 > *End-to-end checks that drive main.py through Streamlit's AppTest in a throwaway folder.*
 
-**Size**: `156` lines (`6721` bytes)
+**Size**: `188` lines (`8560` bytes)
 
 **Classes:**
 - `class AppFlowCase` - *Runs each test inside its own temp folder so local state files never touch the repo.*
@@ -147,9 +149,15 @@
 - `class MalformedPersonnelStateTest`
   - Method `.open_page(raw)`
   - Method `.quarantined()`
+  - Method `.recovered_downloads(app)` - *The download buttons for set-aside files (the page has other download buttons too).*
   - Method `.test_unusable_shapes_are_quarantined_and_the_page_loads()`
   - Method `.test_unusable_people_are_dropped_with_a_warning_and_the_file_is_kept()`
   - Method `.test_bad_settings_do_not_crash_the_page()`
+  - Method `.test_the_user_is_told_when_their_file_was_set_aside_and_can_download_it()`
+  - Method `.test_no_notice_or_download_when_nothing_was_set_aside()`
+  - Method `.test_a_fixed_duty_target_of_the_wrong_type_does_not_crash_generate()`
+  - Method `.test_an_unknown_saved_language_falls_back_to_english()`
+  - Method `.test_the_language_choices_match_the_ones_a_saved_file_may_name()`
   - Method `.test_a_person_without_limits_gets_defaults()`
 - `class MalformedUsersStateTest`
   - Method `.test_unusable_users_files_are_quarantined_and_login_fails_cleanly()`
@@ -253,7 +261,7 @@
 ---
 
 ### [`tests/test_state_documents.py`](tests/test_state_documents.py)
-**Size**: `85` lines (`4171` bytes)
+**Size**: `112` lines (`5591` bytes)
 
 **Classes:**
 - `class NormalizePersonnelDocumentTest`
@@ -266,6 +274,9 @@
   - Method `.test_limits_of_the_wrong_type_get_the_defaults()`
   - Method `.test_settings_of_the_wrong_type_or_range_are_dropped()`
   - Method `.test_unknown_keys_are_kept()`
+  - Method `.test_fixed_duty_targets_of_the_wrong_type_become_zero()`
+  - Method `.test_a_missing_fixed_duty_target_is_left_for_the_app_to_default()`
+  - Method `.test_only_known_languages_are_kept()`
   - Method `.test_the_input_is_not_modified()`
 - `class IsUsersDocumentTest`
   - Method `.test_only_an_object_is_a_users_document()`
@@ -276,7 +287,7 @@
 ---
 
 ### [`tests/test_storage.py`](tests/test_storage.py)
-**Size**: `132` lines (`6002` bytes)
+**Size**: `177` lines (`8168` bytes)
 
 **Classes:**
 - `class LoadJsonOrDefaultTest`
@@ -291,6 +302,12 @@
   - Method `.test_a_document_the_check_rejects_is_quarantined_like_a_corrupt_one()`
   - Method `.test_a_document_the_check_accepts_is_returned_and_kept()`
   - Method `.test_the_default_is_not_checked()`
+- `class QuarantineReportTest`
+  - Method `.test_on_quarantine_receives_the_new_path_for_corrupt_and_rejected_files()`
+  - Method `.test_on_quarantine_is_not_called_for_a_good_or_missing_file()`
+- `class QuarantinedCopiesTest`
+  - Method `.test_lists_only_this_files_copies_newest_first()`
+  - Method `.test_a_missing_folder_has_no_copies()`
 - `class QuarantineCollisionTest`
   - Method `.test_two_corrupt_files_in_the_same_second_are_both_kept()`
 - `class ReplaceJsonEntryTest`
