@@ -12,9 +12,11 @@ from storage import (
 from state_documents import is_users_document, normalize_personnel_document
 from exports import ROBOTO_BOLD, ROBOTO_REGULAR, download_font, generate_ics
 from security import (
+    is_legacy_hash,
     is_valid_username,
     login_backoff_seconds,
     make_hashes,
+    password_problem,
     secure_equals,
     username_taken,
     verify_password,
@@ -83,6 +85,14 @@ LANG_TEXT = {
         "state_dropped": "{} saved entries could not be used and were skipped. Saving now would remove them.",
         "state_quarantined": "Your saved personnel file could not be read, so it was set aside as {} and you are starting with an empty list. Download it below to recover it by hand.",
         "recovered_files": "Set-aside data files ({})",
+        "change_password": "Change password",
+        "current_password": "Current password",
+        "new_password": "New password",
+        "change_password_btn": "Change password",
+        "password_changed": "Password changed.",
+        "err_current_password": "The current password is incorrect.",
+        "err_password_update": "The password could not be updated. Please try again.",
+        "legacy_hash_prompt": "Your account still uses an older, weaker password format. Change your password below to upgrade it.",
         "download_db": "📥 Download Personnel Database",
         "clear_all": "🗑️ Clear Current List",
         "clear_db_btn": "🔥 Clear Personnel Database",
@@ -212,6 +222,14 @@ LANG_TEXT = {
         "state_dropped": "{} kayıtlı giriş kullanılamadığı için atlandı. Şimdi kaydederseniz silinirler.",
         "state_quarantined": "Kayıtlı personel dosyanız okunamadığı için {} adıyla kenara alındı ve boş bir listeyle başlıyorsunuz. Elle kurtarmak için aşağıdan indirin.",
         "recovered_files": "Kenara alınan veri dosyaları ({})",
+        "change_password": "Şifre değiştir",
+        "current_password": "Mevcut şifre",
+        "new_password": "Yeni şifre",
+        "change_password_btn": "Şifreyi değiştir",
+        "password_changed": "Şifre değiştirildi.",
+        "err_current_password": "Mevcut şifre yanlış.",
+        "err_password_update": "Şifre güncellenemedi. Lütfen tekrar deneyin.",
+        "legacy_hash_prompt": "Hesabınız hâlâ eski ve daha zayıf bir şifre biçimi kullanıyor. Yükseltmek için aşağıdan şifrenizi değiştirin.",
         "download_db": "📥 Personel Veritabanını İndir",
         "clear_all": "🗑️ Mevcut Listeyi Temizle",
         "clear_db_btn": "🔥 Personel Veritabanını Temizle",
@@ -347,6 +365,10 @@ AUTH_STATE_KEYS = {
     "login_failures",
     "reg_user",
     "reg_pass",
+    "pw_current",
+    "pw_new",
+    "pw_failures",
+    "pw_changed",
 }
 
 
@@ -452,6 +474,27 @@ def load_users():
 def save_users(data):
     atomic_write_json(USER_DB_FILE, data)
 
+def stored_password_hash(username):
+    """The stored hash of a local or cloud account, or None for the secrets-only admin."""
+    db = get_firestore_db()
+    if db:
+        doc = db.collection("users").document(username).get()
+        return doc.to_dict().get("password_hash") if doc.exists else None
+    return load_users().get(username)
+
+
+def set_password_hash(username, old_hash, new_hash):
+    """Store a new hash for a local or cloud account; False when it could not be written."""
+    db = get_firestore_db()
+    try:
+        if db:
+            db.collection("users").document(username).update({"password_hash": new_hash})
+            return True
+        return replace_json_entry(USER_DB_FILE, username, old_hash, new_hash)
+    except Exception:  # hygiene: allow a failed write is reported to the user instead of crashing
+        return False
+
+
 def authenticate(username, password):
     # 1. Check Cloud DB
     db = get_firestore_db()
@@ -528,12 +571,9 @@ def login_page():
                 st.error(t["err_username"])
                 return
             
-            if len(new_pass) < 8:
-                st.error(t["err_password_short"])
-                return
-
-            if len(new_pass.encode("utf-8")) > 72:
-                st.error(t["err_password_long"])
+            problem = password_problem(new_pass)
+            if problem:
+                st.error(t[problem])
                 return
 
             # 1. Cloud Registration
@@ -704,6 +744,38 @@ def main():
         if st.button(t["logout"], key="btn_logout_top"):
             st.session_state["pending_logout"] = True
             st.rerun()
+
+    # --- Change password (accounts stored locally or in Firestore; the secrets admin has none) ---
+    username = st.session_state.get("username")
+    stored_hash = stored_password_hash(username)
+    if stored_hash is not None:
+        password_changed = st.session_state.pop("pw_changed", False)
+        if password_changed:
+            st.session_state.pop("pw_current", None)
+            st.session_state.pop("pw_new", None)
+        with st.sidebar.expander(t["change_password"], expanded=is_legacy_hash(stored_hash)):
+            if password_changed:
+                st.success(t["password_changed"])
+            if is_legacy_hash(stored_hash):
+                st.info(t["legacy_hash_prompt"])
+            current_password = st.text_input(t["current_password"], type="password", key="pw_current")
+            new_password = st.text_input(t["new_password"], type="password", key="pw_new")
+            if st.button(t["change_password_btn"], key="btn_change_password"):
+                matched, _ = verify_password(current_password, stored_hash)
+                problem = password_problem(new_password)
+                if not matched:
+                    failures = st.session_state.get("pw_failures", 0) + 1
+                    st.session_state["pw_failures"] = failures
+                    time.sleep(login_backoff_seconds(failures))
+                    st.error(t["err_current_password"])
+                elif problem:
+                    st.error(t[problem])
+                elif set_password_hash(username, stored_hash, make_hashes(new_password)):
+                    st.session_state.pop("pw_failures", None)
+                    st.session_state["pw_changed"] = True
+                    st.rerun()
+                else:
+                    st.error(t["err_password_update"])
 
     # --- Sidebar: Configuration ---
     st.sidebar.header(t["sidebar_gen"])

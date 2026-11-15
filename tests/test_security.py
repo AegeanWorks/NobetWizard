@@ -3,9 +3,11 @@ import unittest
 
 from security import (
     check_hashes,
+    is_legacy_hash,
     is_valid_username,
     login_backoff_seconds,
     make_hashes,
+    password_problem,
     secure_equals,
     username_taken,
     verify_password,
@@ -37,6 +39,30 @@ class LoginBackoffTest(unittest.TestCase):
     def test_non_positive_counter_is_minimum(self):
         self.assertEqual(login_backoff_seconds(0), 1)
         self.assertEqual(login_backoff_seconds(-4), 1)
+
+
+class PasswordRulesTest(unittest.TestCase):
+    def test_a_password_of_8_characters_up_to_72_bytes_has_no_problem(self):
+        for password in ("12345678", "x" * 72, "ş" * 36):
+            self.assertIsNone(password_problem(password), password)
+
+    def test_too_short_and_too_long_passwords_name_their_problem(self):
+        self.assertEqual(password_problem("1234567"), "err_password_short")
+        self.assertEqual(password_problem(""), "err_password_short")
+        self.assertEqual(password_problem("x" * 73), "err_password_long")
+        self.assertEqual(password_problem("ş" * 37), "err_password_long")
+
+    def test_non_text_is_a_problem(self):
+        self.assertEqual(password_problem(None), "err_password_short")
+
+
+class LegacyHashTest(unittest.TestCase):
+    def test_a_sha256_hex_digest_is_legacy_and_a_bcrypt_hash_is_not(self):
+        self.assertTrue(is_legacy_hash(hashlib.sha256(b"x").hexdigest()))
+        self.assertTrue(is_legacy_hash(hashlib.sha256(b"x").hexdigest().upper()))
+        self.assertFalse(is_legacy_hash(make_hashes("secret-pass")))
+        for value in (None, "", 5, "g" * 64, "a" * 63):
+            self.assertFalse(is_legacy_hash(value), repr(value))
 
 
 class UsernameTest(unittest.TestCase):

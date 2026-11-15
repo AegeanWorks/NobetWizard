@@ -5,9 +5,11 @@ import os
 import tempfile
 import unittest
 from pathlib import Path
+from unittest import mock
 
 from streamlit.testing.v1 import AppTest
 
+from security import check_hashes, make_hashes
 from state_documents import LANGUAGES
 
 PROJECT = Path(__file__).resolve().parent.parent
@@ -89,6 +91,87 @@ class RegistrationTest(AppFlowCase):
         app = self.register("Admin", admin={"username": "admin", "password": "s3cret-pass"})
         self.assertEqual(self.users(), {})
         self.assertEqual([item.value for item in app.error], ["User already exists"])
+
+
+class ChangePasswordTest(AppFlowCase):
+    LONG = "p" * 80
+
+    def setUp(self):
+        super().setUp()
+        # The wrong-password delay is not what these tests check. Patch the app's backoff, never
+        # time.sleep itself: Streamlit's script runner sleeps too and would spin until it times out.
+        patcher = mock.patch("security.login_backoff_seconds", return_value=0)
+        patcher.start()
+        self.addCleanup(patcher.stop)
+
+    def users(self):
+        return json.loads(Path(self.folder.name, "users_db.json").read_text(encoding="utf-8"))
+
+    def legacy_user(self, password):
+        self.write("users_db.json", json.dumps({"olduser": hashlib.sha256(password.encode()).hexdigest()}))
+        return self.log_in("olduser", password)
+
+    def change(self, app, current, new):
+        app.text_input(key="pw_current").set_value(current)
+        app.text_input(key="pw_new").set_value(new)
+        app.button(key="btn_change_password").click().run()
+        return app
+
+    def info_texts(self, app):
+        return [item.value for item in app.info]
+
+    def test_an_account_still_on_a_legacy_hash_is_prompted_to_change_its_password(self):
+        app = self.legacy_user(self.LONG)
+        self.assertTrue(any("older, weaker" in text for text in self.info_texts(app)))
+
+    def test_changing_the_password_replaces_the_legacy_hash_and_removes_the_prompt(self):
+        app = self.legacy_user(self.LONG)
+        self.change(app, self.LONG, "brand-new-pass1")
+        self.assertEqual([item.value for item in app.exception], [])
+        self.assertEqual([item.value for item in app.error], [])
+        self.assertTrue(check_hashes("brand-new-pass1", self.users()["olduser"]))
+        self.assertFalse(any("older, weaker" in text for text in self.info_texts(app)))
+        again = self.log_in("olduser", "brand-new-pass1")
+        self.assertTrue(again.session_state["logged_in"])
+
+    def test_a_wrong_current_password_changes_nothing(self):
+        app = self.legacy_user(self.LONG)
+        before = self.users()
+        self.change(app, "not-the-password", "brand-new-pass1")
+        self.assertEqual(self.users(), before)
+        self.assertEqual(len(app.error), 1)
+
+    def test_a_new_password_that_breaks_the_rules_changes_nothing(self):
+        app = self.legacy_user(self.LONG)
+        before = self.users()
+        for new in ("short", "x" * 73):
+            self.change(app, self.LONG, new)
+            self.assertEqual(self.users(), before, new)
+            self.assertEqual(len(app.error), 1, new)
+
+    def test_a_wrong_current_password_still_waits(self):
+        app = self.legacy_user(self.LONG)
+        with mock.patch("security.login_backoff_seconds", return_value=0) as backoff:
+            self.change(app, "not-the-password", "brand-new-pass1")
+        backoff.assert_called_once_with(1)
+
+    def test_a_bcrypt_account_gets_the_form_but_no_prompt(self):
+        self.write("users_db.json", json.dumps({"newuser": make_hashes("current-pass1")}))
+        app = self.log_in("newuser", "current-pass1")
+        self.assertEqual(len([w for w in app.text_input if w.key == "pw_current"]), 1)
+        self.assertFalse(any("older, weaker" in text for text in self.info_texts(app)))
+        self.change(app, "current-pass1", "another-pass22")
+        self.assertTrue(check_hashes("another-pass22", self.users()["newuser"]))
+
+    def test_the_admin_from_secrets_has_no_change_form(self):
+        app = self.new_app()
+        app.secrets["admin"] = {"username": "boss", "password": "secret-admin-pass"}
+        app.run()
+        app.text_input(key="login_user").set_value("boss")
+        app.text_input(key="login_pass").set_value("secret-admin-pass")
+        app.button[0].click().run()
+        self.assertTrue(app.session_state["logged_in"])
+        self.assertEqual([w for w in app.text_input if w.key == "pw_current"], [])
 
 
 PERSON = {

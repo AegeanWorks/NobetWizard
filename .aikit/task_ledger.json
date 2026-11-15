@@ -5,23 +5,12 @@
     "last_phase": "verification",
     "active_phase": 4,
     "status": "in_progress",
-    "updated_at": 1794733912.6835704,
+    "updated_at": 1794735156.3093824,
     "owner": "kiro:nw-fixes",
     "started_by": "kiro:nw-fixes",
     "continuations": []
   },
   "checkpoints": [
-    {
-      "task_id": "reforge:run-1",
-      "phase": "reforge stage 5",
-      "phase_num": 3,
-      "description": "Reforge stage 5: stage 5 host review reviewed; run active; coverage 77/77",
-      "files_affected": [],
-      "status": "in_progress",
-      "timestamp": 1794688427.3058133,
-      "timestamp_str": "2026-11-14 23:33:47",
-      "agent": "unidentified"
-    },
     {
       "task_id": "reforge:run-1",
       "phase": "reforge stage 6",
@@ -283,6 +272,18 @@
       "status": "in_progress",
       "timestamp": 1794733912.6835704,
       "timestamp_str": "2026-11-15 12:11:52",
+      "agent": "kiro:nw-fixes",
+      "checklists": "passed"
+    },
+    {
+      "task_id": "nw-hardening",
+      "phase": "verification",
+      "phase_num": 4,
+      "description": "[milestone 3/5] change-password form with legacy-hash prompt and backoff; checklists: passed (test, hygiene, guidelines, secrets)",
+      "files_affected": [],
+      "status": "in_progress",
+      "timestamp": 1794735156.3093824,
+      "timestamp_str": "2026-11-15 12:32:36",
       "agent": "kiro:nw-fixes",
       "checklists": "passed"
     }

@@ -171,6 +171,13 @@ contract, a dependency, a data format or the architecture; IDs are consecutive a
 - **Decision**: After a file is set aside, storage keeps the copy just made plus the newest others, five in total per state file, and deletes the rest. Order comes from the epoch in the name, not the modification time. A copy that sorts older because the clock moved backwards is still kept, because it is the newest event.
 - **Consequences**: At most five copies of the personnel or users file exist at once, so very old damaged data is lost eventually. Pruning ignores other files and the live file, and a failed delete is skipped.
 
+### ADR-025: Let users change their password and prompt accounts still on a legacy hash
+- **Date**: 2026-11-15
+- **Status**: Accepted
+- **Context**: ADR-019 keeps the SHA-256 hash of a legacy account whose password exceeds 72 bytes, and the app had no way to change a password, so such an account could never leave the weak format.
+- **Decision**: A Change password expander in the sidebar verifies the current password with verify_password, applies the registration rules through security.password_problem, and stores a bcrypt hash through replace_json_entry locally or a Firestore update. It opens by default with a prompt when security.is_legacy_hash matches the stored value. A wrong current password uses the login backoff, and the form fields are cleared on logout. The secrets-only admin has no stored hash and no form.
+- **Consequences**: Legacy accounts can upgrade themselves, and every user can now rotate a password. The change verifies with bcrypt once or twice, about half a second. Firestore writes are not checked for a concurrent change, the same as registration.
+
 <!-- Entry format:
 ### ADR-NNN: <decision in one line>
 - **Date**: YYYY-MM-DD

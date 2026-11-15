@@ -7,10 +7,10 @@
 
 ## 📊 Codebase Metrics
 - **Total Python Modules**: `15`
-- **Total Classes**: `29`
-- **Total Top-Level Functions**: `45`
-- **Total Class Methods**: `142`
-- **Total Source Lines**: `3604`
+- **Total Classes**: `32`
+- **Total Top-Level Functions**: `49`
+- **Total Class Methods**: `158`
+- **Total Source Lines**: `3800`
 
 ## 🧭 Map Coverage
 - **Indexed**: python (`15` module(s))
@@ -35,7 +35,7 @@
 ---
 
 ### [`main.py`](main.py)
-**Size**: `1513` lines (`69670` bytes)
+**Size**: `1585` lines (`73384` bytes)
 
 **Functions:**
 - `def get_secrets()` - *Parse Streamlit secrets now; a missing or malformed file is a supported local configuration.*
@@ -48,6 +48,8 @@
 - `def save_db(personnel, username)`
 - `def load_users()`
 - `def save_users(data)`
+- `def stored_password_hash(username)` - *The stored hash of a local or cloud account, or None for the secrets-only admin.*
+- `def set_password_hash(username, old_hash, new_hash)` - *Store a new hash for a local or cloud account; False when it could not be written.*
 - `def authenticate(username, password)`
 - `def login_page()`
 - `def generate_excel(df_res)`
@@ -81,13 +83,15 @@
 ### [`security.py`](security.py)
 > *Password and credential helpers kept free of UI dependencies.*
 
-**Size**: `77` lines (`2950` bytes)
+**Size**: `92` lines (`3533` bytes)
 
 **Functions:**
 - `def secure_equals(left, right)` - *Compare two values in constant time, including non-ASCII text.*
 - `def login_backoff_seconds(failures)` - *Seconds to pause after this many consecutive failed logins, capped at three.*
 - `def make_hashes(password)` - *Hash a password with bcrypt.*
 - `def check_hashes(password, hashed_text)` - *Return True only when the stored hash is a valid bcrypt hash matching the password.*
+- `def password_problem(password)` - *Return the text key of the rule a new password breaks, or None when it is acceptable.*
+- `def is_legacy_hash(stored)` - *True for an unsalted SHA-256 hex digest left from before the bcrypt switch.*
 - `def is_valid_username(name)` - *A username is 3 to 20 ASCII letters, digits, dashes or underscores, with nothing after them.*
 - `def username_taken(name, existing, reserved)` - *True when `name` matches an existing or reserved username ignoring case.*
 - `def verify_password(password, stored)` - *Check a password against a stored hash and report whether the hash needs upgrading.*
@@ -128,7 +132,7 @@
 ### [`tests/test_app_flows.py`](tests/test_app_flows.py)
 > *End-to-end checks that drive main.py through Streamlit's AppTest in a throwaway folder.*
 
-**Size**: `188` lines (`8560` bytes)
+**Size**: `271` lines (`12485` bytes)
 
 **Classes:**
 - `class AppFlowCase` - *Runs each test inside its own temp folder so local state files never touch the repo.*
@@ -146,6 +150,19 @@
   - Method `.test_a_username_differing_only_in_case_is_refused()`
   - Method `.test_a_username_with_a_trailing_newline_is_refused()`
   - Method `.test_the_configured_admin_username_cannot_be_registered()`
+- `class ChangePasswordTest`
+  - Method `.setUp()`
+  - Method `.users()`
+  - Method `.legacy_user(password)`
+  - Method `.change(app, current, new)`
+  - Method `.info_texts(app)`
+  - Method `.test_an_account_still_on_a_legacy_hash_is_prompted_to_change_its_password()`
+  - Method `.test_changing_the_password_replaces_the_legacy_hash_and_removes_the_prompt()`
+  - Method `.test_a_wrong_current_password_changes_nothing()`
+  - Method `.test_a_new_password_that_breaks_the_rules_changes_nothing()`
+  - Method `.test_a_wrong_current_password_still_waits()`
+  - Method `.test_a_bcrypt_account_gets_the_form_but_no_prompt()`
+  - Method `.test_the_admin_from_secrets_has_no_change_form()`
 - `class MalformedPersonnelStateTest`
   - Method `.open_page(raw)`
   - Method `.quarantined()`
@@ -228,7 +245,7 @@
 ---
 
 ### [`tests/test_security.py`](tests/test_security.py)
-**Size**: `114` lines (`4675` bytes)
+**Size**: `140` lines (`5912` bytes)
 
 **Classes:**
 - `class SecureEqualsTest`
@@ -239,6 +256,12 @@
   - Method `.test_delay_grows_with_consecutive_failures()`
   - Method `.test_delay_is_capped()`
   - Method `.test_non_positive_counter_is_minimum()`
+- `class PasswordRulesTest`
+  - Method `.test_a_password_of_8_characters_up_to_72_bytes_has_no_problem()`
+  - Method `.test_too_short_and_too_long_passwords_name_their_problem()`
+  - Method `.test_non_text_is_a_problem()`
+- `class LegacyHashTest`
+  - Method `.test_a_sha256_hex_digest_is_legacy_and_a_bcrypt_hash_is_not()`
 - `class UsernameTest`
   - Method `.test_valid_usernames_are_3_to_20_letters_digits_dash_or_underscore()`
   - Method `.test_invalid_usernames_are_rejected_including_a_trailing_newline()`

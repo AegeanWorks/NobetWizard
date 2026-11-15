@@ -40,6 +40,21 @@ def check_hashes(password, hashed_text):
 LEGACY_SHA256_HASH = re.compile(r"^[0-9a-fA-F]{64}$")
 BCRYPT_MAX_BYTES = 72
 USERNAME_PATTERN = re.compile(r"[a-zA-Z0-9_-]{3,20}")
+MIN_PASSWORD_CHARACTERS = 8
+
+
+def password_problem(password):
+    """Return the text key of the rule a new password breaks, or None when it is acceptable."""
+    if not isinstance(password, str) or len(password) < MIN_PASSWORD_CHARACTERS:
+        return "err_password_short"
+    if len(password.encode("utf-8")) > BCRYPT_MAX_BYTES:
+        return "err_password_long"
+    return None
+
+
+def is_legacy_hash(stored):
+    """True for an unsalted SHA-256 hex digest left from before the bcrypt switch."""
+    return isinstance(stored, str) and LEGACY_SHA256_HASH.match(stored) is not None
 
 
 def is_valid_username(name):
